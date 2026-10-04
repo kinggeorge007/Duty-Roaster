@@ -192,4 +192,43 @@ async function pubR(on){try{if(S.dirty)await saveR();const r=await ensure();
  toast(on?"Published – staff notified":"Unpublished");load()}catch(e){toast(e.message)}}
 async function imp(f){if(!f)return;const lines=(await f.text()).split(/\r?\n/).filter(x=>x.trim()),errs=[],n=dim();
  const head=lines.shift().split(",").map(x=>x.trim().toLowerCase());if(!["email","id","staffid"].includes(head[0]))return toast("First column must be 'email' or 'id'");
- 
+ const tmp={};lines.forEach((l,i)=>{const c=l.split(",").map(x=>x.trim()),s=S.staff.find(x=>x.email?.toLowerCase()===em(c[0]));
+  if(!s)return errs.push(`Row ${i+2}: unknown staff "${c[0]}"`);
+  if(c.length-1<n)errs.push(`Row ${i+2}: only ${c.length-1} of ${n} days`);
+  for(let d=1;d<=n;d++){const v=(c[d]||"").toUpperCase();if(!S.shifts[v])errs.push(`Row ${i+2}, day ${d}: invalid "${c[d]||""}"`);else(tmp[s.id]??={})[dkey(d)]=v}});
+ if(errs.length)return alert("Import failed:\n"+errs.slice(0,15).join("\n")+(errs.length>15?`\n…+${errs.length-15} more`:""));
+ Object.assign(S.asg,tmp);S.dirty=true;toast("Imported – review, then Save");rosterView()}
+
+function staffView(){
+ let h=`<div class="card"><b>Add staff</b><input id="sn" placeholder="Full name"><input id="se" type="text" autocapitalize="none" placeholder="Email or Staff ID (if no email)"><input id="sp" type="password" placeholder="Temporary password (8+ chars)">
+ <select id="sr"><option value="staff">Staff</option><option value="hod">HOD / Admin</option></select><p class="err" id="sx"></p><button id="ab" onclick="addS()">Add</button></div>
+ ${shiftCard()}<div class="card">${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${esc(shown(s.email))} · ${s.role}${s.active?"":" · inactive"}</small></div>
+ ${s.id===S.prof.id?"":`<button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button>`}</div>`).join("")}</div>`;
+ $("#app").innerHTML=shell(h)}
+function shiftCard(){return `<div class="card"><b>Shift types</b><p style="font-size:12px;color:var(--mut)">These shifts belong to your department only. O (Off) is fixed.</p>`
+ +Object.values(S.shifts).map(x=>`<div class="row" style="padding:8px 0"><div><span class="pill ${x.code}">${esc(x.code)}</span> ${esc(x.label)}<br><small style="color:var(--mut)">${x.code==="O"?"Off duty":tm(x.start_time)+"–"+tm(x.end_time)}</small></div>${x.code==="O"?"":`<div><button class="ghost sm" onclick="editSh('${x.code}')">Edit</button> <button class="ghost sm" onclick="delSh('${x.code}')">Delete</button></div>`}</div>`).join("")
+ +`<input id="hc" placeholder="Code, 1-2 chars (e.g. N)" maxlength="2"><input id="hl" placeholder="Name (e.g. Night)"><small style="color:var(--mut)">Start</small><input id="hs" type="time"><small style="color:var(--mut)">End</small><input id="he" type="time"><p class="err" id="hx"></p><button onclick="saveSh()">Save shift</button></div>`}
+function editSh(c){const x=S.shifts[c];$("#hc").value=x.code;$("#hl").value=x.label;$("#hs").value=tm(x.start_time);$("#he").value=tm(x.end_time);$("#hc").scrollIntoView({block:"center"})}
+async function saveSh(){const c=$("#hc").value.trim().toUpperCase(),l=$("#hl").value.trim(),a=$("#hs").value,b=$("#he").value;
+ if(!/^[A-Z][A-Z0-9]?$/.test(c)||c==="O"||l.length<2||!a||!b)return $("#hx").textContent="Enter a code starting with a letter (not O), a name, start and end time.";
+ const{error}=await sb.from("shifts").upsert({department_id:S.prof.department_id,code:c,label:l,start_time:a,end_time:b},{onConflict:"department_id,code"});
+ if(error)return $("#hx").textContent=error.message;toast("Shift saved");await loadShifts();render()}
+async function delSh(c){const{count}=await sb.from("assignments").select("roster_id",{count:"exact",head:true}).eq("shift_code",c);
+ if(count>0)return toast("Shift "+c+" is used in a roster. Change those cells first.");
+ if(!confirm("Delete shift "+c+"?"))return;
+ const{error}=await sb.from("shifts").delete().eq("department_id",S.prof.department_id).eq("code",c);
+ if(error)return toast(error.message);toast("Shift deleted");await loadShifts();render()}
+async function addS(){const b=$("#ab");if(!b||b.disabled)return;b.disabled=true;b.textContent="Adding…";
+ try{await addS0()}finally{const x=$("#ab");if(x){x.disabled=false;x.textContent="Add"}}}
+async function addS0(){const n=$("#sn").value.trim(),e=$("#se").value.trim(),p=$("#sp").value,r=$("#sr").value;
+ if(n.length<2||!/^[^\s@]{3,}(@\S+\.\S+)?$/.test(e)||p.length<8)return $("#sx").textContent="Enter name, an email or Staff ID (no spaces, 3+ chars) and 8+ char password.";
+ const t=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false,storageKey:"tmp"}});
+ const{data,error}=await t.auth.signUp({email:em(e),password:p});if(error||!data.user)return $("#sx").textContent=error?.message||"Could not create user";
+ const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:em(e),role:r,department_id:S.prof.department_id});
+ if(e2)return $("#sx").textContent=e2.message;
+ S.staff.push({id:data.user.id,full_name:n,email:em(e),role:r,active:true});S.staff.sort((a,b)=>a.full_name.localeCompare(b.full_name));toast("Staff added");staffView()}
+async function tgl(id,a){const{error}=await sb.from("profiles").update({active:a}).eq("id",id);if(error)return toast(error.message);const s=S.staff.find(x=>x.id===id);if(s)s.active=a;staffView()}
+
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+init();
+</script></body></html>
