@@ -29,7 +29,39 @@ td.n{text-align:left;white-space:nowrap;padding-right:8px;position:sticky;left:0
 td button{width:28px;height:28px;padding:0;border-radius:8px;font-size:11px}
 #toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;display:none;z-index:9}
 .err{color:#c0392b;font-size:13px}.hide{display:none}
-@media print{nav,.hero,.noprint,button{display:none!important}body{background:#fff}.card{box-shadow:none}}
+.lg{position:fixed;inset:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px;
+ background:linear-gradient(120deg,#006b40,#008751,#2fb36d,#b6ee5a,#f3ffc9,#ffffff,#f3ffc9,#b6ee5a,#2fb36d,#008751);background-size:400% 400%;animation:flow 14s ease-in-out infinite alternate}
+@keyframes flow{from{background-position:0% 50%}to{background-position:100% 50%}}
+@keyframes glow{from{box-shadow:0 18px 50px rgba(0,107,64,.35),0 0 30px rgba(182,238,90,.45)}to{box-shadow:0 18px 60px rgba(0,107,64,.45),0 0 60px rgba(182,238,90,.8)}}
+.lgc{width:100%;max-width:380px;background:rgba(255,255,255,.94);color:#14261c;border-radius:28px;padding:30px 22px 26px;text-align:center;animation:glow 3s ease-in-out infinite alternate}
+.lgi{width:62px;height:62px;border-radius:20px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#008751,#8bdc3f);box-shadow:0 8px 22px rgba(0,135,81,.4)}
+.lgc h1{margin:0;font-size:25px;color:#0a5c36}.lgs{margin:4px 0 20px;color:#4d6b5a;font-size:14px}
+.lgc label{display:block;text-align:left;font-size:13px;font-weight:600;color:#1f4d36;margin:12px 0 2px 4px}
+.lgc input{height:52px;margin:4px 0;border:1.5px solid #8fbea4;background:#fff;color:#14261c;font-size:16px;border-radius:16px}
+.lgc input::placeholder{color:#5f7a6a;opacity:1}
+.lgc input:focus{outline:none;border-color:#008751;box-shadow:0 0 0 4px rgba(0,135,81,.18)}
+.pww{position:relative}.pww input{padding-right:52px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:42px;height:42px;padding:0;border-radius:12px;background:none;color:#3f6a52;display:flex;align-items:center;justify-content:center}
+.lge{min-height:20px;margin:8px 0 6px;color:#c0392b;font-size:13px;font-weight:600}
+.lgb{width:100%;height:52px;font-size:17px;font-weight:700;border-radius:16px;background:linear-gradient(135deg,#008751,#7bd83f);color:#fff;box-shadow:0 10px 26px rgba(0,135,81,.45)}
+.lgb:disabled{opacity:.7}
+@media(prefers-color-scheme:dark){
+.lg{background:linear-gradient(120deg,#020a06,#04160d,#073d24,#0a6b3f,#12a35f,#0a6b3f,#073d24,#04160d,#020a06);background-size:400% 400%}
+@keyframes glow{from{box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 28px rgba(31,200,110,.35)}to{box-shadow:0 18px 60px rgba(0,0,0,.65),0 0 64px rgba(46,230,130,.7)}}
+.lgc{background:rgba(10,24,17,.88);color:#e6f4ec;border:1px solid rgba(46,230,130,.25)}
+.lgc h1{color:#7bf0b0}.lgs{color:#8fb0a0}
+.lgc label{color:#a9d9bf}
+.lgc input{background:#0d2218;border-color:#2c6b4a;color:#e6f4ec}
+.lgc input::placeholder{color:#7fa592}
+.lgc input:focus{border-color:#2ee682;box-shadow:0 0 0 4px rgba(46,230,130,.22)}
+.eye{color:#8fd9b0}
+.lge{color:#ff8a7a}
+.lgb{background:linear-gradient(135deg,#0a9a5c,#2ee682);color:#04160d;box-shadow:0 10px 30px rgba(46,230,130,.4)}
+.lgi{background:linear-gradient(135deg,#0a8a52,#2ee682);box-shadow:0 8px 26px rgba(46,230,130,.45)}
+}
+.po{display:none}
+@page{size:A4 landscape;margin:10mm}
+@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}td button{border:1px solid #999;width:24px;height:24px;font-size:11px}.po{display:block!important;margin:0 0 6px}}
 </style></head><body>
 <div id="toast"></div><div id="app"></div>
 <script>
@@ -66,7 +98,8 @@ function paintShifts(){let c="";Object.keys(S.shifts).filter(k=>!["O","M","D"].i
   c+=`.${k}{background:hsl(${h} 75% 90%);color:hsl(${h} 60% 30%)}@media(prefers-color-scheme:dark){.${k}{background:hsl(${h} 35% 25%);color:hsl(${h} 80% 85%)}}`});
  let e=document.getElementById("sc");if(!e){e=document.createElement("style");e.id="sc";document.head.appendChild(e)}e.textContent=c}
 const tm=t=>t.slice(0,5);
-const DOM="@roster.local",em=x=>(x.includes("@")?x:x+DOM).toLowerCase(),shown=e=>e?.endsWith(DOM)?e.slice(0,-DOM.length):e;
+const BASE="afighorovie",em=x=>(x.includes("@")?x:`${BASE}+${x}@gmail.com`).toLowerCase(),
+ shown=e=>{const m=e?.match(/^afighorovie\+(.+)@gmail\.com$/i);return m?m[1]:e};
 async function load(){
  $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
  const dp=S.prof.department_id;
@@ -80,13 +113,25 @@ async function load(){
  S.dirty=false;render();
 }
 function login(msg){
- $("#app").innerHTML=`<div class="hero"><h1>Duty Schedule</h1><p>Sign in to see your shifts</p></div><main><div class="card">
- <input id="em" type="text" autocapitalize="none" placeholder="Email or Staff ID" autocomplete="username"><input id="pw" type="password" placeholder="Password" autocomplete="current-password">
- <p class="err" id="le">${esc(msg||"")}</p><button style="width:100%" id="lb">Sign in</button></div></main>`;
+ const eyeOn='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+ eyeOff='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.9 10.9 0 0112 19C5 19 1 12 1 12a19.8 19.8 0 015.1-5.9M9.9 5.1A10 10 0 0112 5c7 0 11 7 11 7a19.6 19.6 0 01-2.2 3.2M1 1l22 22"/></svg>';
+ $("#app").innerHTML=`<div class="lg"><div class="lgc">
+  <div class="lgi"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M8 15l2.5 2.5L16 13"/></svg></div>
+  <h1>Duty Schedule</h1><p class="lgs">Sign in to see your shifts</p>
+  <label for="em">Email or Staff ID</label>
+  <input id="em" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="e.g. 891 or name@email.com" autocomplete="username">
+  <label for="pw">Password</label>
+  <div class="pww"><input id="pw" type="password" placeholder="Enter your password" autocomplete="current-password"><button type="button" class="eye" id="eye" aria-label="Show password">${eyeOn}</button></div>
+  <p class="lge" id="le">${esc(msg||"")}</p>
+  <button class="lgb" id="lb">Sign in</button>
+ </div></div>`;
+ $("#eye").onclick=()=>{const i=$("#pw"),show=i.type==="password";i.type=show?"text":"password";$("#eye").innerHTML=show?eyeOff:eyeOn;$("#eye").setAttribute("aria-label",show?"Hide password":"Show password")};
+ $("#pw").addEventListener("keydown",ev=>{if(ev.key==="Enter")$("#lb").click()});
+ $("#em").addEventListener("keydown",ev=>{if(ev.key==="Enter")$("#pw").focus()});
  $("#lb").onclick=async()=>{const e=$("#em").value.trim(),p=$("#pw").value;
   if(!/^[^\s@]{3,}(@\S+\.\S+)?$/.test(e)||p.length<6)return $("#le").textContent="Enter your email or Staff ID, and password (6+ chars).";
-  $("#lb").textContent="Signing in…";const{error}=await sb.auth.signInWithPassword({email:em(e),password:p});
-  if(error){$("#le").textContent=error.message;$("#lb").textContent="Sign in"}else init()}}
+  $("#lb").textContent="Signing in…";$("#lb").disabled=true;const{error}=await sb.auth.signInWithPassword({email:em(e),password:p});
+  if(error){$("#le").textContent=error.message;$("#lb").textContent="Sign in";$("#lb").disabled=false}else init()}}
 function shell(inner){
  const tabs=hod()?[["cal","Calendar"],["ros","Roster"],["stf","Staff"]]:[["cal","Calendar"]];
  return `<div class="hero noprint"><div class="row"><div><h1>Hi, ${esc(S.prof.full_name.split(" ")[0])}</h1><p>${hod()?"Administrator":"Staff"} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><button class="ghost sm" onclick="sb.auth.signOut().then(()=>location.reload())">Sign out</button></div></div>
@@ -124,7 +169,7 @@ function rosterView(){
  const _sl=document.querySelector(".scroll")?.scrollLeft||0,_sy=window.scrollY;
  const n=dim(),act=S.staff.filter(s=>s.active&&s.role==="staff"||s.active&&s.role==="hod");
  const pub=S.roster?.published;
- let h=`<div class="card">${monthBar()}<p>Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span>':""}</p>
+ let h=`<div class="card"><h2 class="po">Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span>':""}</p>
  <div class="row noprint" style="flex-wrap:wrap;justify-content:flex-start"><button onclick="saveR()">Save</button><button onclick="pubR(${!pub})" class="ghost">${pub?"Unpublish":"Publish"}</button>
  <label class="ghost" style="padding:10px 14px;border-radius:14px;background:var(--bg)">Import CSV<input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label><button class="ghost" onclick="print()">Print</button></div>
  <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}. CSV: header <code>email,1,2,…</code> then one row per staff.</p></div>
@@ -147,43 +192,4 @@ async function pubR(on){try{if(S.dirty)await saveR();const r=await ensure();
  toast(on?"Published – staff notified":"Unpublished");load()}catch(e){toast(e.message)}}
 async function imp(f){if(!f)return;const lines=(await f.text()).split(/\r?\n/).filter(x=>x.trim()),errs=[],n=dim();
  const head=lines.shift().split(",").map(x=>x.trim().toLowerCase());if(!["email","id","staffid"].includes(head[0]))return toast("First column must be 'email' or 'id'");
- const tmp={};lines.forEach((l,i)=>{const c=l.split(",").map(x=>x.trim()),s=S.staff.find(x=>x.email?.toLowerCase()===em(c[0]));
-  if(!s)return errs.push(`Row ${i+2}: unknown staff "${c[0]}"`);
-  if(c.length-1<n)errs.push(`Row ${i+2}: only ${c.length-1} of ${n} days`);
-  for(let d=1;d<=n;d++){const v=(c[d]||"").toUpperCase();if(!S.shifts[v])errs.push(`Row ${i+2}, day ${d}: invalid "${c[d]||""}"`);else(tmp[s.id]??={})[dkey(d)]=v}});
- if(errs.length)return alert("Import failed:\n"+errs.slice(0,15).join("\n")+(errs.length>15?`\n…+${errs.length-15} more`:""));
- Object.assign(S.asg,tmp);S.dirty=true;toast("Imported – review, then Save");rosterView()}
-
-function staffView(){
- let h=`<div class="card"><b>Add staff</b><input id="sn" placeholder="Full name"><input id="se" type="text" autocapitalize="none" placeholder="Email or Staff ID (if no email)"><input id="sp" type="password" placeholder="Temporary password (8+ chars)">
- <select id="sr"><option value="staff">Staff</option><option value="hod">HOD / Admin</option></select><p class="err" id="sx"></p><button id="ab" onclick="addS()">Add</button></div>
- ${shiftCard()}<div class="card">${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${esc(shown(s.email))} · ${s.role}${s.active?"":" · inactive"}</small></div>
- ${s.id===S.prof.id?"":`<button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button>`}</div>`).join("")}</div>`;
- $("#app").innerHTML=shell(h)}
-function shiftCard(){return `<div class="card"><b>Shift types</b><p style="font-size:12px;color:var(--mut)">These shifts belong to your department only. O (Off) is fixed.</p>`
- +Object.values(S.shifts).map(x=>`<div class="row" style="padding:8px 0"><div><span class="pill ${x.code}">${esc(x.code)}</span> ${esc(x.label)}<br><small style="color:var(--mut)">${x.code==="O"?"Off duty":tm(x.start_time)+"–"+tm(x.end_time)}</small></div>${x.code==="O"?"":`<div><button class="ghost sm" onclick="editSh('${x.code}')">Edit</button> <button class="ghost sm" onclick="delSh('${x.code}')">Delete</button></div>`}</div>`).join("")
- +`<input id="hc" placeholder="Code, 1-2 chars (e.g. N)" maxlength="2"><input id="hl" placeholder="Name (e.g. Night)"><small style="color:var(--mut)">Start</small><input id="hs" type="time"><small style="color:var(--mut)">End</small><input id="he" type="time"><p class="err" id="hx"></p><button onclick="saveSh()">Save shift</button></div>`}
-function editSh(c){const x=S.shifts[c];$("#hc").value=x.code;$("#hl").value=x.label;$("#hs").value=tm(x.start_time);$("#he").value=tm(x.end_time);$("#hc").scrollIntoView({block:"center"})}
-async function saveSh(){const c=$("#hc").value.trim().toUpperCase(),l=$("#hl").value.trim(),a=$("#hs").value,b=$("#he").value;
- if(!/^[A-Z][A-Z0-9]?$/.test(c)||c==="O"||l.length<2||!a||!b)return $("#hx").textContent="Enter a code starting with a letter (not O), a name, start and end time.";
- const{error}=await sb.from("shifts").upsert({department_id:S.prof.department_id,code:c,label:l,start_time:a,end_time:b},{onConflict:"department_id,code"});
- if(error)return $("#hx").textContent=error.message;toast("Shift saved");await loadShifts();render()}
-async function delSh(c){const{count}=await sb.from("assignments").select("roster_id",{count:"exact",head:true}).eq("shift_code",c);
- if(count>0)return toast("Shift "+c+" is used in a roster. Change those cells first.");
- if(!confirm("Delete shift "+c+"?"))return;
- const{error}=await sb.from("shifts").delete().eq("department_id",S.prof.department_id).eq("code",c);
- if(error)return toast(error.message);toast("Shift deleted");await loadShifts();render()}
-async function addS(){const b=$("#ab");if(!b||b.disabled)return;b.disabled=true;b.textContent="Adding…";
- try{await addS0()}finally{const x=$("#ab");if(x){x.disabled=false;x.textContent="Add"}}}
-async function addS0(){const n=$("#sn").value.trim(),e=$("#se").value.trim(),p=$("#sp").value,r=$("#sr").value;
- if(n.length<2||!/^[^\s@]{3,}(@\S+\.\S+)?$/.test(e)||p.length<8)return $("#sx").textContent="Enter name, an email or Staff ID (no spaces, 3+ chars) and 8+ char password.";
- const t=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false,storageKey:"tmp"}});
- const{data,error}=await t.auth.signUp({email:em(e),password:p});if(error||!data.user)return $("#sx").textContent=error?.message||"Could not create user";
- const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:em(e),role:r,department_id:S.prof.department_id});
- if(e2)return $("#sx").textContent=e2.message;
- S.staff.push({id:data.user.id,full_name:n,email:em(e),role:r,active:true});S.staff.sort((a,b)=>a.full_name.localeCompare(b.full_name));toast("Staff added");staffView()}
-async function tgl(id,a){const{error}=await sb.from("profiles").update({active:a}).eq("id",id);if(error)return toast(error.message);const s=S.staff.find(x=>x.id===id);if(s)s.active=a;staffView()}
-
-if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
-init();
-</script></body></html>
+ 
