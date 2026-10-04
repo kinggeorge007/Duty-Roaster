@@ -3,9 +3,11 @@
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#008751">
 <link rel="icon" href="icon.svg">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>try{var _t=localStorage.getItem("theme");if(_t)document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
 <style>
 :root{--bg:#f4faf6;--card:#fff;--ink:#14261c;--mut:#6f8a7b;--pri:#008751;--pri2:#34b877;--M:#dcf3e5;--Mi:#0a6b3f;--D:#fdf1cf;--Di:#8a6200;--O:#f0f4f1;--Oi:#8a9a90}
-@media(prefers-color-scheme:dark){:root{--bg:#0a1510;--card:#11231a;--ink:#e6f4ec;--mut:#8fb0a0;--M:#17402b;--Mi:#8fe3b5;--D:#40351a;--Di:#f0d27a;--O:#1a2d23;--Oi:#8fb0a0}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1510;--card:#11231a;--ink:#e6f4ec;--mut:#8fb0a0;--M:#17402b;--Mi:#8fe3b5;--D:#40351a;--Di:#f0d27a;--O:#1a2d23;--Oi:#8fb0a0}}
+:root[data-theme="dark"]{--bg:#0a1510;--card:#11231a;--ink:#e6f4ec;--mut:#8fb0a0;--M:#17402b;--Mi:#8fe3b5;--D:#40351a;--Di:#f0d27a;--O:#1a2d23;--Oi:#8fb0a0}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
 .hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:28px 20px 56px;border-radius:0 0 32px 32px}
 .hero h1{margin:0;font-size:22px}.hero p{margin:4px 0 0;opacity:.85;font-size:14px}
@@ -18,9 +20,9 @@ main{padding:0 16px;margin-top:-40px;max-width:760px;margin-inline:auto}
 .day{aspect-ratio:1/1.1;border-radius:14px;border:2px solid transparent;background:var(--O);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;cursor:pointer;color:var(--ink)}
 .day i{font-style:normal;font-weight:700;font-size:13px;margin-top:2px}.day.sel{border-color:var(--pri)}.day.blank{background:none;cursor:default}
 .M{background:var(--M);color:var(--Mi)}.D{background:var(--D);color:var(--Di)}.O{background:var(--O);color:var(--Oi)}
-button,input,select{font:inherit}button{border:0;border-radius:14px;padding:10px 14px;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;cursor:pointer}
+button,input,select,textarea{font:inherit}button{border:0;border-radius:14px;padding:10px 14px;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;cursor:pointer}
 button.ghost{background:var(--bg);color:var(--ink)}button.sm{padding:6px 10px;font-size:13px}
-input,select{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(0,135,81,.25);background:var(--card);color:var(--ink);margin:6px 0}
+input,select,textarea{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(0,135,81,.25);background:var(--card);color:var(--ink);margin:6px 0}
 .pill{padding:6px 12px;border-radius:99px;font-size:13px;display:inline-block;margin:3px 3px 0 0;background:var(--bg)}
 nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--card);border-radius:24px;padding:6px;display:flex;gap:4px;box-shadow:0 8px 30px rgba(0,0,0,.18)}
 nav button{background:none;color:var(--mut)}nav button.on{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff}
@@ -45,25 +47,26 @@ td button{width:28px;height:28px;padding:0;border-radius:8px;font-size:11px}
 .lge{min-height:20px;margin:8px 0 6px;color:#c0392b;font-size:13px;font-weight:600}
 .lgb{width:100%;height:52px;font-size:17px;font-weight:700;border-radius:16px;background:linear-gradient(135deg,#008751,#7bd83f);color:#fff;box-shadow:0 10px 26px rgba(0,135,81,.45)}
 .lgb:disabled{opacity:.7}
-@media(prefers-color-scheme:dark){
-.lg{background:linear-gradient(120deg,#020a06,#04160d,#073d24,#0a6b3f,#12a35f,#0a6b3f,#073d24,#04160d,#020a06);background-size:400% 400%}
-@keyframes glow{from{box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 28px rgba(31,200,110,.35)}to{box-shadow:0 18px 60px rgba(0,0,0,.65),0 0 64px rgba(46,230,130,.7)}}
-.lgc{background:rgba(10,24,17,.88);color:#e6f4ec;border:1px solid rgba(46,230,130,.25)}
-.lgc h1{color:#7bf0b0}.lgs{color:#8fb0a0}
-.lgc label{color:#a9d9bf}
-.lgc input{background:#0d2218;border-color:#2c6b4a;color:#e6f4ec}
-.lgc input::placeholder{color:#7fa592}
-.lgc input:focus{border-color:#2ee682;box-shadow:0 0 0 4px rgba(46,230,130,.22)}
-.eye{color:#8fd9b0}
-.lge{color:#ff8a7a}
-.lgb{background:linear-gradient(135deg,#0a9a5c,#2ee682);color:#04160d;box-shadow:0 10px 30px rgba(46,230,130,.4)}
-.lgi{background:linear-gradient(135deg,#0a8a52,#2ee682);box-shadow:0 8px 26px rgba(46,230,130,.45)}
-}
+@keyframes glowd{from{box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 28px rgba(31,200,110,.35)}to{box-shadow:0 18px 60px rgba(0,0,0,.65),0 0 64px rgba(46,230,130,.7)}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .lg{background:linear-gradient(120deg,#020a06,#04160d,#073d24,#0a6b3f,#12a35f,#0a6b3f,#073d24,#04160d,#020a06);background-size:400% 400%}:root:not([data-theme="light"]) .lgc{background:rgba(10,24,17,.88);color:#e6f4ec;border:1px solid rgba(46,230,130,.25);animation-name:glowd}:root:not([data-theme="light"]) .lgc h1{color:#7bf0b0}:root:not([data-theme="light"]) .lgs{color:#8fb0a0}:root:not([data-theme="light"]) .lgc label{color:#a9d9bf}:root:not([data-theme="light"]) .lgc input{background:#0d2218;border-color:#2c6b4a;color:#e6f4ec}:root:not([data-theme="light"]) .lgc input::placeholder{color:#7fa592}:root:not([data-theme="light"]) .lgc input:focus{border-color:#2ee682;box-shadow:0 0 0 4px rgba(46,230,130,.22)}:root:not([data-theme="light"]) .eye{color:#8fd9b0}:root:not([data-theme="light"]) .lge{color:#ff8a7a}:root:not([data-theme="light"]) .lgb{background:linear-gradient(135deg,#0a9a5c,#2ee682);color:#04160d;box-shadow:0 10px 30px rgba(46,230,130,.4)}:root:not([data-theme="light"]) .lgi{background:linear-gradient(135deg,#0a8a52,#2ee682);box-shadow:0 8px 26px rgba(46,230,130,.45)}:root:not([data-theme="light"]) .side{box-shadow:0 0 40px rgba(0,0,0,.6)}}
+:root[data-theme="dark"] .lg{background:linear-gradient(120deg,#020a06,#04160d,#073d24,#0a6b3f,#12a35f,#0a6b3f,#073d24,#04160d,#020a06);background-size:400% 400%}:root[data-theme="dark"] .lgc{background:rgba(10,24,17,.88);color:#e6f4ec;border:1px solid rgba(46,230,130,.25);animation-name:glowd}:root[data-theme="dark"] .lgc h1{color:#7bf0b0}:root[data-theme="dark"] .lgs{color:#8fb0a0}:root[data-theme="dark"] .lgc label{color:#a9d9bf}:root[data-theme="dark"] .lgc input{background:#0d2218;border-color:#2c6b4a;color:#e6f4ec}:root[data-theme="dark"] .lgc input::placeholder{color:#7fa592}:root[data-theme="dark"] .lgc input:focus{border-color:#2ee682;box-shadow:0 0 0 4px rgba(46,230,130,.22)}:root[data-theme="dark"] .eye{color:#8fd9b0}:root[data-theme="dark"] .lge{color:#ff8a7a}:root[data-theme="dark"] .lgb{background:linear-gradient(135deg,#0a9a5c,#2ee682);color:#04160d;box-shadow:0 10px 30px rgba(46,230,130,.4)}:root[data-theme="dark"] .lgi{background:linear-gradient(135deg,#0a8a52,#2ee682);box-shadow:0 8px 26px rgba(46,230,130,.45)}:root[data-theme="dark"] .side{box-shadow:0 0 40px rgba(0,0,0,.6)}
+.dh{font-size:12px;line-height:1.15;min-width:30px;font-weight:700}.dh small{display:block;font-size:9px;font-weight:600;color:var(--mut)}.dh.wk,.dh.wk small{color:var(--pri)}
+.menu{width:42px;height:42px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:14px}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:19}.scrim.open{opacity:1;pointer-events:auto}
+.side{position:fixed;top:0;bottom:0;left:0;width:84%;max-width:330px;background:var(--card);color:var(--ink);z-index:20;padding:20px 18px;overflow:auto;display:flex;flex-direction:column;transform:translateX(-105%);transition:transform .28s ease;border-radius:0 26px 26px 0}.side.open{transform:none}
+.side .sh{display:flex;align-items:center;gap:12px;margin-bottom:8px}.side .sh small{color:var(--mut)}
+.av{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.side .x{margin-left:auto;background:var(--bg);color:var(--ink);padding:8px 11px;border-radius:12px}
+.side h4{margin:20px 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.seg{display:flex;gap:6px}.seg button{flex:1;background:var(--bg);color:var(--ink)}.seg button.on{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff}
+.side .ghost{width:100%}.side .sm2{font-size:13px;color:var(--mut);margin:4px 0}.grow{flex:1}
+.side .out{width:100%;background:none;border:1.5px solid #d9534f;color:#d9534f;margin-top:22px}
+.tr{display:flex;gap:6px}.tr select{margin:6px 0}
 .po{display:none}
 @page{size:A4 landscape;margin:10mm}
-@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}td button{border:1px solid #999;width:24px;height:24px;font-size:11px}.po{display:block!important;margin:0 0 6px}}
+@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}td button{border:1px solid #999;width:24px;height:24px;font-size:11px}.po{display:block!important;margin:0 0 6px}}
 </style></head><body>
-<div id="toast"></div><div id="app"></div>
+<div id="toast"></div><div id="app"></div><div id="scrim" class="scrim" onclick="closeNav()"></div><aside id="side" class="side"></aside>
 <script>
 /* ===== CONFIG: paste your Supabase values ===== */
 const SB_URL="https://nuswdyeurmngkugklqto.supabase.co",SB_KEY="sb_publishable_Jplra9Xy275rvdNl60ds0g_u4tMTHN_";
@@ -76,7 +79,7 @@ const ym=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-01`,dim=()=>new Date(S.mo
 const dkey=d=>`${S.month.getFullYear()}-${pad(S.month.getMonth()+1)}-${pad(d)}`;
 function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",3500);
  try{if(Notification.permission==="granted"&&document.hidden)new Notification("Duty Schedule",{body:m})}catch(e){}}
-const hrs=c=>{const s=S.shifts[c];return s?`${s.label} · ${s.start_time.slice(0,5)}–${s.end_time.slice(0,5)}`:c};
+const hrs=c=>{const s=S.shifts[c];return s?`${s.label} · ${tm(s.start_time)}–${tm(s.end_time)}`:c};
 const code=(u,d)=>S.asg[u]?.[d]||"O";
 
 async function init(){
@@ -95,9 +98,11 @@ async function loadShifts(){
  S.shifts=Object.fromEntries(a.map(s=>[s.code,s]));paintShifts()}
 function paintShifts(){let c="";Object.keys(S.shifts).filter(k=>!["O","M","D"].includes(k)).forEach(k=>{
   let h=0;for(const ch of k)h=(h*31+ch.charCodeAt(0))%360;
-  c+=`.${k}{background:hsl(${h} 75% 90%);color:hsl(${h} 60% 30%)}@media(prefers-color-scheme:dark){.${k}{background:hsl(${h} 35% 25%);color:hsl(${h} 80% 85%)}}`});
+  const dk=`background:hsl(${h} 35% 25%);color:hsl(${h} 80% 85%)`;
+  c+=`.${k}{background:hsl(${h} 75% 90%);color:hsl(${h} 60% 30%)}@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .${k}{${dk}}}:root[data-theme="dark"] .${k}{${dk}}`});
  let e=document.getElementById("sc");if(!e){e=document.createElement("style");e.id="sc";document.head.appendChild(e)}e.textContent=c}
-const tm=t=>t.slice(0,5);
+const tm=t=>{const h=+t.slice(0,2),m=t.slice(3,5);return `${h%12||12}${m==="00"?"":":"+m} ${h>=12?"PM":"AM"}`};
+const DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const BASE="afighorovie",em=x=>(x.includes("@")?x:`${BASE}+${x}@gmail.com`).toLowerCase(),
  shown=e=>{const m=e?.match(/^afighorovie\+(.+)@gmail\.com$/i);return m?m[1]:e};
 async function load(){
@@ -134,7 +139,7 @@ function login(msg){
   if(error){$("#le").textContent=error.message;$("#lb").textContent="Sign in";$("#lb").disabled=false}else init()}}
 function shell(inner){
  const tabs=hod()?[["cal","Calendar"],["ros","Roster"],["stf","Staff"]]:[["cal","Calendar"]];
- return `<div class="hero noprint"><div class="row"><div><h1>Hi, ${esc(S.prof.full_name.split(" ")[0])}</h1><p>${hod()?"Administrator":"Staff"} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><button class="ghost sm" onclick="sb.auth.signOut().then(()=>location.reload())">Sign out</button></div></div>
+ return `<div class="hero noprint"><div class="row"><div><h1>Hi, ${esc(S.prof.full_name.split(" ")[0])}</h1><p>${hod()?"Administrator":"Staff"} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><button class="ghost menu" onclick="openNav()" aria-label="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div>
  <main>${inner}</main><nav>${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" onclick="S.tab='${t[0]}';render()">${t[1]}</button>`).join("")}</nav>`}
 function monthBar(){return `<div class="row noprint"><button class="ghost sm" onclick="mv(-1)">‹</button><b>${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</b><button class="ghost sm" onclick="mv(1)">›</button></div>`}
 function mv(n){if(S.dirty&&!confirm("Discard unsaved changes?"))return;S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;load()}
@@ -148,12 +153,12 @@ function calView(){
  let nxt=null;for(let d=(isCur?today.getDate():1);d<=n;d++)if(mine[d-1]!=="O"){nxt=d;break}
  let h=!S.roster||(!S.roster.published&&!hod())?`<div class="card">No published roster for this month yet.</div>`:"";
  h+=`<div class="card">${monthBar()}<div class="stats" style="margin-top:12px"><div class="stat"><b>${work}</b><span>Workdays</span></div><div class="stat"><b>${n-work}</b><span>Days off</span></div><div class="stat"><b>${nxt?nxt+" "+mine[nxt-1]:"–"}</b><span>Next shift</span></div></div>
- <div class="grid">${"SMTWTFS".split("").map(d=>`<div class="dow">${d}</div>`).join("")}${Array(off).fill('<div class="day blank"></div>').join("")}
+ <div class="grid">${DOW.map(d=>`<div class="dow">${d}</div>`).join("")}${Array(off).fill('<div class="day blank"></div>').join("")}
  ${mine.map((c,i)=>`<div class="day ${c} ${S.sel===i+1?"sel":""}" onclick="S.sel=${i+1};render()">${i+1}<i>${c}</i></div>`).join("")}</div>
  <div class="row noprint" style="margin-top:12px">${Object.values(S.shifts).map(x=>`<span class="pill ${x.code}">${esc(x.code)} ${x.code==="O"?"Off":tm(x.start_time)+"–"+tm(x.end_time)}</span>`).join("")}</div>
  <div class="row noprint" style="margin-top:8px"><button class="ghost sm" onclick="ics()">Add to phone calendar</button><button class="ghost sm" onclick="print()">Print</button></div></div>`;
  if(S.sel){const k=dkey(S.sel),c=code(me,k);
-  h+=`<div class="card"><b>${S.sel} ${S.month.toLocaleString("default",{month:"long"})}</b><p><span class="pill ${c}">${esc(hrs(c))}</span></p>`;
+  h+=`<div class="card"><b>${DOW[new Date(S.month.getFullYear(),S.month.getMonth(),S.sel).getDay()]}, ${S.sel} ${S.month.toLocaleString("default",{month:"long"})}</b><p><span class="pill ${c}">${esc(hrs(c))}</span></p>`;
   for(const sc of Object.keys(S.shifts).filter(x=>x!=="O")){const ppl=S.staff.filter(s=>s.active&&code(s.id,k)===sc);
    h+=`<p style="margin:10px 0 2px;color:var(--mut);font-size:13px">${esc(S.shifts[sc]?.label||sc)} team (${ppl.length})</p>${ppl.map(s=>`<span class="pill ${s.id===me?sc:""}">${esc(s.full_name)}</span>`).join("")||"<span class='pill'>No one</span>"}`}
   h+=`</div>`}
@@ -172,8 +177,8 @@ function rosterView(){
  let h=`<div class="card"><h2 class="po">Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span>':""}</p>
  <div class="row noprint" style="flex-wrap:wrap;justify-content:flex-start"><button onclick="saveR()">Save</button><button onclick="pubR(${!pub})" class="ghost">${pub?"Unpublish":"Publish"}</button>
  <label class="ghost" style="padding:10px 14px;border-radius:14px;background:var(--bg)">Import CSV<input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label><button class="ghost" onclick="print()">Print</button></div>
- <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}. CSV: header <code>email,1,2,…</code> then one row per staff.</p></div>
- <div class="card scroll"><table><tr><th></th>${Array.from({length:n},(_,i)=>`<th>${i+1}</th>`).join("")}<th>Days</th></tr>
+ <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}. CSV: header <code>name,1,2,…</code> then one row per staff.</p></div>
+ <div class="card scroll"><table><tr><th></th>${Array.from({length:n},(_,i)=>{const w=new Date(S.month.getFullYear(),S.month.getMonth(),i+1).getDay();return `<th class="dh${w%6===0?" wk":""}"><small>${DOW[w]}</small>${i+1}</th>`}).join("")}<th>Days</th></tr>
  ${act.map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><button class="${c}" onclick="cyc('${s.id}',${i+1})">${c}</button></td>`}).join("");
   return `<tr><td class="n">${esc(s.full_name)}</td>${cells}<td><b>${w}</b></td></tr>`}).join("")}</table></div>`;
  $("#app").innerHTML=shell(h);
@@ -191,43 +196,79 @@ async function pubR(on){try{if(S.dirty)await saveR();const r=await ensure();
  await sb.from("publication_history").insert({roster_id:r.id,action:on?"published":"unpublished",acted_by:S.prof.id});
  toast(on?"Published – staff notified":"Unpublished");load()}catch(e){toast(e.message)}}
 async function imp(f){if(!f)return;const lines=(await f.text()).split(/\r?\n/).filter(x=>x.trim()),errs=[],n=dim();
- const head=lines.shift().split(",").map(x=>x.trim().toLowerCase());if(!["email","id","staffid"].includes(head[0]))return toast("First column must be 'email' or 'id'");
- const tmp={};lines.forEach((l,i)=>{const c=l.split(",").map(x=>x.trim()),s=S.staff.find(x=>x.email?.toLowerCase()===em(c[0]));
+ const head=lines.shift().split(",").map(x=>x.trim().toLowerCase());if(!["name","email","id"].includes(head[0]))return toast("First column must be 'name'");
+ const tmp={};lines.forEach((l,i)=>{const c=l.split(",").map(x=>x.trim()),s=S.staff.find(x=>x.full_name.toLowerCase()===c[0].toLowerCase()||x.email?.toLowerCase()===em(c[0]));
   if(!s)return errs.push(`Row ${i+2}: unknown staff "${c[0]}"`);
   if(c.length-1<n)errs.push(`Row ${i+2}: only ${c.length-1} of ${n} days`);
   for(let d=1;d<=n;d++){const v=(c[d]||"").toUpperCase();if(!S.shifts[v])errs.push(`Row ${i+2}, day ${d}: invalid "${c[d]||""}"`);else(tmp[s.id]??={})[dkey(d)]=v}});
  if(errs.length)return alert("Import failed:\n"+errs.slice(0,15).join("\n")+(errs.length>15?`\n…+${errs.length-15} more`:""));
  Object.assign(S.asg,tmp);S.dirty=true;toast("Imported – review, then Save");rosterView()}
 
+const sortStaff=()=>S.staff.sort((x,y)=>x.full_name.localeCompare(y.full_name));
 function staffView(){
- let h=`<div class="card"><b>Add staff</b><input id="sn" placeholder="Full name"><input id="se" type="text" autocapitalize="none" placeholder="Email or Staff ID (if no email)"><input id="sp" type="password" placeholder="Temporary password (8+ chars)">
- <select id="sr"><option value="staff">Staff</option><option value="hod">HOD / Admin</option></select><p class="err" id="sx"></p><button id="ab" onclick="addS()">Add</button></div>
- ${shiftCard()}<div class="card">${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${esc(shown(s.email))} · ${s.role}${s.active?"":" · inactive"}</small></div>
- ${s.id===S.prof.id?"":`<button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button>`}</div>`).join("")}</div>`;
- $("#app").innerHTML=shell(h)}
+ let h=`<div class="card"><b>Add staff</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Names only. Staff do not need an email or login. To add many, type one name per line.</p>
+ <textarea id="sn" rows="3" placeholder="Full name&#10;Another name"></textarea><p class="err" id="sx"></p><button id="ab" onclick="addS()">Add</button></div>
+ <div class="card"><b>Staff (${S.staff.filter(s=>s.active).length})</b>${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${s.role==="hod"?"Admin · "+esc(shown(s.email)):"Staff"}${s.active?"":" · inactive"}</small></div>
+ <div style="white-space:nowrap"><button class="ghost sm" onclick="renS('${s.id}')">Rename</button>${s.id===S.prof.id?"":` <button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button>`}</div></div>`).join("")}</div>
+ ${shiftCard()}
+ <div class="card"><b>Add an admin (HOD)</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Only admins sign in. Give them a one-time login.</p>
+ <input id="an" placeholder="Full name"><input id="ai" type="text" autocapitalize="none" placeholder="Email or ID for sign-in"><input id="ap" type="password" placeholder="Temporary password (8+ chars)">
+ <p class="err" id="ax"></p><button id="ah" onclick="addH()">Add admin</button></div>`;
+ $("#app").innerHTML=shell(h);setT("ts","08:00");setT("te","17:00")}
+const HRS=Array.from({length:12},(_,i)=>i+1),MINS=Array.from({length:12},(_,i)=>pad(i*5));
+function timeSel(id){return `<div class="tr"><select id="${id}h">${HRS.map(h=>`<option>${h}</option>`).join("")}</select><select id="${id}m">${MINS.map(m=>`<option>${m}</option>`).join("")}</select><select id="${id}p"><option>AM</option><option>PM</option></select></div>`}
+function setT(id,t){const h=+t.slice(0,2),m=t.slice(3,5);$("#"+id+"h").value=String(h%12||12);const ms=$("#"+id+"m");if(![...ms.options].some(o=>o.value===m))ms.add(new Option(m,m));ms.value=m;$("#"+id+"p").value=h>=12?"PM":"AM"}
+function getT(id){let h=+$("#"+id+"h").value;const p=$("#"+id+"p").value;h=h%12+(p==="PM"?12:0);return pad(h)+":"+$("#"+id+"m").value}
 function shiftCard(){return `<div class="card"><b>Shift types</b><p style="font-size:12px;color:var(--mut)">These shifts belong to your department only. O (Off) is fixed.</p>`
- +Object.values(S.shifts).map(x=>`<div class="row" style="padding:8px 0"><div><span class="pill ${x.code}">${esc(x.code)}</span> ${esc(x.label)}<br><small style="color:var(--mut)">${x.code==="O"?"Off duty":tm(x.start_time)+"–"+tm(x.end_time)}</small></div>${x.code==="O"?"":`<div><button class="ghost sm" onclick="editSh('${x.code}')">Edit</button> <button class="ghost sm" onclick="delSh('${x.code}')">Delete</button></div>`}</div>`).join("")
- +`<input id="hc" placeholder="Code, 1-2 chars (e.g. N)" maxlength="2"><input id="hl" placeholder="Name (e.g. Night)"><small style="color:var(--mut)">Start</small><input id="hs" type="time"><small style="color:var(--mut)">End</small><input id="he" type="time"><p class="err" id="hx"></p><button onclick="saveSh()">Save shift</button></div>`}
-function editSh(c){const x=S.shifts[c];$("#hc").value=x.code;$("#hl").value=x.label;$("#hs").value=tm(x.start_time);$("#he").value=tm(x.end_time);$("#hc").scrollIntoView({block:"center"})}
-async function saveSh(){const c=$("#hc").value.trim().toUpperCase(),l=$("#hl").value.trim(),a=$("#hs").value,b=$("#he").value;
- if(!/^[A-Z][A-Z0-9]?$/.test(c)||c==="O"||l.length<2||!a||!b)return $("#hx").textContent="Enter a code starting with a letter (not O), a name, start and end time.";
- const{error}=await sb.from("shifts").upsert({department_id:S.prof.department_id,code:c,label:l,start_time:a,end_time:b},{onConflict:"department_id,code"});
+ +Object.values(S.shifts).map(x=>`<div class="row" style="padding:8px 0"><div><span class="pill ${x.code}">${esc(x.code)}</span> ${esc(x.label)}<br><small style="color:var(--mut)">${x.code==="O"?"Off duty":tm(x.start_time)+" – "+tm(x.end_time)}</small></div>${x.code==="O"?"":`<div style="white-space:nowrap"><button class="ghost sm" onclick="editSh('${x.code}')">Edit</button> <button class="ghost sm" onclick="delSh('${x.code}')">Delete</button></div>`}</div>`).join("")
+ +`<input id="hc" placeholder="Code, 1-2 chars (e.g. N)" maxlength="2"><input id="hl" placeholder="Name (e.g. Night)"><small style="color:var(--mut)">Starts</small>${timeSel("ts")}<small style="color:var(--mut)">Ends</small>${timeSel("te")}<p class="err" id="hx"></p><button onclick="saveSh()">Save shift</button></div>`}
+function editSh(c){const x=S.shifts[c];$("#hc").value=x.code;$("#hl").value=x.label;setT("ts",x.start_time);setT("te",x.end_time);$("#hc").scrollIntoView({block:"center"})}
+async function saveSh(){const c=$("#hc").value.trim().toUpperCase(),l=$("#hl").value.trim();
+ if(!/^[A-Z][A-Z0-9]?$/.test(c)||c==="O"||l.length<2)return $("#hx").textContent="Enter a code starting with a letter (not O) and a name.";
+ const{error}=await sb.from("shifts").upsert({department_id:S.prof.department_id,code:c,label:l,start_time:getT("ts"),end_time:getT("te")},{onConflict:"department_id,code"});
  if(error)return $("#hx").textContent=error.message;toast("Shift saved");await loadShifts();render()}
 async function delSh(c){const{count}=await sb.from("assignments").select("roster_id",{count:"exact",head:true}).eq("shift_code",c);
  if(count>0)return toast("Shift "+c+" is used in a roster. Change those cells first.");
  if(!confirm("Delete shift "+c+"?"))return;
  const{error}=await sb.from("shifts").delete().eq("department_id",S.prof.department_id).eq("code",c);
  if(error)return toast(error.message);toast("Shift deleted");await loadShifts();render()}
-async function addS(){const b=$("#ab");if(!b||b.disabled)return;b.disabled=true;b.textContent="Adding…";
- try{await addS0()}finally{const x=$("#ab");if(x){x.disabled=false;x.textContent="Add"}}}
-async function addS0(){const n=$("#sn").value.trim(),e=$("#se").value.trim(),p=$("#sp").value,r=$("#sr").value;
- if(n.length<2||!/^[^\s@]{3,}(@\S+\.\S+)?$/.test(e)||p.length<8)return $("#sx").textContent="Enter name, an email or Staff ID (no spaces, 3+ chars) and 8+ char password.";
+async function addS(){const b=$("#ab");if(!b||b.disabled)return;
+ const names=$("#sn").value.split(/\n/).map(x=>x.trim()).filter(Boolean);
+ if(!names.length)return $("#sx").textContent="Enter at least one name.";
+ if(names.some(n=>n.length<2))return $("#sx").textContent="Each name needs at least 2 letters.";
+ b.disabled=true;b.textContent="Adding…";$("#sx").textContent="";
+ const{data,error}=await sb.from("profiles").insert(names.map(n=>({full_name:n,role:"staff",department_id:S.prof.department_id}))).select("id,full_name,email,role,active");
+ if(error){b.disabled=false;b.textContent="Add";return $("#sx").textContent=error.message}
+ S.staff.push(...data);sortStaff();toast(data.length+(data.length>1?" staff added":" staff added"));staffView()}
+async function addH(){const b=$("#ah");if(!b||b.disabled)return;b.disabled=true;b.textContent="Adding…";
+ try{await addH0()}finally{const x=$("#ah");if(x){x.disabled=false;x.textContent="Add admin"}}}
+async function addH0(){const n=$("#an").value.trim(),e=$("#ai").value.trim(),p=$("#ap").value;
+ if(n.length<2||!/^[^\s@]{3,}(@\S+\.\S+)?$/.test(e)||p.length<8)return $("#ax").textContent="Enter name, an email or ID (no spaces, 3+ chars) and 8+ char password.";
  const t=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false,storageKey:"tmp"}});
- const{data,error}=await t.auth.signUp({email:em(e),password:p});if(error||!data.user)return $("#sx").textContent=error?.message||"Could not create user";
- const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:em(e),role:r,department_id:S.prof.department_id});
- if(e2)return $("#sx").textContent=e2.message;
- S.staff.push({id:data.user.id,full_name:n,email:em(e),role:r,active:true});S.staff.sort((a,b)=>a.full_name.localeCompare(b.full_name));toast("Staff added");staffView()}
+ const{data,error}=await t.auth.signUp({email:em(e),password:p});if(error||!data.user)return $("#ax").textContent=error?.message||"Could not create user";
+ const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:em(e),role:"hod",department_id:S.prof.department_id});
+ if(e2)return $("#ax").textContent=e2.message;
+ S.staff.push({id:data.user.id,full_name:n,email:em(e),role:"hod",active:true});sortStaff();toast("Admin added");staffView()}
+async function renS(id){const s=S.staff.find(x=>x.id===id),n=prompt("Name",s.full_name);if(!n||n.trim().length<2)return;
+ const{error}=await sb.from("profiles").update({full_name:n.trim()}).eq("id",id);if(error)return toast(error.message);s.full_name=n.trim();sortStaff();staffView()}
 async function tgl(id,a){const{error}=await sb.from("profiles").update({active:a}).eq("id",id);if(error)return toast(error.message);const s=S.staff.find(x=>x.id===id);if(s)s.active=a;staffView()}
+
+function themePref(){try{return localStorage.getItem("theme")||"auto"}catch(e){return"auto"}}
+function setTheme(t){try{t==="auto"?localStorage.removeItem("theme"):localStorage.setItem("theme",t)}catch(e){}
+ t==="auto"?document.documentElement.removeAttribute("data-theme"):document.documentElement.setAttribute("data-theme",t);navHtml()}
+function navHtml(){const t=themePref(),ini=S.prof.full_name.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase(),
+ seg=(v,l)=>`<button class="${t===v?"on":""}" onclick="setTheme('${v}')">${l}</button>`,
+ np="Notification" in window?Notification.permission:"na";
+ $("#side").innerHTML=`<div class="sh"><div class="av">${esc(ini)}</div><div><b>${esc(S.prof.full_name)}</b><br><small>${hod()?"Administrator":"Staff"}</small></div><button class="x" onclick="closeNav()" aria-label="Close">✕</button></div>
+ <h4>Appearance</h4><div class="seg">${seg("auto","Auto")}${seg("light","Light")}${seg("dark","Dark")}</div>
+ <h4>Notifications</h4>${np==="granted"?'<p class="sm2">On</p>':np==="denied"?'<p class="sm2">Blocked. Allow them in your browser or phone settings.</p>':np==="default"?'<button class="ghost" onclick="askNotif()">Turn on notifications</button>':'<p class="sm2">Not supported on this device.</p>'}
+ <h4>Change password</h4><input id="np1" type="password" placeholder="New password (8+ chars)" autocomplete="new-password"><p class="err" id="npx"></p><button class="ghost" onclick="chgPw()">Update password</button>
+ <div class="grow"></div><button class="out" onclick="sb.auth.signOut().then(()=>location.reload())">Sign out</button><p class="sm2" style="text-align:center;margin-top:12px">Duty Schedule</p>`}
+function openNav(){navHtml();$("#side").classList.add("open");$("#scrim").classList.add("open")}
+function closeNav(){$("#side").classList.remove("open");$("#scrim").classList.remove("open")}
+function askNotif(){Notification.requestPermission().then(navHtml)}
+async function chgPw(){const p=$("#np1").value;if(p.length<8)return $("#npx").textContent="Use 8 or more characters.";
+ const{error}=await sb.auth.updateUser({password:p});if(error)return $("#npx").textContent=error.message;$("#np1").value="";$("#npx").textContent="";toast("Password updated")}
 
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 init();
