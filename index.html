@@ -1,16 +1,16 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Duty Roster</title>
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2b7fd4">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Duty Schedule</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#008751">
 <link rel="icon" href="icon.svg">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>
-:root{--bg:#eef6fb;--card:#fff;--ink:#1c2b3a;--mut:#7b8da0;--pri:#2b7fd4;--pri2:#5bc0eb;--M:#dbeeff;--Mi:#1d6fb8;--D:#e6e3ff;--Di:#4b3fb5;--O:#f1f4f7;--Oi:#8896a4}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1b2b;--card:#182a40;--ink:#e8f1fa;--mut:#8ea3b8;--M:#1d3d63;--Mi:#9fd0ff;--D:#2d2b66;--Di:#c1bcff;--O:#22364d;--Oi:#8ea3b8}}
+:root{--bg:#f4faf6;--card:#fff;--ink:#14261c;--mut:#6f8a7b;--pri:#008751;--pri2:#34b877;--M:#dcf3e5;--Mi:#0a6b3f;--D:#fdf1cf;--Di:#8a6200;--O:#f0f4f1;--Oi:#8a9a90}
+@media(prefers-color-scheme:dark){:root{--bg:#0a1510;--card:#11231a;--ink:#e6f4ec;--mut:#8fb0a0;--M:#17402b;--Mi:#8fe3b5;--D:#40351a;--Di:#f0d27a;--O:#1a2d23;--Oi:#8fb0a0}}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
 .hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:28px 20px 56px;border-radius:0 0 32px 32px}
 .hero h1{margin:0;font-size:22px}.hero p{margin:4px 0 0;opacity:.85;font-size:14px}
 main{padding:0 16px;margin-top:-40px;max-width:760px;margin-inline:auto}
-.card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 6px 24px rgba(43,127,212,.1)}
+.card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 6px 24px rgba(0,135,81,.10)}
 .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--bg);border-radius:16px;padding:12px;text-align:center}
 .stat b{font-size:22px;display:block}.stat span{font-size:12px;color:var(--mut)}
@@ -20,7 +20,7 @@ main{padding:0 16px;margin-top:-40px;max-width:760px;margin-inline:auto}
 .M{background:var(--M);color:var(--Mi)}.D{background:var(--D);color:var(--Di)}.O{background:var(--O);color:var(--Oi)}
 button,input,select{font:inherit}button{border:0;border-radius:14px;padding:10px 14px;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;cursor:pointer}
 button.ghost{background:var(--bg);color:var(--ink)}button.sm{padding:6px 10px;font-size:13px}
-input,select{width:100%;padding:12px;border-radius:14px;border:1px solid #d5e2ee;background:var(--card);color:var(--ink);margin:6px 0}
+input,select{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(0,135,81,.25);background:var(--card);color:var(--ink);margin:6px 0}
 .pill{padding:6px 12px;border-radius:99px;font-size:13px;display:inline-block;margin:3px 3px 0 0;background:var(--bg)}
 nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--card);border-radius:24px;padding:6px;display:flex;gap:4px;box-shadow:0 8px 30px rgba(0,0,0,.18)}
 nav button{background:none;color:var(--mut)}nav button.on{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff}
@@ -34,7 +34,7 @@ td button{width:28px;height:28px;padding:0;border-radius:8px;font-size:11px}
 <div id="toast"></div><div id="app"></div>
 <script>
 /* ===== CONFIG: paste your Supabase values ===== */
-const SB_URL="https://nuswdyeurmngkugklqto.supabase.co",SB_KEY="sb_publishable_Jplra9Xy275rvdNl60ds0g_u4tMTHN_";
+const SB_URL="YOUR_SUPABASE_URL",SB_KEY="YOUR_SUPABASE_ANON_KEY";
 /* ============================================== */
 const sb=supabase.createClient(SB_URL,SB_KEY);
 const S={prof:null,shifts:{},month:new Date(new Date().getFullYear(),new Date().getMonth(),1),roster:null,asg:{},staff:[],tab:"cal",sel:null,dirty:false};
@@ -43,7 +43,7 @@ const hod=()=>S.prof?.role==="hod",pad=n=>String(n).padStart(2,"0");
 const ym=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-01`,dim=()=>new Date(S.month.getFullYear(),S.month.getMonth()+1,0).getDate();
 const dkey=d=>`${S.month.getFullYear()}-${pad(S.month.getMonth()+1)}-${pad(d)}`;
 function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",3500);
- try{if(Notification.permission==="granted"&&document.hidden)new Notification("Duty Roster",{body:m})}catch(e){}}
+ try{if(Notification.permission==="granted"&&document.hidden)new Notification("Duty Schedule",{body:m})}catch(e){}}
 const hrs=c=>{const s=S.shifts[c];return s?`${s.label} · ${s.start_time.slice(0,5)}–${s.end_time.slice(0,5)}`:c};
 const code=(u,d)=>S.asg[u]?.[d]||"O";
 
@@ -53,7 +53,6 @@ async function init(){
  const{data:p,error}=await sb.from("profiles").select("*").eq("id",session.user.id).single();
  if(error||!p||!p.active){await sb.auth.signOut();return login("Account not found or deactivated.")}
  S.prof=p;
- await loadShifts();
  await load();
  sb.channel("rt").on("postgres_changes",{event:"*",schema:"public",table:"rosters"},()=>{toast("Roster updated");load()}).subscribe();
  if("Notification" in window&&Notification.permission==="default")Notification.requestPermission();
@@ -67,23 +66,26 @@ function paintShifts(){let c="";Object.keys(S.shifts).filter(k=>!["O","M","D"].i
   c+=`.${k}{background:hsl(${h} 75% 90%);color:hsl(${h} 60% 30%)}@media(prefers-color-scheme:dark){.${k}{background:hsl(${h} 35% 25%);color:hsl(${h} 80% 85%)}}`});
  let e=document.getElementById("sc");if(!e){e=document.createElement("style");e.id="sc";document.head.appendChild(e)}e.textContent=c}
 const tm=t=>t.slice(0,5);
+const DOM="@roster.local",em=x=>(x.includes("@")?x:x+DOM).toLowerCase(),shown=e=>e?.endsWith(DOM)?e.slice(0,-DOM.length):e;
 async function load(){
  $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
- let q=sb.from("rosters").select("*").eq("department_id",S.prof.department_id).eq("month",ym(S.month));
- const{data:r}=await q;S.roster=r?.[0]||null;S.asg={};
- const{data:st}=await sb.from("profiles").select("id,full_name,email,role,active").eq("department_id",S.prof.department_id).order("full_name");
- S.staff=st||[];
+ const dp=S.prof.department_id;
+ const[{data:r},{data:st}]=await Promise.all([
+  sb.from("rosters").select("*").eq("department_id",dp).eq("month",ym(S.month)),
+  sb.from("profiles").select("id,full_name,email,role,active").eq("department_id",dp).order("full_name"),
+  Object.keys(S.shifts).length?null:loadShifts()]);
+ S.roster=r?.[0]||null;S.asg={};S.staff=st||[];
  if(S.roster){const{data:a,error}=await sb.from("assignments").select("user_id,day,shift_code").eq("roster_id",S.roster.id);
   if(error)toast(error.message);(a||[]).forEach(x=>(S.asg[x.user_id]??={})[x.day]=x.shift_code)}
  S.dirty=false;render();
 }
 function login(msg){
- $("#app").innerHTML=`<div class="hero"><h1>Duty Roster</h1><p>Sign in to see your shifts</p></div><main><div class="card">
- <input id="em" type="email" placeholder="Email" autocomplete="username"><input id="pw" type="password" placeholder="Password" autocomplete="current-password">
+ $("#app").innerHTML=`<div class="hero"><h1>Duty Schedule</h1><p>Sign in to see your shifts</p></div><main><div class="card">
+ <input id="em" type="text" autocapitalize="none" placeholder="Email or Staff ID" autocomplete="username"><input id="pw" type="password" placeholder="Password" autocomplete="current-password">
  <p class="err" id="le">${esc(msg||"")}</p><button style="width:100%" id="lb">Sign in</button></div></main>`;
  $("#lb").onclick=async()=>{const e=$("#em").value.trim(),p=$("#pw").value;
-  if(!/^\S+@\S+\.\S+$/.test(e)||p.length<6)return $("#le").textContent="Enter a valid email and password (6+ chars).";
-  $("#lb").textContent="Signing in…";const{error}=await sb.auth.signInWithPassword({email:e,password:p});
+  if(!/^[^\s@]{3,}(@\S+\.\S+)?$/.test(e)||p.length<6)return $("#le").textContent="Enter your email or Staff ID, and password (6+ chars).";
+  $("#lb").textContent="Signing in…";const{error}=await sb.auth.signInWithPassword({email:em(e),password:p});
   if(error){$("#le").textContent=error.message;$("#lb").textContent="Sign in"}else init()}}
 function shell(inner){
  const tabs=hod()?[["cal","Calendar"],["ros","Roster"],["stf","Staff"]]:[["cal","Calendar"]];
@@ -116,9 +118,10 @@ function ics(){
  const n=dim(),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//DutyRoster//EN"];
  for(let d=1;d<=n;d++){const c=code(S.prof.id,dkey(d));if(c==="O"||!S.shifts[c])continue;const s=S.shifts[c],ds=dkey(d).replace(/-/g,"");
   L.push("BEGIN:VEVENT",`UID:${ds}-${S.prof.id}@roster`,`DTSTAMP:${ds}T000000Z`,`DTSTART:${ds}T${s.start_time.replace(/:/g,"").slice(0,6)}`,`DTEND:${ds}T${s.end_time.replace(/:/g,"").slice(0,6)}`,`SUMMARY:${s.label} duty`,"BEGIN:VALARM","TRIGGER:-PT60M","ACTION:DISPLAY","DESCRIPTION:Duty starts soon","END:VALARM","END:VEVENT")}
- L.push("END:VCALENDAR");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([L.join("\r\n")],{type:"text/calendar"}));a.download="duty-roster.ics";a.click()}
+ L.push("END:VCALENDAR");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([L.join("\r\n")],{type:"text/calendar"}));a.download="duty-schedule.ics";a.click()}
 
 function rosterView(){
+ const _sl=document.querySelector(".scroll")?.scrollLeft||0,_sy=window.scrollY;
  const n=dim(),act=S.staff.filter(s=>s.active&&s.role==="staff"||s.active&&s.role==="hod");
  const pub=S.roster?.published;
  let h=`<div class="card">${monthBar()}<p>Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span>':""}</p>
@@ -128,7 +131,8 @@ function rosterView(){
  <div class="card scroll"><table><tr><th></th>${Array.from({length:n},(_,i)=>`<th>${i+1}</th>`).join("")}<th>Days</th></tr>
  ${act.map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><button class="${c}" onclick="cyc('${s.id}',${i+1})">${c}</button></td>`}).join("");
   return `<tr><td class="n">${esc(s.full_name)}</td>${cells}<td><b>${w}</b></td></tr>`}).join("")}</table></div>`;
- $("#app").innerHTML=shell(h)}
+ $("#app").innerHTML=shell(h);
+ const _e=document.querySelector(".scroll");if(_e)_e.scrollLeft=_sl;window.scrollTo(0,_sy)}
 function cyc(u,d){const k=dkey(d),o=Object.keys(S.shifts),c=code(u,k);(S.asg[u]??={})[k]=o[(o.indexOf(c)+1)%o.length];S.dirty=true;rosterView()}
 async function ensure(){if(S.roster)return S.roster;
  const{data,error}=await sb.from("rosters").insert({department_id:S.prof.department_id,month:ym(S.month)}).select().single();
@@ -142,8 +146,8 @@ async function pubR(on){try{if(S.dirty)await saveR();const r=await ensure();
  await sb.from("publication_history").insert({roster_id:r.id,action:on?"published":"unpublished",acted_by:S.prof.id});
  toast(on?"Published – staff notified":"Unpublished");load()}catch(e){toast(e.message)}}
 async function imp(f){if(!f)return;const lines=(await f.text()).split(/\r?\n/).filter(x=>x.trim()),errs=[],n=dim();
- const head=lines.shift().split(",").map(x=>x.trim().toLowerCase());if(head[0]!=="email")return toast("First column must be 'email'");
- const tmp={};lines.forEach((l,i)=>{const c=l.split(",").map(x=>x.trim()),s=S.staff.find(x=>x.email?.toLowerCase()===c[0].toLowerCase());
+ const head=lines.shift().split(",").map(x=>x.trim().toLowerCase());if(!["email","id","staffid"].includes(head[0]))return toast("First column must be 'email' or 'id'");
+ const tmp={};lines.forEach((l,i)=>{const c=l.split(",").map(x=>x.trim()),s=S.staff.find(x=>x.email?.toLowerCase()===em(c[0]));
   if(!s)return errs.push(`Row ${i+2}: unknown staff "${c[0]}"`);
   if(c.length-1<n)errs.push(`Row ${i+2}: only ${c.length-1} of ${n} days`);
   for(let d=1;d<=n;d++){const v=(c[d]||"").toUpperCase();if(!S.shifts[v])errs.push(`Row ${i+2}, day ${d}: invalid "${c[d]||""}"`);else(tmp[s.id]??={})[dkey(d)]=v}});
@@ -151,9 +155,9 @@ async function imp(f){if(!f)return;const lines=(await f.text()).split(/\r?\n/).f
  Object.assign(S.asg,tmp);S.dirty=true;toast("Imported – review, then Save");rosterView()}
 
 function staffView(){
- let h=`<div class="card"><b>Add staff</b><input id="sn" placeholder="Full name"><input id="se" type="email" placeholder="Email"><input id="sp" type="password" placeholder="Temporary password (8+ chars)">
- <select id="sr"><option value="staff">Staff</option><option value="hod">HOD / Admin</option></select><p class="err" id="sx"></p><button onclick="addS()">Add</button></div>
- ${shiftCard()}<div class="card">${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${esc(s.email)} · ${s.role}${s.active?"":" · inactive"}</small></div>
+ let h=`<div class="card"><b>Add staff</b><input id="sn" placeholder="Full name"><input id="se" type="text" autocapitalize="none" placeholder="Email or Staff ID (if no email)"><input id="sp" type="password" placeholder="Temporary password (8+ chars)">
+ <select id="sr"><option value="staff">Staff</option><option value="hod">HOD / Admin</option></select><p class="err" id="sx"></p><button id="ab" onclick="addS()">Add</button></div>
+ ${shiftCard()}<div class="card">${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${esc(shown(s.email))} · ${s.role}${s.active?"":" · inactive"}</small></div>
  ${s.id===S.prof.id?"":`<button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button>`}</div>`).join("")}</div>`;
  $("#app").innerHTML=shell(h)}
 function shiftCard(){return `<div class="card"><b>Shift types</b><p style="font-size:12px;color:var(--mut)">These shifts belong to your department only. O (Off) is fixed.</p>`
@@ -169,13 +173,16 @@ async function delSh(c){const{count}=await sb.from("assignments").select("roster
  if(!confirm("Delete shift "+c+"?"))return;
  const{error}=await sb.from("shifts").delete().eq("department_id",S.prof.department_id).eq("code",c);
  if(error)return toast(error.message);toast("Shift deleted");await loadShifts();render()}
-async function addS(){const n=$("#sn").value.trim(),e=$("#se").value.trim(),p=$("#sp").value,r=$("#sr").value;
- if(n.length<2||!/^\S+@\S+\.\S+$/.test(e)||p.length<8)return $("#sx").textContent="Enter name, valid email and 8+ char password.";
+async function addS(){const b=$("#ab");if(!b||b.disabled)return;b.disabled=true;b.textContent="Adding…";
+ try{await addS0()}finally{const x=$("#ab");if(x){x.disabled=false;x.textContent="Add"}}}
+async function addS0(){const n=$("#sn").value.trim(),e=$("#se").value.trim(),p=$("#sp").value,r=$("#sr").value;
+ if(n.length<2||!/^[^\s@]{3,}(@\S+\.\S+)?$/.test(e)||p.length<8)return $("#sx").textContent="Enter name, an email or Staff ID (no spaces, 3+ chars) and 8+ char password.";
  const t=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false,storageKey:"tmp"}});
- const{data,error}=await t.auth.signUp({email:e,password:p});if(error||!data.user)return $("#sx").textContent=error?.message||"Could not create user";
- const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:e,role:r,department_id:S.prof.department_id});
- if(e2)return $("#sx").textContent=e2.message;toast("Staff added");load()}
-async function tgl(id,a){const{error}=await sb.from("profiles").update({active:a}).eq("id",id);if(error)toast(error.message);load()}
+ const{data,error}=await t.auth.signUp({email:em(e),password:p});if(error||!data.user)return $("#sx").textContent=error?.message||"Could not create user";
+ const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:em(e),role:r,department_id:S.prof.department_id});
+ if(e2)return $("#sx").textContent=e2.message;
+ S.staff.push({id:data.user.id,full_name:n,email:em(e),role:r,active:true});S.staff.sort((a,b)=>a.full_name.localeCompare(b.full_name));toast("Staff added");staffView()}
+async function tgl(id,a){const{error}=await sb.from("profiles").update({active:a}).eq("id",id);if(error)return toast(error.message);const s=S.staff.find(x=>x.id===id);if(s)s.active=a;staffView()}
 
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 init();
