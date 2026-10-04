@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Duty Roster</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2b7fd4">
+<link rel="icon" href="icon.svg">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#eef6fb;--card:#fff;--ink:#1c2b3a;--mut:#7b8da0;--pri:#2b7fd4;--pri2:#5bc0eb;--M:#dbeeff;--Mi:#1d6fb8;--D:#e6e3ff;--Di:#4b3fb5;--O:#f1f4f7;--Oi:#8896a4}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1b2b;--card:#182a40;--ink:#e8f1fa;--mut:#8ea3b8;--M:#1d3d63;--Mi:#9fd0ff;--D:#2d2b66;--Di:#c1bcff;--O:#22364d;--Oi:#8ea3b8}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
+.hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:28px 20px 56px;border-radius:0 0 32px 32px}
+.hero h1{margin:0;font-size:22px}.hero p{margin:4px 0 0;opacity:.85;font-size:14px}
+main{padding:0 16px;margin-top:-40px;max-width:760px;margin-inline:auto}
+.card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 6px 24px rgba(43,127,212,.1)}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--bg);border-radius:16px;padding:12px;text-align:center}
+.stat b{font-size:22px;display:block}.stat span{font-size:12px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}.dow{font-size:11px;color:var(--mut);text-align:center}
+.day{aspect-ratio:1/1.1;border-radius:14px;border:2px solid transparent;background:var(--O);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;cursor:pointer;color:var(--ink)}
+.day i{font-style:normal;font-weight:700;font-size:13px;margin-top:2px}.day.sel{border-color:var(--pri)}.day.blank{background:none;cursor:default}
+.M{background:var(--M);color:var(--Mi)}.D{background:var(--D);color:var(--Di)}.O{background:var(--O);color:var(--Oi)}
+button,input,select{font:inherit}button{border:0;border-radius:14px;padding:10px 14px;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;cursor:pointer}
+button.ghost{background:var(--bg);color:var(--ink)}button.sm{padding:6px 10px;font-size:13px}
+input,select{width:100%;padding:12px;border-radius:14px;border:1px solid #d5e2ee;background:var(--card);color:var(--ink);margin:6px 0}
+.pill{padding:6px 12px;border-radius:99px;font-size:13px;display:inline-block;margin:3px 3px 0 0;background:var(--bg)}
+nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--card);border-radius:24px;padding:6px;display:flex;gap:4px;box-shadow:0 8px 30px rgba(0,0,0,.18)}
+nav button{background:none;color:var(--mut)}nav button.on{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff}
+.scroll{overflow-x:auto}table{border-collapse:separate;border-spacing:3px;font-size:12px}td,th{padding:0;text-align:center}
+td.n{text-align:left;white-space:nowrap;padding-right:8px;position:sticky;left:0;background:var(--card)}
+td button{width:28px;height:28px;padding:0;border-radius:8px;font-size:11px}
+#toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;display:none;z-index:9}
+.err{color:#c0392b;font-size:13px}.hide{display:none}
+@media print{nav,.hero,.noprint,button{display:none!important}body{background:#fff}.card{box-shadow:none}}
+</style></head><body>
+<div id="toast"></div><div id="app"></div>
+<script>
+/* ===== CONFIG: paste your Supabase values ===== */
+const SB_URL="YOUR_SUPABASE_URL",SB_KEY="YOUR_SUPABASE_ANON_KEY";
+/* ============================================== */
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const S={prof:null,shifts:{},month:new Date(new Date().getFullYear(),new Date().getMonth(),1),roster:null,asg:{},staff:[],tab:"cal",sel:null,dirty:false};
+const $=s=>document.querySelector(s),esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hod=()=>S.prof?.role==="hod",pad=n=>String(n).padStart(2,"0");
+const ym=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-01`,dim=()=>new Date(S.month.getFullYear(),S.month.getMonth()+1,0).getDate();
+const dkey=d=>`${S.month.getFullYear()}-${pad(S.month.getMonth()+1)}-${pad(d)}`;
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",3500);
+ try{if(Notification.permission==="granted"&&document.hidden)new Notification("Duty Roster",{body:m})}catch(e){}}
+const hrs=c=>{const s=S.shifts[c];return s?`${s.label} · ${s.start_time.slice(0,5)}–${s.end_time.slice(0,5)}`:c};
+const code=(u,d)=>S.asg[u]?.[d]||"O";
+
+async function init(){
+ const{data:{session}}=await sb.auth.getSession();
+ if(!session)return login();
+ const{data:p,error}=await sb.from("profiles").select("*").eq("id",session.user.id).single();
+ if(error||!p||!p.active){await sb.auth.signOut();return login("Account not found or deactivated.")}
+ S.prof=p;
+ const{data:sh}=await sb.from("shifts").select("*");S.shifts=Object.fromEntries((sh||[]).map(s=>[s.code,s]));
+ await load();
+ sb.channel("rt").on("postgres_changes",{event:"*",schema:"public",table:"rosters"},()=>{toast("Roster updated");load()}).subscribe();
+ if("Notification" in window&&Notification.permission==="default")Notification.requestPermission();
+}
+async function load(){
+ $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
+ let q=sb.from("rosters").select("*").eq("department_id",S.prof.department_id).eq("month",ym(S.month));
+ const{data:r}=await q;S.roster=r?.[0]||null;S.asg={};
+ const{data:st}=await sb.from("profiles").select("id,full_name,email,role,active").eq("department_id",S.prof.department_id).order("full_name");
+ S.staff=st||[];
+ if(S.roster){const{data:a,error}=await sb.from("assignments").select("user_id,day,shift_code").eq("roster_id",S.roster.id);
+  if(error)toast(error.message);(a||[]).forEach(x=>(S.asg[x.user_id]??={})[x.day]=x.shift_code)}
+ S.dirty=false;render();
+}
+function login(msg){
+ $("#app").innerHTML=`<div class="hero"><h1>Duty Roster</h1><p>Sign in to see your shifts</p></div><main><div class="card">
+ <input id="em" type="email" placeholder="Email" autocomplete="username"><input id="pw" type="password" placeholder="Password" autocomplete="current-password">
+ <p class="err" id="le">${esc(msg||"")}</p><button style="width:100%" id="lb">Sign in</button></div></main>`;
+ $("#lb").onclick=async()=>{const e=$("#em").value.trim(),p=$("#pw").value;
+  if(!/^\S+@\S+\.\S+$/.test(e)||p.length<6)return $("#le").textContent="Enter a valid email and password (6+ chars).";
+  $("#lb").textContent="Signing in…";const{error}=await sb.auth.signInWithPassword({email:e,password:p});
+  if(error){$("#le").textContent=error.message;$("#lb").textContent="Sign in"}else init()}}
+function shell(inner){
+ const tabs=hod()?[["cal","Calendar"],["ros","Roster"],["stf","Staff"]]:[["cal","Calendar"]];
+ return `<div class="hero noprint"><div class="row"><div><h1>Hi, ${esc(S.prof.full_name.split(" ")[0])}</h1><p>${hod()?"Administrator":"Staff"} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><button class="ghost sm" onclick="sb.auth.signOut().then(()=>location.reload())">Sign out</button></div></div>
+ <main>${inner}</main><nav>${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" onclick="S.tab='${t[0]}';render()">${t[1]}</button>`).join("")}</nav>`}
+function monthBar(){return `<div class="row noprint"><button class="ghost sm" onclick="mv(-1)">‹</button><b>${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</b><button class="ghost sm" onclick="mv(1)">›</button></div>`}
+function mv(n){if(S.dirty&&!confirm("Discard unsaved changes?"))return;S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;load()}
+function render(){S.tab==="ros"&&hod()?rosterView():S.tab==="stf"&&hod()?staffView():calView()}
+
+function calView(){
+ const me=S.prof.id,n=dim(),off=S.month.getDay(),today=new Date();
+ const mine=Array.from({length:n},(_,i)=>code(me,dkey(i+1)));
+ const work=mine.filter(c=>c!=="O").length;
+ const isCur=today.getMonth()===S.month.getMonth()&&today.getFullYear()===S.month.getFullYear();
+ let nxt=null;for(let d=(isCur?today.getDate():1);d<=n;d++)if(mine[d-1]!=="O"){nxt=d;break}
+ let h=!S.roster||(!S.roster.published&&!hod())?`<div class="card">No published roster for this month yet.</div>`:"";
+ h+=`<div class="card">${monthBar()}<div class="stats" style="margin-top:12px"><div class="stat"><b>${work}</b><span>Workdays</span></div><div class="stat"><b>${n-work}</b><span>Days off</span></div><div class="stat"><b>${nxt?nxt+" "+mine[nxt-1]:"–"}</b><span>Next shift</span></div></div>
+ <div class="grid">${"SMTWTFS".split("").map(d=>`<div class="dow">${d}</div>`).join("")}${Array(off).fill('<div class="day blank"></div>').join("")}
+ ${mine.map((c,i)=>`<div class="day ${c} ${S.sel===i+1?"sel":""}" onclick="S.sel=${i+1};render()">${i+1}<i>${c}</i></div>`).join("")}</div>
+ <div class="row noprint" style="margin-top:12px"><span class="pill M">M 8AM–2PM</span><span class="pill D">D 8AM–6PM</span><span class="pill O">O Off</span></div>
+ <div class="row noprint" style="margin-top:8px"><button class="ghost sm" onclick="ics()">Add to phone calendar</button><button class="ghost sm" onclick="print()">Print</button></div></div>`;
+ if(S.sel){const k=dkey(S.sel),c=code(me,k);
+  h+=`<div class="card"><b>${S.sel} ${S.month.toLocaleString("default",{month:"long"})}</b><p><span class="pill ${c}">${esc(hrs(c))}</span></p>`;
+  for(const sc of["M","D"]){const ppl=S.staff.filter(s=>s.active&&code(s.id,k)===sc);
+   h+=`<p style="margin:10px 0 2px;color:var(--mut);font-size:13px">${esc(S.shifts[sc]?.label||sc)} team (${ppl.length})</p>${ppl.map(s=>`<span class="pill ${s.id===me?sc:""}">${esc(s.full_name)}</span>`).join("")||"<span class='pill'>No one</span>"}`}
+  h+=`</div>`}
+ $("#app").innerHTML=shell(h)}
+
+function ics(){
+ const n=dim(),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//DutyRoster//EN"];
+ for(let d=1;d<=n;d++){const c=code(S.prof.id,dkey(d));if(c==="O"||!S.shifts[c])continue;const s=S.shifts[c],ds=dkey(d).replace(/-/g,"");
+  L.push("BEGIN:VEVENT",`UID:${ds}-${S.prof.id}@roster`,`DTSTAMP:${ds}T000000Z`,`DTSTART:${ds}T${s.start_time.replace(/:/g,"").slice(0,6)}`,`DTEND:${ds}T${s.end_time.replace(/:/g,"").slice(0,6)}`,`SUMMARY:${s.label} duty`,"BEGIN:VALARM","TRIGGER:-PT60M","ACTION:DISPLAY","DESCRIPTION:Duty starts soon","END:VALARM","END:VEVENT")}
+ L.push("END:VCALENDAR");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([L.join("\r\n")],{type:"text/calendar"}));a.download="duty-roster.ics";a.click()}
+
+function rosterView(){
+ const n=dim(),act=S.staff.filter(s=>s.active&&s.role==="staff"||s.active&&s.role==="hod");
+ const pub=S.roster?.published;
+ let h=`<div class="card">${monthBar()}<p>Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span>':""}</p>
+ <div class="row noprint" style="flex-wrap:wrap;justify-content:flex-start"><button onclick="saveR()">Save</button><button onclick="pubR(${!pub})" class="ghost">${pub?"Unpublish":"Publish"}</button>
+ <label class="ghost" style="padding:10px 14px;border-radius:14px;background:var(--bg)">Import CSV<input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label><button class="ghost" onclick="print()">Print</button></div>
+ <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle O → M → D. CSV: header <code>email,1,2,…</code> then one row per staff.</p></div>
+ <div class="card scroll"><table><tr><th></th>${Array.from({length:n},(_,i)=>`<th>${i+1}</th>`).join("")}<th>Days</th></tr>
+ ${act.map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><button class="${c}" onclick="cyc('${s.id}',${i+1})">${c}</button></td>`}).join("");
+  return `<tr><td class="n">${esc(s.full_name)}</td>${cells}<td><b>${w}</b></td></tr>`}).join("")}</table></div>`;
+ $("#app").innerHTML=shell(h)}
+function cyc(u,d){const k=dkey(d),o=Object.keys(S.shifts),c=code(u,k);(S.asg[u]??={})[k]=o[(o.indexOf(c)+1)%o.length];S.dirty=true;rosterView()}
+async function ensure(){if(S.roster)return S.roster;
+ const{data,error}=await sb.from("rosters").insert({department_id:S.prof.department_id,month:ym(S.month)}).select().single();
+ if(error)throw error;return S.roster=data}
+async function saveR(){try{const r=await ensure(),rows=[];
+ S.staff.filter(s=>s.active).forEach(s=>{for(let d=1;d<=dim();d++){const k=dkey(d),c=code(s.id,k);if(!S.shifts[c])throw new Error(`Invalid shift "${c}" for ${s.full_name} on day ${d}`);rows.push({roster_id:r.id,user_id:s.id,day:k,shift_code:c})}});
+ const{error}=await sb.from("assignments").upsert(rows,{onConflict:"roster_id,user_id,day"});if(error)throw error;
+ S.dirty=false;toast("Saved");rosterView()}catch(e){toast(e.message)}}
+async function pubR(on){try{if(S.dirty)await saveR();const r=await ensure();
+ const{error}=await sb.from("rosters").update({published:on}).eq("id",r.id);if(error)throw error;
+ await sb.from("publication_history").insert({roster_id:r.id,action:on?"published":"unpublished",acted_by:S.prof.id});
+ toast(on?"Published – staff notified":"Unpublished");load()}catch(e){toast(e.message)}}
+async function imp(f){if(!f)return;const lines=(await f.text()).split(/\r?\n/).filter(x=>x.trim()),errs=[],n=dim();
+ const head=lines.shift().split(",").map(x=>x.trim().toLowerCase());if(head[0]!=="email")return toast("First column must be 'email'");
+ const tmp={};lines.forEach((l,i)=>{const c=l.split(",").map(x=>x.trim()),s=S.staff.find(x=>x.email?.toLowerCase()===c[0].toLowerCase());
+  if(!s)return errs.push(`Row ${i+2}: unknown staff "${c[0]}"`);
+  if(c.length-1<n)errs.push(`Row ${i+2}: only ${c.length-1} of ${n} days`);
+  for(let d=1;d<=n;d++){const v=(c[d]||"").toUpperCase();if(!S.shifts[v])errs.push(`Row ${i+2}, day ${d}: invalid "${c[d]||""}"`);else(tmp[s.id]??={})[dkey(d)]=v}});
+ if(errs.length)return alert("Import failed:\n"+errs.slice(0,15).join("\n")+(errs.length>15?`\n…+${errs.length-15} more`:""));
+ Object.assign(S.asg,tmp);S.dirty=true;toast("Imported – review, then Save");rosterView()}
+
+function staffView(){
+ let h=`<div class="card"><b>Add staff</b><input id="sn" placeholder="Full name"><input id="se" type="email" placeholder="Email"><input id="sp" type="password" placeholder="Temporary password (8+ chars)">
+ <select id="sr"><option value="staff">Staff</option><option value="hod">HOD / Admin</option></select><p class="err" id="sx"></p><button onclick="addS()">Add</button></div>
+ <div class="card">${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${esc(s.email)} · ${s.role}${s.active?"":" · inactive"}</small></div>
+ ${s.id===S.prof.id?"":`<button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button>`}</div>`).join("")}</div>`;
+ $("#app").innerHTML=shell(h)}
+async function addS(){const n=$("#sn").value.trim(),e=$("#se").value.trim(),p=$("#sp").value,r=$("#sr").value;
+ if(n.length<2||!/^\S+@\S+\.\S+$/.test(e)||p.length<8)return $("#sx").textContent="Enter name, valid email and 8+ char password.";
+ const t=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false,storageKey:"tmp"}});
+ const{data,error}=await t.auth.signUp({email:e,password:p});if(error||!data.user)return $("#sx").textContent=error?.message||"Could not create user";
+ const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:e,role:r,department_id:S.prof.department_id});
+ if(e2)return $("#sx").textContent=e2.message;toast("Staff added");load()}
+async function tgl(id,a){const{error}=await sb.from("profiles").update({active:a}).eq("id",id);if(error)toast(error.message);load()}
+
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+init();
+</script></body></html>
