@@ -1,0 +1,80 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository files
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Work out the app link
+        run: |
+          OWNER=$(echo "$GITHUB_REPOSITORY_OWNER" | tr 'A-Z' 'a-z')
+          REPO="${GITHUB_REPOSITORY#*/}"
+          if [ "$(echo "$REPO" | tr 'A-Z' 'a-z')" = "$OWNER.github.io" ]; then
+            echo "APP_URL=https://$OWNER.github.io/" >> "$GITHUB_ENV"
+          else
+            echo "APP_URL=https://$OWNER.github.io/$REPO/" >> "$GITHUB_ENV"
+          fi
+
+      - name: Unpack icons and keystore
+        run: |
+          test -f android-assets.zip || { echo "android-assets.zip is missing from the repo"; exit 1; }
+          mkdir -p /tmp/assets && unzip -q android-assets.zip -d /tmp/assets
+          ls /tmp/assets
+
+      - name: Create the Android project
+        run: |
+          mkdir -p /tmp/cap && cd /tmp/cap
+          npm init -y
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 @capacitor/share@6 @capacitor/filesystem@6
+          mkdir www && cp /tmp/assets/www/index.html www/
+          cat > capacitor.config.json <<JSON
+          {
+            "appId": "com.dutyschedule.app",
+            "appName": "Duty Schedule",
+            "webDir": "www",
+            "server": {
+              "url": "${APP_URL}",
+              "cleartext": false,
+              "allowNavigation": ["*.github.io", "*.supabase.co", "fonts.googleapis.com", "fonts.gstatic.com", "cdn.jsdelivr.net"]
+            },
+            "android": { "allowMixedContent": false }
+          }
+          JSON
+          npx cap add android
+          cp -r /tmp/assets/res/. android/app/src/main/res/
+          find android/app/src/main/res -name 'splash.png' -exec cp /tmp/assets/splash.png {} \;
+          npx cap sync android
+
+      - name: Build the APK
+        run: |
+          mkdir -p ~/.android && cp /tmp/assets/debug.keystore ~/.android/debug.keystore
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          cd /tmp/cap/android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/duty-schedule.apk"
+
+      - name: Publish the APK for download
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: Duty Schedule APK
+          body: Download duty-schedule.apk below and install it on an Android phone.
+          files: duty-schedule.apk
