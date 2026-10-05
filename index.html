@@ -149,6 +149,14 @@ button:focus-visible,.tile:focus-visible,select:focus-visible{outline:2px solid 
 @media(min-width:1200px){:root{--mw:1280px}td button{width:36px;height:36px}.cl{width:34px;height:34px}.dh{min-width:42px}}
 @media(min-width:1500px){:root{--mw:1480px}td button{width:40px;height:40px}.dh{min-width:46px}}
 nav{z-index:8}
+.tbtn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin:6px 0;padding:13px 14px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:500;text-align:left}
+.tbtn svg{width:20px;height:20px;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tbtn span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tpv{font-size:30px;font-weight:600;text-align:center;margin:12px 0;color:var(--dk)}
+.chips{display:grid;gap:8px;margin:8px 0 14px}.c4{grid-template-columns:repeat(4,1fr)}.c2{grid-template-columns:1fr 1fr}
+.chip{padding:12px 0;border-radius:14px;background:var(--pale);color:var(--ink);font-weight:500}.chip.on{background:var(--pri);color:#fff;font-weight:600}
+.opt{display:flex;justify-content:space-between;align-items:center;width:100%;padding:15px 8px;border-radius:0;background:none;color:var(--ink);font-weight:500;text-align:left}
+.opt+.opt{border-top:1px solid var(--line)}.opt.on{color:var(--dk);font-weight:700}.opt svg{width:20px;height:20px;stroke:var(--pri);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .po{display:none}
 @page{size:A4 landscape;margin:5mm}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}.scroll td,.scroll th{padding:1px!important}.scroll td.n{font-size:11px;min-width:0;padding-right:6px!important}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
@@ -238,12 +246,16 @@ const IC={save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/>'
 csv:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M12 18v-6M9 14l3-3 3 3"/>',print:'<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
 image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>',
 cal:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M12 13v5M9.5 15.5h5"/>',copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/>',
-reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
+reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',check:'<path d="M5 12l5 5 9-10"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
 const svg=i=>`<svg viewBox="0 0 24 24">${IC[i]}</svg>`,
  tile=(fn,i,l,c="")=>`<button type="button" class="tile ${c}" onclick="${fn}">${svg(i)}<span>${l}</span></button>`;
 const sortedAct=()=>S.staff.filter(s=>s.active).slice().sort((x,y)=>x.full_name.localeCompare(y.full_name));
 function legendHtml(){return `<div class="lgd">${Object.values(S.shifts).map(x=>`<div class="lk"><span class="bd ${x.code}">${esc(x.code)}</span><div><b>${esc(x.label)}</b><small>${x.code==="O"?"Day off":tm(x.start_time)+" – "+tm(x.end_time)}</small></div></div>`).join("")}</div>`}
-function filterSel(){const f=fv();return `<label class="fl noprint">Show<select onchange="S.fv=this.value;S.sel=null;rr()"><option value="all"${f==="all"?" selected":""}>Everyone – full roster</option>${sortedAct().map(s=>`<option value="${s.id}"${f===s.id?" selected":""}>${esc(s.full_name)}</option>`).join("")}</select></label>`}
+function filterSel(){const f=fv(),cur=f==="all"?"Everyone – full roster":(S.staff.find(x=>x.id===f)?.full_name||"Everyone – full roster");
+ return `<div class="fl noprint">Show<button type="button" class="tbtn" onclick="fltM()"><span>${esc(cur)}</span>${svg("chev")}</button></div>`}
+function fltM(){const f=fv(),row=(id,l)=>`<button type="button" class="opt ${f===id?"on":""}" onclick="fp('${id}')"><span>${esc(l)}</span>${f===id?svg("check"):""}</button>`;
+ openM(`<b>Show</b><div style="margin-top:8px">${row("all","Everyone – full roster")}${sortedAct().map(x=>row(x.id,x.full_name)).join("")}</div>`)}
+function fp(id){S.fv=id;S.sel=null;closeM();rr()}
 const dayHead=()=>Array.from({length:dim()},(_,i)=>{const w=new Date(S.month.getFullYear(),S.month.getMonth(),i+1).getDay();return `<th class="dh${w%6===0?" wk":""}"><small>${DOW[w]}</small>${i+1}</th>`}).join("");
 function tableHtml(){const n=dim();
  return `<table class="rt"><tr><th></th>${dayHead()}<th>Days</th></tr>${sortedAct().map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><span class="cl ${c}">${c}</span></td>`}).join("");
@@ -436,9 +448,17 @@ function staffView(){
  <p class="err" id="ax"></p><button id="ah" onclick="addH()">Add admin</button></div>`;
  $("#app").innerHTML=shell(`<div class="nar">${h}</div>`);setT("ts","08:00");setT("te","17:00")}
 const HRS=Array.from({length:12},(_,i)=>i+1),MINS=Array.from({length:12},(_,i)=>pad(i*5));
-function timeSel(id){return `<div class="tr"><select id="${id}h">${HRS.map(h=>`<option>${h}</option>`).join("")}</select><select id="${id}m">${MINS.map(m=>`<option>${m}</option>`).join("")}</select><select id="${id}p"><option>AM</option><option>PM</option></select></div>`}
-function setT(id,t){const h=+t.slice(0,2),m=t.slice(3,5);$("#"+id+"h").value=String(h%12||12);const ms=$("#"+id+"m");if(![...ms.options].some(o=>o.value===m))ms.add(new Option(m,m));ms.value=m;$("#"+id+"p").value=h>=12?"PM":"AM"}
-function getT(id){let h=+$("#"+id+"h").value;const p=$("#"+id+"p").value;h=h%12+(p==="PM"?12:0);return pad(h)+":"+$("#"+id+"m").value}
+function timeSel(id){return `<button type="button" class="tbtn" id="${id}b" onclick="pickT('${id}')"><span id="${id}l"></span>${svg("clock")}</button>`}
+function setT(id,t){S.tv=S.tv||{};S.tv[id]=t.slice(0,5);const e=$("#"+id+"l");if(e)e.textContent=tm(t)}
+function getT(id){return(S.tv&&S.tv[id])||"08:00"}
+function pickT(id){const t=getT(id),h=+t.slice(0,2);S.tp={id,h:h%12||12,m:t.slice(3,5),p:h>=12?"PM":"AM"};tpHtml()}
+function tpHtml(){const p=S.tp,chip=(on,fn,l)=>`<button type="button" class="chip ${on?"on":""}" onclick="${fn}">${l}</button>`;
+ openM(`<b>Select time</b><div class="tpv">${p.h}:${p.m} ${p.p}</div><small style="color:var(--mut)">Hour</small><div class="chips c4">${HRS.map(h=>chip(p.h===h,`tp('h',${h})`,h)).join("")}</div>
+ <small style="color:var(--mut)">Minutes</small><div class="chips c4">${MINS.map(m=>chip(p.m===m,`tp('m','${m}')`,m)).join("")}</div>
+ <div class="chips c2">${chip(p.p==="AM","tp('p','AM')","AM")}${chip(p.p==="PM","tp('p','PM')","PM")}</div>
+ <div class="tiles">${tile("tpDone()","save","Done","pri")}${tile("closeM()","x","Cancel")}</div>`)}
+function tp(k,v){S.tp[k]=v;tpHtml()}
+function tpDone(){const p=S.tp;setT(p.id,pad(p.h%12+(p.p==="PM"?12:0))+":"+p.m);closeM()}
 function shiftCard(){return `<div class="card"><b>Shift types</b><p style="font-size:12px;color:var(--mut)">These shifts belong to your department only. O (Off) is fixed.</p>`
  +Object.values(S.shifts).map(x=>`<div class="row" style="padding:8px 0"><div><span class="pill ${x.code}">${esc(x.code)}</span> ${esc(x.label)}<br><small style="color:var(--mut)">${x.code==="O"?"Off duty":tm(x.start_time)+" – "+tm(x.end_time)}</small></div>${x.code==="O"?"":`<div style="white-space:nowrap"><button class="ghost sm" onclick="editSh('${x.code}')">Edit</button> <button class="ghost sm" onclick="delSh('${x.code}')">Delete</button></div>`}</div>`).join("")
  +`<input id="hc" placeholder="Code, 1-2 chars (e.g. N)" maxlength="2"><input id="hl" placeholder="Name (e.g. Night)"><small style="color:var(--mut)">Starts</small>${timeSel("ts")}<small style="color:var(--mut)">Ends</small>${timeSel("te")}<p class="err" id="hx"></p><button onclick="saveSh()">Save shift</button></div>`}
