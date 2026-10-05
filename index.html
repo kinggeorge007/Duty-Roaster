@@ -7,9 +7,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>try{var _t=localStorage.getItem("theme");if(_t)document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
 <style>
-:root{--bg:#F4F7F6;--card:#fff;--ink:#17231F;--mut:#84938B;--pri:#159957;--pri2:#1aa862;--dk:#126B46;--mint:#E5F5EC;--pale:#F0F8F3;--line:#E9EFEB;--M:#DFF3E7;--Mi:#126B46;--D:#F7F1DC;--Di:#7A6A20;--A:#F5F0D5;--Ai:#767024;--N:#EAF4D9;--Ni:#4F6B2A;--O:#F0F3F1;--Oi:#84938B}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1511;--card:#121f19;--ink:#E8F1EC;--mut:#8DA298;--pri:#1fae68;--pri2:#27c077;--dk:#8fe3b5;--mint:#173326;--pale:#16251d;--line:#1f2e26;--M:#1a3f2d;--Mi:#8fe3b5;--D:#3d3720;--Di:#e8d48a;--A:#38371c;--Ai:#e0dc8a;--N:#2b3b20;--Ni:#b6d98f;--O:#1b2a22;--Oi:#8fa398}}
-:root[data-theme="dark"]{--bg:#0c1511;--card:#121f19;--ink:#E8F1EC;--mut:#8DA298;--pri:#1fae68;--pri2:#27c077;--dk:#8fe3b5;--mint:#173326;--pale:#16251d;--line:#1f2e26;--M:#1a3f2d;--Mi:#8fe3b5;--D:#3d3720;--Di:#e8d48a;--A:#38371c;--Ai:#e0dc8a;--N:#2b3b20;--Ni:#b6d98f;--O:#1b2a22;--Oi:#8fa398}
+:root{--bg:#F4F7F6;--card:#fff;--ink:#17231F;--mut:#84938B;--pri:#159957;--pri2:#1aa862;--dk:#126B46;--mint:#E5F5EC;--pale:#F0F8F3;--line:#E9EFEB;--M:#C6EAD4;--Mi:#0E5A39;--D:#F2E5B4;--Di:#6B5A0F;--A:#EDE3A6;--Ai:#645E0E;--N:#D9EBB8;--Ni:#3D5A1C;--O:#F1F4F2;--Oi:#A6B2AB}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1511;--card:#121f19;--ink:#E8F1EC;--mut:#8DA298;--pri:#1fae68;--pri2:#27c077;--dk:#8fe3b5;--mint:#173326;--pale:#16251d;--line:#1f2e26;--M:#1f5238;--Mi:#a6f0c6;--D:#4a4220;--Di:#f0dc94;--A:#46441f;--Ai:#ece896;--N:#34491f;--Ni:#c4e69b;--O:#18241d;--Oi:#6f8479}}
+:root[data-theme="dark"]{--bg:#0c1511;--card:#121f19;--ink:#E8F1EC;--mut:#8DA298;--pri:#1fae68;--pri2:#27c077;--dk:#8fe3b5;--mint:#173326;--pale:#16251d;--line:#1f2e26;--M:#1f5238;--Mi:#a6f0c6;--D:#4a4220;--Di:#f0dc94;--A:#46441f;--Ai:#ece896;--N:#34491f;--Ni:#c4e69b;--O:#18241d;--Oi:#6f8479}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
 .hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:28px 20px 56px;border-radius:0 0 32px 32px}
 .hero h1{margin:0;font-size:22px}.hero p{margin:4px 0 0;opacity:.85;font-size:14px}
@@ -127,9 +127,30 @@ td button{border-radius:9px;font-weight:600}.cl{border-radius:9px;font-weight:60
 #toast{border-radius:999px;font-weight:500}
 @media(min-width:760px){.hero{padding-top:34px}.card{padding:24px}}
 @media(max-width:360px){.day{border-radius:12px}nav button{padding:10px 16px}.tile{padding:12px 10px}}
+/* ===== round 3: clarity, touch size, desktop ===== */
+:root{--mw:760px}
+main{max-width:var(--mw)}
+.hero{padding-left:max(20px,calc((100% - var(--mw))/2 + 16px));padding-right:max(20px,calc((100% - var(--mw))/2 + 16px))}
+.M,.D,.A,.N{font-weight:700}.O{font-weight:500}
+.day i{font-weight:700;font-size:14px}.day.O i{font-weight:500}
+.day.O{background:var(--O)}
+.scroll table{border-spacing:0;min-width:100%}
+.scroll td,.scroll th{padding:4px 3px;border-bottom:1px solid var(--line)}
+.scroll tr:last-child td{border-bottom:0}
+.scroll td.n{padding:4px 14px 4px 4px;border-right:1px solid var(--line);font-size:14px;min-width:120px;z-index:1}
+td button{width:40px;height:40px;font-size:13px;border-radius:11px}
+.cl{width:36px;height:36px;font-size:12px;border-radius:10px}
+.dh{min-width:46px}
+.tile.danger{background:rgba(217,83,79,.12);color:#c0504d;box-shadow:none}
+button:focus-visible,.tile:focus-visible,select:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+@media(hover:hover){button:hover,.tile:hover{filter:brightness(.97)}.day:hover{filter:brightness(.97)}td.n:hover{color:var(--pri)}}
+.pv,.nar{max-width:660px;margin-inline:auto}
+@media(min-width:900px){:root{--mw:980px}.hero{padding-top:34px}}
+@media(min-width:1200px){:root{--mw:1280px}td button{width:36px;height:36px}.cl{width:34px;height:34px}.dh{min-width:42px}}
+@media(min-width:1500px){:root{--mw:1480px}td button{width:40px;height:40px}.dh{min-width:46px}}
 .po{display:none}
 @page{size:A4 landscape;margin:5mm}
-@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
+@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}.scroll td,.scroll th{padding:1px!important}.scroll td.n{font-size:11px;min-width:0;padding-right:6px!important}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
 </style></head><body>
 <div id="toast"></div><div id="app"></div><div id="scrim" class="scrim" onclick="closeNav()"></div><aside id="side" class="side"></aside><div id="mdl" class="mdl" onclick="if(event.target===this)closeM()"><div class="mbox" id="mbx"></div></div>
 <script>
@@ -216,7 +237,7 @@ const IC={save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/>'
 csv:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M12 18v-6M9 14l3-3 3 3"/>',print:'<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
 image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>',
 cal:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M12 13v5M9.5 15.5h5"/>',copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/>',
-reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>'};
+reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
 const svg=i=>`<svg viewBox="0 0 24 24">${IC[i]}</svg>`,
  tile=(fn,i,l,c="")=>`<button type="button" class="tile ${c}" onclick="${fn}">${svg(i)}<span>${l}</span></button>`;
 const sortedAct=()=>S.staff.filter(s=>s.active).slice().sort((x,y)=>x.full_name.localeCompare(y.full_name));
@@ -229,9 +250,9 @@ function tableHtml(){const n=dim();
 function personHtml(uid){const n=dim(),off=S.month.getDay(),today=new Date(),mine=Array.from({length:n},(_,i)=>code(uid,dkey(i+1))),work=mine.filter(c=>c!=="O").length,
  isCur=today.getMonth()===S.month.getMonth()&&today.getFullYear()===S.month.getFullYear();
  let nxt=null;for(let d=(isCur?today.getDate():1);d<=n;d++)if(mine[d-1]!=="O"){nxt=d;break}
- return `<div class="stats"><div class="stat"><b>${work}</b><span>Workdays</span></div><div class="stat"><b>${n-work}</b><span>Days off</span></div><div class="stat"><b>${nxt?nxt+" "+mine[nxt-1]:"–"}</b><span>Next shift</span></div></div>
+ return `<div class="pv"><div class="stats"><div class="stat"><b>${work}</b><span>Workdays</span></div><div class="stat"><b>${n-work}</b><span>Days off</span></div><div class="stat"><b>${nxt?nxt+" "+mine[nxt-1]:"–"}</b><span>Next shift</span></div></div>
  <div class="grid">${DOW.map(d=>`<div class="dow">${d}</div>`).join("")}${Array(off).fill('<div class="day blank"></div>').join("")}
- ${mine.map((c,i)=>`<div class="day ${c} ${S.sel===i+1?"sel":""}" onclick="S.sel=${i+1};rr()">${i+1}<i>${c}</i></div>`).join("")}</div>`}
+ ${mine.map((c,i)=>`<div class="day ${c} ${S.sel===i+1?"sel":""}" onclick="S.sel=${i+1};rr()">${i+1}<i>${c}</i></div>`).join("")}</div></div>`}
 function viewBody(){const f=fv(),mon=S.month.toLocaleString("default",{month:"long",year:"numeric"}),nm=f==="all"?"":" · "+(S.staff.find(x=>x.id===f)?.full_name||"");
  return `<div class="card"><h2 class="po">${esc(S.dept?.name||"Duty Schedule")} · ${mon}${esc(nm)}</h2>${f==="all"?`<div class="scroll">${tableHtml()}</div>`:personHtml(f)}${legendHtml()}</div>`}
 function dayCard(uid){if(!S.sel)return"";const k=dkey(S.sel),c=code(uid,k);
@@ -241,7 +262,7 @@ function dayCard(uid){if(!S.sel)return"";const k=dkey(S.sel),c=code(uid,k);
  return h+`</div>`}
 function calView(){const f=fv(),me=S.prof.id;
  let h=(!S.roster||(!S.roster.published&&!hod()))?`<div class="card">No published roster for this month yet.</div>`:"";
- h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${f}')`,"image","Save image")}${tile("print()","print","Print")}${hod()?tile("linkM()","share","Share link"):""}${f===me?tile("ics()","cal","Phone calendar"):""}</div></div>`;
+ h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${f}')`,"image","Save image")}${tile(`exportPdf('${f}')`,"pdf","Save PDF")}${tile("print()","print","Print")}${hod()?tile("linkM()","share","Share link"):""}${f===me?tile("ics()","cal","Phone calendar"):""}</div></div>`;
  if(S.roster&&(S.roster.published||hod())){h+=viewBody()+(f==="all"?"":dayCard(f))}
  $("#app").innerHTML=shell(h)}
 
@@ -256,7 +277,7 @@ async function vLoad(){
  S.asg={};data.assignments.forEach(x=>(S.asg[x.u]??={})[x.d]=x.c);S.roster={published:data.published};vRender()}
 function vRender(){
  let h=S.roster.published?"":`<div class="card">This month's schedule has not been published yet.</div>`;
- h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${fv()}')`,"image","Save image")}${tile("print()","print","Print")}</div></div>`;
+ h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${fv()}')`,"image","Save image")}${tile(`exportPdf('${fv()}')`,"pdf","Save PDF")}${tile("print()","print","Print")}</div></div>`;
  if(S.roster.published)h+=viewBody()+(fv()==="all"?"":dayCard(fv()));
  $("#app").innerHTML=`<div class="hero noprint"><h1>${esc(S.dept.name)}</h1><p>Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><main>${h}</main>`}
 
@@ -275,44 +296,78 @@ function shareLink(){const d={title:"Duty Schedule",text:(S.dept.name||"")+" dut
 function copyLink(){const i=$("#lu");i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(()=>document.execCommand("copy")).finally(()=>toast("Link copied"))}
 async function resetLink(){if(!confirm("Make a new link? The old link will stop working."))return;
  const{data,error}=await sb.rpc("rotate_share_link");if(error)return toast(error.message);S.dept.share_token=data;linkM();toast("New link created")}
-const PAL=c=>{if(c==="O")return["#F0F3F1","#84938B"];if(c==="M")return["#DFF3E7","#126B46"];if(c==="D")return["#F7F1DC","#7A6A20"];if(c==="A")return["#F5F0D5","#767024"];if(c==="N")return["#EAF4D9","#4F6B2A"];let h=0;for(const ch of c)h=(h*31+ch.charCodeAt(0))%360;return[`hsl(${h} 45% 92%)`,`hsl(${h} 40% 28%)`]};
+const PAL=c=>{if(c==="O")return["#F1F4F2","#A6B2AB"];if(c==="M")return["#C6EAD4","#0E5A39"];if(c==="D")return["#F2E5B4","#6B5A0F"];if(c==="A")return["#EDE3A6","#645E0E"];if(c==="N")return["#D9EBB8","#3D5A1C"];let h=0;for(const ch of c)h=(h*31+ch.charCodeAt(0))%360;return[`hsl(${h} 45% 92%)`,`hsl(${h} 40% 28%)`]};
 function rrect(c,x,y,w,h,r,f){c.beginPath();c.roundRect?c.roundRect(x,y,w,h,r):c.rect(x,y,w,h);c.fillStyle=f;c.fill()}
-async function exportImage(f){
+function buildCanvas(f,o={}){
  const FONT='system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',n=dim(),y0=S.month.getFullYear(),m0=S.month.getMonth(),
-  mon=S.month.toLocaleString("default",{month:"long",year:"numeric"}),dept=S.dept?.name||"Duty Schedule",staff=sortedAct(),shifts=Object.values(S.shifts),P=20,LW=156,LH=44;
+  mon=S.month.toLocaleString("default",{month:"long",year:"numeric"}),dept=S.dept?.name||"Duty Schedule",staffAll=sortedAct(),staff=o.rows||staffAll,shifts=Object.values(S.shifts),P=20,LW=156,LH=44;
  const tc=document.createElement("canvas").getContext("2d");tc.font=`600 13px ${FONT}`;
  const legH=w=>Math.ceil(shifts.length/Math.max(1,Math.floor((w-2*P)/LW)))*LH;
  const legend=(c,y,w)=>{const cols=Math.max(1,Math.floor((w-2*P)/LW));shifts.forEach((s,i)=>{const x=P+(i%cols)*LW,yy=y+Math.floor(i/cols)*LH,[bg,fg]=PAL(s.code);
   rrect(c,x,yy,LW-8,LH-8,9,"#F0F8F3");rrect(c,x+6,yy+6,24,24,7,bg);c.textBaseline="middle";c.textAlign="center";c.fillStyle=fg;c.font=`700 12px ${FONT}`;c.fillText(s.code,x+18,yy+18.5);
   c.textAlign="left";c.fillStyle="#3b5246";c.font=`600 12px ${FONT}`;c.fillText(s.label,x+38,yy+12,108);
   c.fillStyle="#7b8f83";c.font=`11px ${FONT}`;c.fillText(s.code==="O"?"Day off":tm(s.start_time)+" – "+tm(s.end_time),x+38,yy+25,108)})};
- let W,H,body;
+ let W,H,body,geo;const lg=o.legend!==false;
  if(f==="all"){
-  const cell=30,gap=3,gx=P+Math.max(100,...staff.map(s=>tc.measureText(s.full_name).width+12)),hy=P+58,ry=hy+36;
-  W=Math.max(gx+n*(cell+gap)+46+P,520);H=ry+staff.length*(cell+gap)+18+legH(W)+P;
-  body=c=>{c.textBaseline="alphabetic";c.textAlign="left";c.fillStyle="#126B46";c.font=`700 22px ${FONT}`;c.fillText(dept,P,P+22);c.fillStyle="#84938B";c.font=`14px ${FONT}`;c.fillText("Duty Schedule · "+mon,P,P+44);
+  const cell=30,gap=3,gx=P+Math.max(100,...staffAll.map(s=>tc.measureText(s.full_name).width+12)),hy=P+58,ry=hy+36;
+  W=Math.max(gx+n*(cell+gap)+46+P,520);H=ry+staff.length*(cell+gap)+18+(lg?legH(W):0)+P;geo={W,ry,rh:cell+gap,legH:legH(W),P};
+  body=c=>{c.textBaseline="alphabetic";c.textAlign="left";c.fillStyle="#126B46";c.font=`700 22px ${FONT}`;c.fillText(dept,P,P+22);c.fillStyle="#84938B";c.font=`14px ${FONT}`;c.fillText("Duty Schedule · "+mon+(o.tag||""),P,P+44);
    for(let d=1;d<=n;d++){const x=gx+(d-1)*(cell+gap)+cell/2,w=new Date(y0,m0,d).getDay(),wk=w%6===0;c.textAlign="center";c.fillStyle=wk?"#159957":"#84938B";c.font=`600 9px ${FONT}`;c.fillText(DOW[w],x,hy+10);c.fillStyle=wk?"#159957":"#17231F";c.font=`700 12px ${FONT}`;c.fillText(String(d),x,hy+26)}
    c.fillStyle="#17231F";c.font=`700 11px ${FONT}`;c.fillText("Days",gx+n*(cell+gap)+20,hy+26);
    staff.forEach((s,i)=>{const y=ry+i*(cell+gap);if(i%2===0)rrect(c,P-6,y-2,W-2*P+12,cell+gap+1,8,"#F7FAF8");
     c.textBaseline="middle";c.textAlign="left";c.fillStyle="#17231F";c.font=`600 13px ${FONT}`;c.fillText(s.full_name,P,y+cell/2);
     let w=0;for(let d=1;d<=n;d++){const k=code(s.id,dkey(d)),[bg,fg]=PAL(k);if(k!=="O")w++;const x=gx+(d-1)*(cell+gap);rrect(c,x,y,cell,cell,8,bg);c.fillStyle=fg;c.font=`700 11px ${FONT}`;c.textAlign="center";c.fillText(k,x+cell/2,y+cell/2+.5)}
     c.fillStyle="#17231F";c.font=`700 12px ${FONT}`;c.fillText(String(w),gx+n*(cell+gap)+20,y+cell/2)});
-   legend(c,ry+staff.length*(cell+gap)+10,W)}
+   if(lg)legend(c,ry+staff.length*(cell+gap)+10,W)}
  }else{
   const who=S.staff.find(x=>x.id===f)?.full_name||"",cw=58,ch=62,g=6,off=new Date(y0,m0,1).getDay(),rows=Math.ceil((off+n)/7),gy=P+112,
    mine=Array.from({length:n},(_,i)=>code(f,dkey(i+1))),work=mine.filter(k=>k!=="O").length;
-  W=P*2+7*cw+6*g;H=gy+rows*(ch+g)+14+legH(W)+P;
+  W=P*2+7*cw+6*g;H=gy+rows*(ch+g)+14+legH(W)+P;geo={W,H};
   body=c=>{c.textBaseline="alphabetic";c.textAlign="left";c.fillStyle="#126B46";c.font=`700 24px ${FONT}`;c.fillText(who,P,P+24,W-2*P);c.fillStyle="#84938B";c.font=`13px ${FONT}`;c.fillText(dept+" · "+mon,P,P+46,W-2*P);
    c.fillStyle="#17231F";c.font=`600 13px ${FONT}`;c.fillText(`Workdays ${work}   ·   Days off ${n-work}`,P,P+76);
    c.textAlign="center";c.fillStyle="#84938B";c.font=`600 10px ${FONT}`;DOW.forEach((d,i)=>c.fillText(d,P+i*(cw+g)+cw/2,gy-10));
    mine.forEach((k,i)=>{const p=off+i,x=P+(p%7)*(cw+g),y=gy+Math.floor(p/7)*(ch+g),[bg,fg]=PAL(k);rrect(c,x,y,cw,ch,12,bg);c.fillStyle=fg;c.globalAlpha=.7;c.textAlign="left";c.font=`600 11px ${FONT}`;c.fillText(String(i+1),x+8,y+15);c.globalAlpha=1;c.textAlign="center";c.font=`700 20px ${FONT}`;c.fillText(k,x+cw/2,y+ch/2+12)});
    legend(c,gy+rows*(ch+g)+10,W)}
  }
+ if(o.measure)return geo;
  const sc=Math.min(3,Math.sqrt(16e6/(W*H))),cv=document.createElement("canvas");cv.width=Math.round(W*sc);cv.height=Math.round(H*sc);
  const c=cv.getContext("2d");c.scale(sc,sc);c.fillStyle="#fff";c.fillRect(0,0,W,H);body(c);
- const blob=await new Promise(r=>cv.toBlob(r,"image/png"));if(!blob)return toast("Could not create the image");
- const nm=f==="all"?"everyone":(S.staff.find(x=>x.id===f)?.full_name||"staff");
- showImage(blob,("duty-schedule-"+mon+"-"+nm).replace(/[^a-z0-9]+/gi,"-").toLowerCase()+".png")}
+ return{cv,W,H,mon,nm:f==="all"?"everyone":(S.staff.find(x=>x.id===f)?.full_name||"staff")}}
+const fname=(mon,nm,ext)=>("duty-schedule-"+mon+"-"+nm).replace(/[^a-z0-9]+/gi,"-").toLowerCase()+"."+ext;
+async function exportImage(f){const{cv,mon,nm}=buildCanvas(f);const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+ if(!blob)return toast("Could not create the image");showImage(blob,fname(mon,nm,"png"))}
+function makePdf(pages){
+ const enc=new TextEncoder(),parts=[],offs=[];let len=0;
+ const push=b=>{const u=typeof b==="string"?enc.encode(b):b;parts.push(u);len+=u.length};
+ const obj=(id,fn)=>{offs[id]=len;push(`${id} 0 obj\n`);fn();push("\nendobj\n")};
+ const f2=v=>v.toFixed(2);
+ push("%PDF-1.4\n%\u00e2\u00e3\u00cf\u00d3\n");
+ obj(1,()=>push("<< /Type /Catalog /Pages 2 0 R >>"));
+ obj(2,()=>push(`<< /Type /Pages /Kids [${pages.map((_,i)=>`${3+3*i} 0 R`).join(" ")}] /Count ${pages.length} >>`));
+ pages.forEach((p,i)=>{const pg=3+3*i,ct=pg+1,im=pg+2,cs=`q ${f2(p.dw)} 0 0 ${f2(p.dh)} ${f2(p.x)} ${f2(p.y)} cm /Im0 Do Q`;
+  obj(pg,()=>push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${f2(p.w)} ${f2(p.h)}] /Resources << /XObject << /Im0 ${im} 0 R >> >> /Contents ${ct} 0 R >>`));
+  obj(ct,()=>push(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`));
+  obj(im,()=>{push(`<< /Type /XObject /Subtype /Image /Width ${p.iw} /Height ${p.ih} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.img.length} >>\nstream\n`);push(p.img);push("\nendstream")})});
+ const xr=len,n=3+3*pages.length;
+ push(`xref\n0 ${n}\n0000000000 65535 f \n`);for(let i=1;i<n;i++)push(String(offs[i]).padStart(10,"0")+" 00000 n \n");
+ push(`trailer\n<< /Size ${n} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`);
+ return new Blob(parts,{type:"application/pdf"})}
+async function exportPdf(f){
+ try{toast("Creating PDF…");
+  const land=f==="all",PW=land?841.89:595.28,PH=land?595.28:841.89,M=14.17,aw=PW-2*M,ah=PH-2*M;let cvs=[];
+  if(land){const g=buildCanvas(f,{measure:true}),capPx=ah/(aw/g.W),rows=sortedAct();let chunks=[rows];
+   if(g.ry+rows.length*g.rh+18+g.legH+g.P>capPx){const per=Math.max(1,Math.floor((capPx-g.ry-18-g.legH-g.P-10)/g.rh));chunks=[];for(let i=0;i<rows.length;i+=per)chunks.push(rows.slice(i,i+per))}
+   chunks.forEach((r,i)=>cvs.push(buildCanvas(f,{rows:r,legend:i===chunks.length-1,tag:chunks.length>1?` · page ${i+1} of ${chunks.length}`:""})))}
+  else cvs.push(buildCanvas(f));
+  const pages=[];
+  for(const o of cvs){const blob=await new Promise(r=>o.cv.toBlob(r,"image/jpeg",.92));if(!blob)throw new Error("Could not create the PDF");
+   const sc=Math.min(aw/o.W,ah/o.H),dw=o.W*sc,dh=o.H*sc;
+   pages.push({w:PW,h:PH,img:new Uint8Array(await blob.arrayBuffer()),iw:o.cv.width,ih:o.cv.height,dw,dh,x:(PW-dw)/2,y:PH-M-dh})}
+  showPdf(makePdf(pages),fname(cvs[0].mon,cvs[0].nm,"pdf"),pages.length,land)
+ }catch(e){toast(e.message||"Could not create the PDF")}}
+function showPdf(blob,name,n,land){S.imgFile=new File([blob],name,{type:"application/pdf"});if(S.imgUrl)URL.revokeObjectURL(S.imgUrl);S.imgUrl=URL.createObjectURL(blob);
+ const can=!!(navigator.canShare&&navigator.canShare({files:[S.imgFile]}));
+ openM(`<b>PDF ready</b><div style="display:flex;gap:12px;align-items:center;margin:14px 0;padding:14px;border-radius:18px;background:var(--pale)"><div class="av" style="flex:none">PDF</div><div style="min-width:0"><div style="word-break:break-all;font-weight:600">${esc(name)}</div><small style="color:var(--mut)">A4 ${land?"landscape":"portrait"} · 5 mm margins · ${n} page${n>1?"s":""} · ${(blob.size/1024).toFixed(0)} KB</small></div></div><div class="tiles">${can?tile("shareImg()","share","Share","pri"):""}${tile("saveImg()","save",can?"Save":"Save PDF",can?"":"pri")}${tile("closeM()","x","Close")}</div>`)}
 
 function ics(){
  const n=dim(),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//DutyRoster//EN"];
@@ -326,7 +381,7 @@ function rosterView(){
  const pub=S.roster?.published;
  let h=`<div class="card"><h2 class="po">Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span>':""}</p>
  <div class="tiles noprint">${tile("saveR()","save","Save","pri")}${tile(`pubR(${!pub})`,pub?"unpublish":"publish",pub?"Unpublish":"Publish")}
- <label class="tile">${svg("csv")}<span>Import CSV</span><input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label>${tile("print()","print","Print")}${tile("exportImage('all')","image","Save image")}${tile("linkM()","share","Share link")}</div>
+ <label class="tile">${svg("csv")}<span>Import CSV</span><input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label>${tile("print()","print","Print")}${tile("exportImage('all')","image","Save image")}${tile("exportPdf('all')","pdf","Save PDF")}${tile("linkM()","share","Share link")}${S.roster?tile("delR()","trash","Delete roster","danger"):""}</div>
  <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}. CSV: header <code>name,1,2,…</code> then one row per staff.</p></div>
  <div class="card scroll"><table><tr><th></th>${Array.from({length:n},(_,i)=>{const w=new Date(S.month.getFullYear(),S.month.getMonth(),i+1).getDay();return `<th class="dh${w%6===0?" wk":""}"><small>${DOW[w]}</small>${i+1}</th>`}).join("")}<th>Days</th></tr>
  ${act.map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><button class="${c}" onclick="cyc('${s.id}',${i+1})">${c}</button></td>`}).join("");
@@ -341,6 +396,13 @@ async function saveR(){try{const r=await ensure(),rows=[];
  S.staff.filter(s=>s.active).forEach(s=>{for(let d=1;d<=dim();d++){const k=dkey(d),c=code(s.id,k);if(!S.shifts[c])throw new Error(`Invalid shift "${c}" for ${s.full_name} on day ${d}`);rows.push({roster_id:r.id,user_id:s.id,day:k,shift_code:c})}});
  const{error}=await sb.from("assignments").upsert(rows,{onConflict:"roster_id,user_id,day"});if(error)throw error;
  S.dirty=false;toast("Saved");rosterView()}catch(e){toast(e.message)}}
+async function delR(){
+ if(!S.roster)return toast("There is no roster for this month.");
+ const mon=S.month.toLocaleString("default",{month:"long",year:"numeric"});
+ if(!confirm(`Delete the ${mon} roster?\n\nAll shifts for this month are removed${S.roster.published?" and the shared link will stop showing it":""}. Your staff and shift types are kept. This cannot be undone.`))return;
+ const{error}=await sb.from("rosters").delete().eq("id",S.roster.id);
+ if(error)return toast(/publication_history|foreign key/i.test(error.message)?"Run the delete-roster SQL in Supabase first.":error.message);
+ S.dirty=false;toast("Roster deleted");load()}
 async function pubR(on){try{if(S.dirty)await saveR();const r=await ensure();
  const{error}=await sb.from("rosters").update({published:on}).eq("id",r.id);if(error)throw error;
  await sb.from("publication_history").insert({roster_id:r.id,action:on?"published":"unpublished",acted_by:S.prof.id});
@@ -364,7 +426,7 @@ function staffView(){
  <div class="card"><b>Add an admin (HOD)</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Only admins sign in. Give them a one-time login.</p>
  <input id="an" placeholder="Full name"><input id="ai" type="text" autocapitalize="none" placeholder="Email or ID for sign-in"><input id="ap" type="password" placeholder="Temporary password (8+ chars)">
  <p class="err" id="ax"></p><button id="ah" onclick="addH()">Add admin</button></div>`;
- $("#app").innerHTML=shell(h);setT("ts","08:00");setT("te","17:00")}
+ $("#app").innerHTML=shell(`<div class="nar">${h}</div>`);setT("ts","08:00");setT("te","17:00")}
 const HRS=Array.from({length:12},(_,i)=>i+1),MINS=Array.from({length:12},(_,i)=>pad(i*5));
 function timeSel(id){return `<div class="tr"><select id="${id}h">${HRS.map(h=>`<option>${h}</option>`).join("")}</select><select id="${id}m">${MINS.map(m=>`<option>${m}</option>`).join("")}</select><select id="${id}p"><option>AM</option><option>PM</option></select></div>`}
 function setT(id,t){const h=+t.slice(0,2),m=t.slice(3,5);$("#"+id+"h").value=String(h%12||12);const ms=$("#"+id+"m");if(![...ms.options].some(o=>o.value===m))ms.add(new Option(m,m));ms.value=m;$("#"+id+"p").value=h>=12?"PM":"AM"}
@@ -378,7 +440,10 @@ async function saveSh(){const c=$("#hc").value.trim().toUpperCase(),l=$("#hl").v
  const{error}=await sb.from("shifts").upsert({department_id:S.prof.department_id,code:c,label:l,start_time:getT("ts"),end_time:getT("te")},{onConflict:"department_id,code"});
  if(error)return $("#hx").textContent=error.message;toast("Shift saved");await loadShifts();render()}
 async function delSh(c){const{count}=await sb.from("assignments").select("roster_id",{count:"exact",head:true}).eq("shift_code",c);
- if(count>0)return toast("Shift "+c+" is used in a roster. Change those cells first.");
+ if(count>0){const{data:rs}=await sb.from("rosters").select("id,month").eq("department_id",S.prof.department_id);
+  const hits=(await Promise.all((rs||[]).map(async r=>{const{count:k}=await sb.from("assignments").select("roster_id",{count:"exact",head:true}).eq("roster_id",r.id).eq("shift_code",c);return k>0?r.month:null}))).filter(Boolean).sort();
+  const names=hits.map(m=>new Date(m+"T00:00").toLocaleString("default",{month:"long",year:"numeric"}));
+  return alert(`Shift ${c} is still used in: ${names.join(", ")||"a roster"}.\n\nOpen the Roster tab for ${names.length>1?"each of those months":"that month"} and tap Delete roster (or change those cells), then delete the shift.`)}
  if(!confirm("Delete shift "+c+"?"))return;
  const{error}=await sb.from("shifts").delete().eq("department_id",S.prof.department_id).eq("code",c);
  if(error)return toast(error.message);toast("Shift deleted");await loadShifts();render()}
