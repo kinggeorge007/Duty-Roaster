@@ -148,6 +148,7 @@ button:focus-visible,.tile:focus-visible,select:focus-visible{outline:2px solid 
 @media(min-width:900px){:root{--mw:980px}.hero{padding-top:34px}}
 @media(min-width:1200px){:root{--mw:1280px}td button{width:36px;height:36px}.cl{width:34px;height:34px}.dh{min-width:42px}}
 @media(min-width:1500px){:root{--mw:1480px}td button{width:40px;height:40px}.dh{min-width:46px}}
+nav{z-index:8}
 .po{display:none}
 @page{size:A4 landscape;margin:5mm}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}.scroll td,.scroll th{padding:1px!important}.scroll td.n{font-size:11px;min-width:0;padding-right:6px!important}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
@@ -379,15 +380,22 @@ function rosterView(){
  const _sl=document.querySelector(".scroll")?.scrollLeft||0,_sy=window.scrollY;
  const n=dim(),act=S.staff.filter(s=>s.active&&s.role==="staff"||s.active&&s.role==="hod");
  const pub=S.roster?.published;
- let h=`<div class="card"><h2 class="po">Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span>':""}</p>
- <div class="tiles noprint">${tile("saveR()","save","Save","pri")}${tile(`pubR(${!pub})`,pub?"unpublish":"publish",pub?"Unpublish":"Publish")}
- <label class="tile">${svg("csv")}<span>Import CSV</span><input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label>${tile("print()","print","Print")}${tile("exportImage('all')","image","Save image")}${tile("exportPdf('all')","pdf","Save PDF")}${tile("linkM()","share","Share link")}${S.roster?tile("delR()","trash","Delete roster","danger"):""}</div>
- <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}. CSV: header <code>name,1,2,…</code> then one row per staff.</p></div>
+ let h=`<div class="card"><h2 class="po">${esc(S.dept?.name||"Duty Schedule")} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span> <button class="sm" onclick="saveR()">Save now</button>':""}</p>
+ <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}.</p></div>
  <div class="card scroll"><table><tr><th></th>${Array.from({length:n},(_,i)=>{const w=new Date(S.month.getFullYear(),S.month.getMonth(),i+1).getDay();return `<th class="dh${w%6===0?" wk":""}"><small>${DOW[w]}</small>${i+1}</th>`}).join("")}<th>Days</th></tr>
  ${act.map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><button class="${c}" onclick="cyc('${s.id}',${i+1})">${c}</button></td>`}).join("");
-  return `<tr><td class="n">${esc(s.full_name)}</td>${cells}<td><b>${w}</b></td></tr>`}).join("")}</table></div>`;
+  return `<tr><td class="n">${esc(s.full_name)}</td>${cells}<td><b>${w}</b></td></tr>`}).join("")}</table></div>
+ <div class="card noprint"><div class="tiles" style="margin-top:0">${tile("saveR()","save","Save","pri")}${tile(`pubR(${!pub})`,pub?"unpublish":"publish",pub?"Unpublish":"Publish")}
+ <label class="tile">${svg("csv")}<span>Import CSV</span><input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label>${tile("print()","print","Print")}${tile("exportImage('all')","image","Save image")}${tile("exportPdf('all')","pdf","Save PDF")}${tile("linkM()","share","Share link")}${S.roster?tile("delR()","trash","Delete roster","danger"):""}</div>
+ <p style="font-size:12px;color:var(--mut);margin:12px 0 0">CSV import: header <code>name,1,2,…</code> then one row per staff.</p></div>
+ <div class="card noprint"><b>Department name</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Shown at the top of printed rosters, PDFs, images and the shared link.${/^your dep/i.test(S.dept?.name||"")?" <b style='color:#c0504d'>It still shows the placeholder name.</b>":""}</p><input id="dn" value="${esc(S.dept?.name||"")}" maxlength="60" placeholder="e.g. Pharmacy Department"><p class="err" id="dx"></p><button class="ghost" onclick="saveDept()">Save name</button></div>`;
  $("#app").innerHTML=shell(h);
  const _e=document.querySelector(".scroll");if(_e)_e.scrollLeft=_sl;window.scrollTo(0,_sy)}
+async function saveDept(){const n=$("#dn").value.trim();if(n.length<2)return $("#dx").textContent="Enter the department name (2 or more letters).";
+ const{data,error}=await sb.from("departments").update({name:n}).eq("id",S.prof.department_id).select("name");
+ if(error)return $("#dx").textContent=error.message;
+ if(!data||!data.length)return $("#dx").textContent="Not saved. Run the department SQL in Supabase first.";
+ S.dept=S.dept||{};S.dept.name=n;toast("Department name saved");rosterView()}
 function cyc(u,d){const k=dkey(d),o=Object.keys(S.shifts),c=code(u,k);(S.asg[u]??={})[k]=o[(o.indexOf(c)+1)%o.length];S.dirty=true;rosterView()}
 async function ensure(){if(S.roster)return S.roster;
  const{data,error}=await sb.from("rosters").insert({department_id:S.prof.department_id,month:ym(S.month)}).select().single();
