@@ -1,6 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Duty Schedule</title>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#159957">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Duty Schedule"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="format-detection" content="telephone=no">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="icon" href="icon-192.png" sizes="192x192" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -294,18 +295,24 @@ function vRender(){
  if(S.roster.published)h+=viewBody()+(fv()==="all"?"":dayCard(fv()));
  $("#app").innerHTML=`<div class="hero noprint"><h1>${esc(S.dept.name)}</h1><p>Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><main>${h}</main>`}
 
+/* ---------- Android app (wrapper) support ---------- */
+const isNat=()=>!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+const toB64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(b)});
+async function natShare(file,name){try{const P=Capacitor.Plugins,w=await P.Filesystem.writeFile({path:name,data:await toB64(file),directory:"CACHE"});
+ await P.Share.share({title:"Duty Schedule",files:[w.uri],dialogTitle:"Send or save"})}catch(e){const m=String(e&&e.message||e);if(!/cancel/i.test(m))toast("Could not share: "+m)}}
+
 /* ---------- modal, image export, share link ---------- */
 function openM(h){$("#mbx").innerHTML=h;$("#mdl").classList.add("open")}
 function closeM(){$("#mdl").classList.remove("open");if(S.imgUrl){URL.revokeObjectURL(S.imgUrl);S.imgUrl=null}}
 function showImage(blob,name){S.imgFile=new File([blob],name,{type:"image/png"});if(S.imgUrl)URL.revokeObjectURL(S.imgUrl);S.imgUrl=URL.createObjectURL(blob);
- const can=!!(navigator.canShare&&navigator.canShare({files:[S.imgFile]}));
- openM(`<b>Schedule image</b><img src="${S.imgUrl}" alt="" style="width:100%;border-radius:12px;margin:10px 0;border:1px solid rgba(0,135,81,.2)"><div class="tiles">${can?tile("shareImg()","share","Share","pri"):""}${tile("saveImg()","save",can?"Save":"Save image",can?"":"pri")}${tile("closeM()","x","Close")}</div>`)}
-function shareImg(){navigator.share({files:[S.imgFile],title:"Duty Schedule"}).catch(()=>{})}
-function saveImg(){const a=document.createElement("a");a.href=S.imgUrl;a.download=S.imgFile.name;document.body.appendChild(a);a.click();a.remove();toast("Image saved")}
+ const can=isNat()||!!(navigator.canShare&&navigator.canShare({files:[S.imgFile]}));
+ openM(`<b>Schedule image</b><img src="${S.imgUrl}" alt="" style="width:100%;border-radius:12px;margin:10px 0;border:1px solid rgba(0,135,81,.2)"><div class="tiles">${can?tile("shareImg()","share",isNat()?"Share or save":"Share","pri"):""}${isNat()?"":tile("saveImg()","save",can?"Save":"Save image",can?"":"pri")}${tile("closeM()","x","Close")}</div>`)}
+function shareImg(){if(isNat())return natShare(S.imgFile,S.imgFile.name);navigator.share({files:[S.imgFile],title:"Duty Schedule"}).catch(()=>{})}
+function saveImg(){if(isNat())return natShare(S.imgFile,S.imgFile.name);const a=document.createElement("a");a.href=S.imgUrl;a.download=S.imgFile.name;document.body.appendChild(a);a.click();a.remove();toast("Image saved")}
 const shareUrl=()=>location.origin+location.pathname+"?s="+S.dept.share_token;
 function linkM(){if(!S.dept?.share_token)return toast("Run the sharing SQL in Supabase first.");
  openM(`<b>Share link</b><p style="font-size:13px;color:var(--mut)">Anyone with this link can view the <b>published</b> schedule, filter by name and save it as an image. They cannot edit anything.</p><input id="lu" readonly value="${esc(shareUrl())}" onclick="this.select()"><div class="tiles">${tile("shareLink()","share","Share","pri")}${tile("copyLink()","copy","Copy")}${tile("resetLink()","reset","New link")}</div><button class="ghost" style="width:100%;margin-top:10px" onclick="closeM()">Close</button>`)}
-function shareLink(){const d={title:"Duty Schedule",text:(S.dept.name||"")+" duty schedule",url:shareUrl()};navigator.share?navigator.share(d).catch(()=>{}):copyLink()}
+function shareLink(){const d={title:"Duty Schedule",text:(S.dept.name||"")+" duty schedule",url:shareUrl()};if(isNat())return Capacitor.Plugins.Share.share({title:d.title,text:d.text,url:d.url,dialogTitle:"Share link"}).catch(()=>{});navigator.share?navigator.share(d).catch(()=>{}):copyLink()}
 function copyLink(){const i=$("#lu");i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(()=>document.execCommand("copy")).finally(()=>toast("Link copied"))}
 async function resetLink(){if(!confirm("Make a new link? The old link will stop working."))return;
  const{data,error}=await sb.rpc("rotate_share_link");if(error)return toast(error.message);S.dept.share_token=data;linkM();toast("New link created")}
@@ -379,14 +386,14 @@ async function exportPdf(f){
   showPdf(makePdf(pages),fname(cvs[0].mon,cvs[0].nm,"pdf"),pages.length,land)
  }catch(e){toast(e.message||"Could not create the PDF")}}
 function showPdf(blob,name,n,land){S.imgFile=new File([blob],name,{type:"application/pdf"});if(S.imgUrl)URL.revokeObjectURL(S.imgUrl);S.imgUrl=URL.createObjectURL(blob);
- const can=!!(navigator.canShare&&navigator.canShare({files:[S.imgFile]}));
- openM(`<b>PDF ready</b><div style="display:flex;gap:12px;align-items:center;margin:14px 0;padding:14px;border-radius:18px;background:var(--pale)"><div class="av" style="flex:none">PDF</div><div style="min-width:0"><div style="word-break:break-all;font-weight:600">${esc(name)}</div><small style="color:var(--mut)">A4 ${land?"landscape":"portrait"} · 5 mm margins · ${n} page${n>1?"s":""} · ${(blob.size/1024).toFixed(0)} KB</small></div></div><div class="tiles">${can?tile("shareImg()","share","Share","pri"):""}${tile("saveImg()","save",can?"Save":"Save PDF",can?"":"pri")}${tile("closeM()","x","Close")}</div>`)}
+ const can=isNat()||!!(navigator.canShare&&navigator.canShare({files:[S.imgFile]}));
+ openM(`<b>PDF ready</b><div style="display:flex;gap:12px;align-items:center;margin:14px 0;padding:14px;border-radius:18px;background:var(--pale)"><div class="av" style="flex:none">PDF</div><div style="min-width:0"><div style="word-break:break-all;font-weight:600">${esc(name)}</div><small style="color:var(--mut)">A4 ${land?"landscape":"portrait"} · 5 mm margins · ${n} page${n>1?"s":""} · ${(blob.size/1024).toFixed(0)} KB</small></div></div><div class="tiles">${can?tile("shareImg()","share",isNat()?"Share, save or print":"Share","pri"):""}${isNat()?"":tile("saveImg()","save",can?"Save":"Save PDF",can?"":"pri")}${tile("closeM()","x","Close")}</div>`)}
 
 function ics(){
  const n=dim(),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//DutyRoster//EN"];
  for(let d=1;d<=n;d++){const c=code(S.prof.id,dkey(d));if(c==="O"||!S.shifts[c])continue;const s=S.shifts[c],ds=dkey(d).replace(/-/g,"");
   L.push("BEGIN:VEVENT",`UID:${ds}-${S.prof.id}@roster`,`DTSTAMP:${ds}T000000Z`,`DTSTART:${ds}T${s.start_time.replace(/:/g,"").slice(0,6)}`,`DTEND:${ds}T${s.end_time.replace(/:/g,"").slice(0,6)}`,`SUMMARY:${s.label} duty`,"BEGIN:VALARM","TRIGGER:-PT60M","ACTION:DISPLAY","DESCRIPTION:Duty starts soon","END:VALARM","END:VEVENT")}
- L.push("END:VCALENDAR");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([L.join("\r\n")],{type:"text/calendar"}));a.download="duty-schedule.ics";a.click()}
+ L.push("END:VCALENDAR");const blob=new Blob([L.join("\r\n")],{type:"text/calendar"});if(isNat())return natShare(blob,"duty-schedule.ics");const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="duty-schedule.ics";a.click()}
 
 function rosterView(){
  const _sl=document.querySelector(".scroll")?.scrollLeft||0,_sy=window.scrollY;
@@ -514,5 +521,6 @@ async function chgPw(){const p=$("#np1").value;if(p.length<8)return $("#npx").te
  const{error}=await sb.auth.updateUser({password:p});if(error)return $("#npx").textContent=error.message;$("#np1").value="";$("#npx").textContent="";toast("Password updated")}
 
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+if(isNat())window.print=()=>exportPdf(S.tab==="ros"&&hod()?"all":fv());
 SH?vLoad():init();
 </script></body></html>
