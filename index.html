@@ -8,9 +8,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>try{var _t=localStorage.getItem("theme");if(_t)document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
 <style>
-:root{--bg:#F4F7F6;--card:#fff;--ink:#17231F;--mut:#84938B;--pri:#159957;--pri2:#1aa862;--dk:#126B46;--mint:#E5F5EC;--pale:#F0F8F3;--line:#E9EFEB;--M:#C6EAD4;--Mi:#0E5A39;--D:#F2E5B4;--Di:#6B5A0F;--A:#EDE3A6;--Ai:#645E0E;--N:#D9EBB8;--Ni:#3D5A1C;--O:#F1F4F2;--Oi:#A6B2AB}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1511;--card:#121f19;--ink:#E8F1EC;--mut:#8DA298;--pri:#1fae68;--pri2:#27c077;--dk:#8fe3b5;--mint:#173326;--pale:#16251d;--line:#1f2e26;--M:#1f5238;--Mi:#a6f0c6;--D:#4a4220;--Di:#f0dc94;--A:#46441f;--Ai:#ece896;--N:#34491f;--Ni:#c4e69b;--O:#18241d;--Oi:#6f8479}}
-:root[data-theme="dark"]{--bg:#0c1511;--card:#121f19;--ink:#E8F1EC;--mut:#8DA298;--pri:#1fae68;--pri2:#27c077;--dk:#8fe3b5;--mint:#173326;--pale:#16251d;--line:#1f2e26;--M:#1f5238;--Mi:#a6f0c6;--D:#4a4220;--Di:#f0dc94;--A:#46441f;--Ai:#ece896;--N:#34491f;--Ni:#c4e69b;--O:#18241d;--Oi:#6f8479}
+:root{--bg:#F4F7F6;--card:#fff;--ink:#17231F;--mut:#84938B;--pri:#159957;--pri2:#1aa862;--dk:#126B46;--mint:#E5F5EC;--pale:#F0F8F3;--line:#E9EFEB;--grid:#C9D1CD;--M:#C6EAD4;--Mi:#0E5A39;--D:#F2E5B4;--Di:#6B5A0F;--A:#EDE3A6;--Ai:#645E0E;--N:#D9EBB8;--Ni:#3D5A1C;--O:#F1F4F2;--Oi:#A6B2AB}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111315;--card:#1A1D20;--ink:#ECEEEF;--mut:#8B9298;--pri:#1fae68;--pri2:#27c077;--dk:#D8EFE3;--mint:#24282C;--pale:#1F2327;--line:#2A2F34;--grid:#3A4046;--M:#1F5A3F;--Mi:#D3F6E3;--D:#5A4A12;--Di:#F6E3A0;--A:#4F4A17;--Ai:#F1EAA0;--N:#35501F;--Ni:#D5EFB3;--O:#25292D;--Oi:#7D868D}}
+:root[data-theme="dark"]{--bg:#111315;--card:#1A1D20;--ink:#ECEEEF;--mut:#8B9298;--pri:#1fae68;--pri2:#27c077;--dk:#D8EFE3;--mint:#24282C;--pale:#1F2327;--line:#2A2F34;--grid:#3A4046;--M:#1F5A3F;--Mi:#D3F6E3;--D:#5A4A12;--Di:#F6E3A0;--A:#4F4A17;--Ai:#F1EAA0;--N:#35501F;--Ni:#D5EFB3;--O:#25292D;--Oi:#7D868D}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
 .hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:28px 20px 56px;border-radius:0 0 32px 32px}
 .hero h1{margin:0;font-size:22px}.hero p{margin:4px 0 0;opacity:.85;font-size:14px}
@@ -158,6 +158,52 @@ nav{z-index:8}
 .chip{padding:12px 0;border-radius:14px;background:var(--pale);color:var(--ink);font-weight:500}.chip.on{background:var(--pri);color:#fff;font-weight:600}
 .opt{display:flex;justify-content:space-between;align-items:center;width:100%;padding:15px 8px;border-radius:0;background:none;color:var(--ink);font-weight:500;text-align:left}
 .opt+.opt{border-top:1px solid var(--line)}.opt.on{color:var(--dk);font-weight:700}.opt svg{width:20px;height:20px;stroke:var(--pri);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+/* ===== features round: squares, grid, settings, preview, print doc ===== */
+.scroll table{border-collapse:collapse;border-spacing:0}
+.scroll td,.scroll th{padding:0;border:1px solid var(--grid)}
+.scroll tr:last-child td{border-bottom:1px solid var(--grid)}
+.scroll td.n{padding:0 12px 0 8px;border:1px solid var(--grid);font-size:14px;font-weight:600}
+.scroll td button,.scroll td .cl{display:flex;align-items:center;justify-content:center;width:100%;min-width:40px;height:40px;padding:0;border:0;border-radius:0;font-size:14px;font-weight:800;box-shadow:none}
+.scroll td .cl{height:36px;min-width:36px}
+.scroll th.dh{min-width:40px;padding:4px 0}
+.day{border-radius:6px}.bd{border-radius:3px}.pill{border-radius:5px}.sqr{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--grid);font-weight:800;flex:none}
+.swt{width:54px;height:30px;padding:0;border-radius:999px;background:var(--line);position:relative;flex:none;border:1px solid var(--grid)}
+.swt i{position:absolute;top:2px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.swt.on{background:var(--pri);border-color:var(--pri)}.swt.on i{left:26px}
+.clr{display:flex;align-items:center;gap:12px;width:100%;padding:10px 0;background:none;color:var(--ink);border-radius:0;border-top:1px solid var(--line);font-weight:500;text-align:left}
+.hx{color:var(--mut);font-size:12px;font-variant-numeric:tabular-nums}
+.sws{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:14px 0}
+.swb{height:42px;padding:0;border-radius:0;border:1px solid var(--grid)}.swb.on{outline:3px solid var(--pri);outline-offset:2px}
+.cpb{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:12px 14px;background:var(--pale);font-size:13px;color:var(--mut)}
+.pvb{position:sticky;top:0;z-index:7;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:#1d2024;color:#fff;font-size:13px}
+.pvb button{padding:7px 14px;background:#fff;color:#111;font-size:13px;flex:none}
+#printdoc{display:none}
+@media print{
+ body>*:not(#printdoc){display:none!important}
+ #printdoc{display:block!important}
+ body{background:#fff!important;padding:0!important;color:#000!important}
+ .od,.od *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box}
+ .od{font-family:Arial,Helvetica,sans-serif;color:#000}
+ .oh{text-align:center;margin-bottom:4mm}.o1{font-size:16pt;font-weight:800;letter-spacing:.4px}.o2{font-size:12pt;font-weight:700;letter-spacing:2px;margin-top:1mm}.o3{font-size:11pt;margin-top:1mm}
+ .ot{border-collapse:collapse;width:100%;table-layout:fixed;border:1.5px solid #000}
+ .ot th,.ot td{border:1px solid #000;text-align:center;padding:0;height:var(--rh,7mm);font-size:var(--fs,9pt);line-height:1;overflow:hidden;border-radius:0}
+ .ot th{background:#e6e9eb;font-weight:800;font-size:7.5pt;height:auto;padding:1mm 0}.ot th.we{background:#d3d8db}
+ .ot td{font-weight:800}.ot td.nm{text-align:left;padding-left:1.5mm;font-weight:600;white-space:nowrap}.ot th.nm{text-align:left;padding-left:1.5mm}
+ .ot thead{display:table-header-group}.ot tr{page-break-inside:avoid}
+ .pc td{height:19mm;vertical-align:middle;position:relative}.pc td small{position:absolute;top:1mm;left:1.5mm;font-size:7pt;font-weight:600}.pc td b{font-size:15pt}
+ .lg2{margin-top:5mm;page-break-inside:avoid}.li{display:inline-flex;border:1px solid #000;margin:0 3mm 2mm 0;vertical-align:top}
+ .li b{width:8mm;display:flex;align-items:center;justify-content:center;border-right:1px solid #000;font-weight:800;font-size:9pt}.li i{font-style:normal;padding:1.2mm 2.5mm;font-size:8pt}
+ .of{display:flex;justify-content:space-between;align-items:flex-end;margin-top:7mm;page-break-inside:avoid;font-size:10pt}
+ .sg{margin-top:15mm;white-space:nowrap;font-weight:700}.sg i{display:inline-block;width:78mm;border-bottom:1px solid #000;height:0}
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .lg{background:linear-gradient(120deg,#0b0c0d,#14171a,#173a2b,#14171a,#0b0c0d);background-size:400% 400%}
+:root:not([data-theme="light"]) .lgc{background:rgba(26,29,32,.92);border:1px solid rgba(255,255,255,.08)}
+:root:not([data-theme="light"]) .lgc h1{color:#E8F5EE}:root:not([data-theme="light"]) .lgs{color:#8B9298}:root:not([data-theme="light"]) .lgc label{color:#B6BDC2}
+:root:not([data-theme="light"]) .lgc input{background:#1F2327;border-color:#3A4046;color:#ECEEEF}:root:not([data-theme="light"]) .lgc input::placeholder{color:#7C858C}}
+:root[data-theme="dark"] .lg{background:linear-gradient(120deg,#0b0c0d,#14171a,#173a2b,#14171a,#0b0c0d);background-size:400% 400%}
+:root[data-theme="dark"] .lgc{background:rgba(26,29,32,.92);border:1px solid rgba(255,255,255,.08)}
+:root[data-theme="dark"] .lgc h1{color:#E8F5EE}:root[data-theme="dark"] .lgs{color:#8B9298}:root[data-theme="dark"] .lgc label{color:#B6BDC2}
+:root[data-theme="dark"] .lgc input{background:#1F2327;border-color:#3A4046;color:#ECEEEF}:root[data-theme="dark"] .lgc input::placeholder{color:#7C858C}
 .po{display:none}
 @page{size:A4 landscape;margin:5mm}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}.scroll td,.scroll th{padding:1px!important}.scroll td.n{font-size:11px;min-width:0;padding-right:6px!important}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
@@ -193,15 +239,35 @@ async function loadShifts(){
  const{data:sh}=await sb.from("shifts").select("*").eq("department_id",S.prof.department_id);
  const a=sh||[];a.sort((x,y)=>(x.code==="O"?-1:y.code==="O"?1:x.start_time.localeCompare(y.start_time)));
  S.shifts=Object.fromEntries(a.map(s=>[s.code,s]));paintShifts()}
-function paintShifts(){let c="";Object.keys(S.shifts).filter(k=>!["O","M","D","A","N"].includes(k)).forEach(k=>{
-  let h=0;for(const ch of k)h=(h*31+ch.charCodeAt(0))%360;
-  const dk=`background:hsl(${h} 35% 25%);color:hsl(${h} 80% 85%)`;
-  c+=`.${k},.pill.${k}{background:hsl(${h} 45% 92%);color:hsl(${h} 40% 28%)}@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .${k},:root:not([data-theme="light"]) .pill.${k}{${dk}}}:root[data-theme="dark"] .${k},:root[data-theme="dark"] .pill.${k}{${dk}}`});
+function paintShifts(){let c="";const cols=ST().colors||{};
+ Object.keys(S.shifts).forEach(k=>{const u=cols[k];if(!u&&["O","M","D","A","N"].includes(k))return;const b=u||AUTO[hsh(k)%AUTO.length];c+=`.${k},.pill.${k}{background:${b};color:${txtOn(b)}}`});
  let e=document.getElementById("sc");if(!e){e=document.createElement("style");e.id="sc";document.head.appendChild(e)}e.textContent=c}
 const tm=t=>{const h=+t.slice(0,2),m=t.slice(3,5);return `${h%12||12}${m==="00"?"":":"+m} ${h>=12?"PM":"AM"}`};
 const DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DEFC={O:"#F1F4F2",M:"#C6EAD4",D:"#F2E5B4",A:"#EDE3A6",N:"#D9EBB8"},AUTO=["#CFE3F8","#E6D5F2","#F8D9C9","#D5EEF0","#F3DDE8","#E0EAC8","#F6E3B8","#D9DDF2"],
+ SW=["#FFFFFF","#F1F4F2","#C6EAD4","#7FD3A4","#2E9F67","#0E5A39","#F2E5B4","#F6C945","#F59E0B","#F4B183","#E06C5C","#B3261E","#CFE3F8","#6FA8E8","#2F6FD0","#E6D5F2","#9B7BD3","#2B2F33"];
+const hsh=c=>{let h=0;for(const ch of c)h=(h*31+ch.charCodeAt(0))>>>0;return h};
+const ST=()=>(S.dept&&S.dept.settings)||{},showDays=()=>ST().days!==false;
+const colorOf=c=>(ST().colors&&ST().colors[c])||DEFC[c]||AUTO[hsh(c)%AUTO.length];
+const lum=h=>{const n=parseInt(h.slice(1),16);return(.299*(n>>16&255)+.587*(n>>8&255)+.114*(n&255))/255};
+const txtOn=h=>lum(h)>.58?"#111111":"#FFFFFF",shColor=c=>{const b=colorOf(c);return[b,txtOn(b)]};
+const prepBy=()=>(S.roster&&S.roster.prepared_by)||(S.prof?S.prof.full_name:"");
+async function saveSettings(patch){const cur={...ST(),...patch};
+ const{data,error}=await sb.from("departments").update({settings:cur}).eq("id",S.prof.department_id).select("settings");
+ if(error){toast(/settings/i.test(error.message)?"Run the roster features SQL in Supabase first.":error.message);return false}
+ if(!data||!data.length){toast("Not saved. Run the roster features SQL in Supabase first.");return false}
+ S.dept.settings=data[0].settings;paintShifts();return true}
+async function togDays(){if(await saveSettings({days:!showDays()}))rosterView()}
+function colM(c){const cur=colorOf(c).toUpperCase();
+ openM(`<b>Colour for ${esc(c)} · ${esc(S.shifts[c].label)}</b><div class="sws">${SW.map(h=>`<button type="button" class="swb ${h===cur?"on":""}" style="background:${h}" onclick="setCol('${c}','${h}')" aria-label="${h}"></button>`).join("")}</div>
+ <div class="row" style="margin:6px 0 14px"><span>Custom colour</span><input type="color" value="${cur.toLowerCase()}" onchange="setCol('${c}',this.value)" style="width:76px;height:44px;padding:2px;margin:0"></div>
+ <div class="tiles">${tile(`resetCol('${c}')`,"reset","Default")}${tile("closeM()","x","Done")}</div>`)}
+async function setCol(c,h){if(await saveSettings({colors:{...(ST().colors||{}),[c]:h}})){colM(c);rosterView()}}
+async function resetCol(c){const o={...(ST().colors||{})};delete o[c];if(await saveSettings({colors:o})){colM(c);rosterView()}}
 const BASE="afighorovie",em=x=>(x.includes("@")?x:`${BASE}+${x}@gmail.com`).toLowerCase(),
  shown=e=>{const m=e?.match(/^afighorovie\+(.+)@gmail\.com$/i);return m?m[1]:e};
+async function allAsg(id){let out=[],from=0;for(;;){const{data,error}=await sb.from("assignments").select("user_id,day,shift_code").eq("roster_id",id).order("user_id").order("day").range(from,from+999);
+ if(error)throw error;out=out.concat(data||[]);if(!data||data.length<1000)break;from+=1000}return out}
 async function load(){
  $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
  const dp=S.prof.department_id;
@@ -211,8 +277,7 @@ async function load(){
   Object.keys(S.shifts).length?null:loadShifts(),
   S.dept?null:sb.from("departments").select("*").eq("id",dp).single().then(x=>{S.dept=x.data})]);
  S.roster=r?.[0]||null;S.asg={};S.staff=st||[];
- if(S.roster){const{data:a,error}=await sb.from("assignments").select("user_id,day,shift_code").eq("roster_id",S.roster.id);
-  if(error)toast(error.message);(a||[]).forEach(x=>(S.asg[x.user_id]??={})[x.day]=x.shift_code)}
+ if(S.roster){try{(await allAsg(S.roster.id)).forEach(x=>(S.asg[x.user_id]??={})[x.day]=x.shift_code)}catch(e){toast(e.message)}}
  S.dirty=false;render();
 }
 function login(msg){
@@ -241,13 +306,13 @@ function shell(inner){
  <main>${inner}</main><nav>${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" onclick="S.tab='${t[0]}';render()">${t[1]}</button>`).join("")}</nav>`}
 function monthBar(){return `<div class="row noprint"><button class="cir" onclick="mv(-1)" aria-label="Previous month">‹</button><b>${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</b><button class="cir" onclick="mv(1)" aria-label="Next month">›</button></div>`}
 function mv(n){if(SH){S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;return vLoad()}if(S.dirty&&!confirm("Discard unsaved changes?"))return;S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;load()}
-function render(){S.tab==="ros"&&hod()?rosterView():S.tab==="stf"&&hod()?staffView():calView()}
+function render(){if(S.preview)return vRender();S.tab==="ros"&&hod()?rosterView():S.tab==="stf"&&hod()?staffView():calView()}
 
 const IC={save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/>',publish:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/>',unpublish:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/>',
 csv:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M12 18v-6M9 14l3-3 3 3"/>',print:'<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
 image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>',
 cal:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M12 13v5M9.5 15.5h5"/>',copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/>',
-reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',check:'<path d="M5 12l5 5 9-10"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
+reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',check:'<path d="M5 12l5 5 9-10"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
 const svg=i=>`<svg viewBox="0 0 24 24">${IC[i]}</svg>`,
  tile=(fn,i,l,c="")=>`<button type="button" class="tile ${c}" onclick="${fn}">${svg(i)}<span>${l}</span></button>`;
 const sortedAct=()=>S.staff.filter(s=>s.active).slice().sort((x,y)=>x.full_name.localeCompare(y.full_name));
@@ -258,9 +323,9 @@ function fltM(){const f=fv(),row=(id,l)=>`<button type="button" class="opt ${f==
  openM(`<b>Show</b><div style="margin-top:8px">${row("all","Everyone – full roster")}${sortedAct().map(x=>row(x.id,x.full_name)).join("")}</div>`)}
 function fp(id){S.fv=id;S.sel=null;closeM();rr()}
 const dayHead=()=>Array.from({length:dim()},(_,i)=>{const w=new Date(S.month.getFullYear(),S.month.getMonth(),i+1).getDay();return `<th class="dh${w%6===0?" wk":""}"><small>${DOW[w]}</small>${i+1}</th>`}).join("");
-function tableHtml(){const n=dim();
- return `<table class="rt"><tr><th></th>${dayHead()}<th>Days</th></tr>${sortedAct().map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><span class="cl ${c}">${c}</span></td>`}).join("");
-  return `<tr><td class="n" style="cursor:pointer" onclick="S.fv='${s.id}';S.sel=null;rr()">${esc(s.full_name)}</td>${cells}<td><b>${w}</b></td></tr>`}).join("")}</table>`}
+function tableHtml(){const n=dim(),sd=showDays();
+ return `<table class="rt"><tr><th></th>${dayHead()}${sd?"<th>Days</th>":""}</tr>${sortedAct().map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><span class="cl ${c}">${c}</span></td>`}).join("");
+  return `<tr><td class="n" style="cursor:pointer" onclick="S.fv='${s.id}';S.sel=null;rr()">${esc(s.full_name)}</td>${cells}${sd?`<td style="text-align:center"><b>${w}</b></td>`:""}</tr>`}).join("")}</table>`}
 function personHtml(uid){const n=dim(),off=S.month.getDay(),today=new Date(),mine=Array.from({length:n},(_,i)=>code(uid,dkey(i+1))),work=mine.filter(c=>c!=="O").length,
  isCur=today.getMonth()===S.month.getMonth()&&today.getFullYear()===S.month.getFullYear();
  let nxt=null;for(let d=(isCur?today.getDate():1);d<=n;d++)if(mine[d-1]!=="O"){nxt=d;break}
@@ -276,7 +341,7 @@ function dayCard(uid){if(!S.sel)return"";const k=dkey(S.sel),c=code(uid,k);
  return h+`</div>`}
 function calView(){const f=fv(),me=S.prof.id;
  let h=(!S.roster||(!S.roster.published&&!hod()))?`<div class="card">No published roster for this month yet.</div>`:"";
- h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${f}')`,"image","Save image")}${tile(`exportPdf('${f}')`,"pdf","Save PDF")}${tile("print()","print","Print")}${hod()?tile("linkM()","share","Share link"):""}${f===me?tile("ics()","cal","Phone calendar"):""}</div></div>`;
+ h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${f}')`,"image","Save image")}${tile(`exportPdf('${f}')`,"pdf","Save PDF")}${tile(`printDoc('${f}')`,"print","Print")}${hod()?tile("linkM()","share","Share link")+tile("startPreview()","eye","View as staff"):""}${f===me?tile("ics()","cal","Phone calendar"):""}</div></div>`;
  if(S.roster&&(S.roster.published||hod())){h+=viewBody()+(f==="all"?"":dayCard(f))}
  $("#app").innerHTML=shell(h)}
 
@@ -285,15 +350,18 @@ async function vLoad(){
  $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
  const{data,error}=await sb.rpc("get_shared_roster",{t:SH,m:ym(S.month)});
  if(error||!data||data.error){$("#app").innerHTML='<div class="lg"><div class="lgc"><h1>Link not valid</h1><p class="lgs">Ask your head of department for the current link.</p></div></div>';return}
- S.dept={name:data.dept};const a=data.shifts.slice().sort((x,y)=>(x.code==="O"?-1:y.code==="O"?1:x.start_time.localeCompare(y.start_time)));
+ S.dept={name:data.dept,settings:data.settings||{}};const a=data.shifts.slice().sort((x,y)=>(x.code==="O"?-1:y.code==="O"?1:x.start_time.localeCompare(y.start_time)));
  S.shifts=Object.fromEntries(a.map(x=>[x.code,x]));paintShifts();
  S.staff=data.staff.map(x=>({id:x.id,full_name:x.name,active:true,role:"staff"}));
- S.asg={};data.assignments.forEach(x=>(S.asg[x.u]??={})[x.d]=x.c);S.roster={published:data.published};vRender()}
-function vRender(){
- let h=S.roster.published?"":`<div class="card">This month's schedule has not been published yet.</div>`;
- h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${fv()}')`,"image","Save image")}${tile(`exportPdf('${fv()}')`,"pdf","Save PDF")}${tile("print()","print","Print")}</div></div>`;
- if(S.roster.published)h+=viewBody()+(fv()==="all"?"":dayCard(fv()));
- $("#app").innerHTML=`<div class="hero noprint"><h1>${esc(S.dept.name)}</h1><p>Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><main>${h}</main>`}
+ S.asg={};data.assignments.forEach(x=>(S.asg[x.u]??={})[x.d]=x.c);S.roster={published:data.published,prepared_by:data.prepared_by};vRender()}
+function vRender(){const pub=!!(S.roster&&S.roster.published);
+ let h=pub?"":`<div class="card">This month's schedule has not been published yet.</div>`;
+ h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${fv()}')`,"image","Save image")}${tile(`exportPdf('${fv()}')`,"pdf","Save PDF")}${tile(`printDoc('${fv()}')`,"print","Print")}</div></div>`;
+ if(pub)h+=viewBody()+(fv()==="all"?"":dayCard(fv()));
+ $("#app").innerHTML=(S.preview?`<div class="pvb noprint"><span><b>STAFF VIEW</b> · preview only, nothing can be changed</span><button onclick="endPreview()">Exit preview</button></div>`:"")+`<div class="hero noprint"><h1>${esc(S.dept.name)}</h1><p>Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><main>${h}</main>`}
+async function startPreview(){if(S.dirty){if(!confirm("You have unsaved changes. Save them first so the preview matches what staff will see?"))return;await saveR()}
+ closeNav();S.preview=true;S.fv="all";S.sel=null;window.scrollTo(0,0);vRender()}
+function endPreview(){S.preview=false;S.fv=null;S.sel=null;render()}
 
 /* ---------- Android app (wrapper) support ---------- */
 const isNat=()=>!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
@@ -316,46 +384,65 @@ function shareLink(){const d={title:"Duty Schedule",text:(S.dept.name||"")+" dut
 function copyLink(){const i=$("#lu");i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(()=>document.execCommand("copy")).finally(()=>toast("Link copied"))}
 async function resetLink(){if(!confirm("Make a new link? The old link will stop working."))return;
  const{data,error}=await sb.rpc("rotate_share_link");if(error)return toast(error.message);S.dept.share_token=data;linkM();toast("New link created")}
-const PAL=c=>{if(c==="O")return["#F1F4F2","#A6B2AB"];if(c==="M")return["#C6EAD4","#0E5A39"];if(c==="D")return["#F2E5B4","#6B5A0F"];if(c==="A")return["#EDE3A6","#645E0E"];if(c==="N")return["#D9EBB8","#3D5A1C"];let h=0;for(const ch of c)h=(h*31+ch.charCodeAt(0))%360;return[`hsl(${h} 45% 92%)`,`hsl(${h} 40% 28%)`]};
-function rrect(c,x,y,w,h,r,f){c.beginPath();c.roundRect?c.roundRect(x,y,w,h,r):c.rect(x,y,w,h);c.fillStyle=f;c.fill()}
-function buildCanvas(f,o={}){
- const FONT='system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',n=dim(),y0=S.month.getFullYear(),m0=S.month.getMonth(),
-  mon=S.month.toLocaleString("default",{month:"long",year:"numeric"}),dept=S.dept?.name||"Duty Schedule",staffAll=sortedAct(),staff=o.rows||staffAll,shifts=Object.values(S.shifts),P=20,LW=156,LH=44;
- const tc=document.createElement("canvas").getContext("2d");tc.font=`600 13px ${FONT}`;
- const legH=w=>Math.ceil(shifts.length/Math.max(1,Math.floor((w-2*P)/LW)))*LH;
- const legend=(c,y,w)=>{const cols=Math.max(1,Math.floor((w-2*P)/LW));shifts.forEach((s,i)=>{const x=P+(i%cols)*LW,yy=y+Math.floor(i/cols)*LH,[bg,fg]=PAL(s.code);
-  rrect(c,x,yy,LW-8,LH-8,9,"#F0F8F3");rrect(c,x+6,yy+6,24,24,7,bg);c.textBaseline="middle";c.textAlign="center";c.fillStyle=fg;c.font=`700 12px ${FONT}`;c.fillText(s.code,x+18,yy+18.5);
-  c.textAlign="left";c.fillStyle="#3b5246";c.font=`600 12px ${FONT}`;c.fillText(s.label,x+38,yy+12,108);
-  c.fillStyle="#7b8f83";c.font=`11px ${FONT}`;c.fillText(s.code==="O"?"Day off":tm(s.start_time)+" – "+tm(s.end_time),x+38,yy+25,108)})};
- let W,H,body,geo;const lg=o.legend!==false;
- if(f==="all"){
-  const cell=30,gap=3,gx=P+Math.max(100,...staffAll.map(s=>tc.measureText(s.full_name).width+12)),hy=P+58,ry=hy+36;
-  W=Math.max(gx+n*(cell+gap)+46+P,520);H=ry+staff.length*(cell+gap)+18+(lg?legH(W):0)+P;geo={W,ry,rh:cell+gap,legH:legH(W),P};
-  body=c=>{c.textBaseline="alphabetic";c.textAlign="left";c.fillStyle="#126B46";c.font=`700 22px ${FONT}`;c.fillText(dept,P,P+22);c.fillStyle="#84938B";c.font=`14px ${FONT}`;c.fillText("Duty Schedule · "+mon+(o.tag||""),P,P+44);
-   for(let d=1;d<=n;d++){const x=gx+(d-1)*(cell+gap)+cell/2,w=new Date(y0,m0,d).getDay(),wk=w%6===0;c.textAlign="center";c.fillStyle=wk?"#159957":"#84938B";c.font=`600 9px ${FONT}`;c.fillText(DOW[w],x,hy+10);c.fillStyle=wk?"#159957":"#17231F";c.font=`700 12px ${FONT}`;c.fillText(String(d),x,hy+26)}
-   c.fillStyle="#17231F";c.font=`700 11px ${FONT}`;c.fillText("Days",gx+n*(cell+gap)+20,hy+26);
-   staff.forEach((s,i)=>{const y=ry+i*(cell+gap);if(i%2===0)rrect(c,P-6,y-2,W-2*P+12,cell+gap+1,8,"#F7FAF8");
-    c.textBaseline="middle";c.textAlign="left";c.fillStyle="#17231F";c.font=`600 13px ${FONT}`;c.fillText(s.full_name,P,y+cell/2);
-    let w=0;for(let d=1;d<=n;d++){const k=code(s.id,dkey(d)),[bg,fg]=PAL(k);if(k!=="O")w++;const x=gx+(d-1)*(cell+gap);rrect(c,x,y,cell,cell,8,bg);c.fillStyle=fg;c.font=`700 11px ${FONT}`;c.textAlign="center";c.fillText(k,x+cell/2,y+cell/2+.5)}
-    c.fillStyle="#17231F";c.font=`700 12px ${FONT}`;c.fillText(String(w),gx+n*(cell+gap)+20,y+cell/2)});
-   if(lg)legend(c,ry+staff.length*(cell+gap)+10,W)}
- }else{
-  const who=S.staff.find(x=>x.id===f)?.full_name||"",cw=58,ch=62,g=6,off=new Date(y0,m0,1).getDay(),rows=Math.ceil((off+n)/7),gy=P+112,
-   mine=Array.from({length:n},(_,i)=>code(f,dkey(i+1))),work=mine.filter(k=>k!=="O").length;
-  W=P*2+7*cw+6*g;H=gy+rows*(ch+g)+14+legH(W)+P;geo={W,H};
-  body=c=>{c.textBaseline="alphabetic";c.textAlign="left";c.fillStyle="#126B46";c.font=`700 24px ${FONT}`;c.fillText(who,P,P+24,W-2*P);c.fillStyle="#84938B";c.font=`13px ${FONT}`;c.fillText(dept+" · "+mon,P,P+46,W-2*P);
-   c.fillStyle="#17231F";c.font=`600 13px ${FONT}`;c.fillText(`Workdays ${work}   ·   Days off ${n-work}`,P,P+76);
-   c.textAlign="center";c.fillStyle="#84938B";c.font=`600 10px ${FONT}`;DOW.forEach((d,i)=>c.fillText(d,P+i*(cw+g)+cw/2,gy-10));
-   mine.forEach((k,i)=>{const p=off+i,x=P+(p%7)*(cw+g),y=gy+Math.floor(p/7)*(ch+g),[bg,fg]=PAL(k);rrect(c,x,y,cw,ch,12,bg);c.fillStyle=fg;c.globalAlpha=.7;c.textAlign="left";c.font=`600 11px ${FONT}`;c.fillText(String(i+1),x+8,y+15);c.globalAlpha=1;c.textAlign="center";c.font=`700 20px ${FONT}`;c.fillText(k,x+cw/2,y+ch/2+12)});
-   legend(c,gy+rows*(ch+g)+10,W)}
- }
- if(o.measure)return geo;
- const sc=Math.min(3,Math.sqrt(16e6/(W*H))),cv=document.createElement("canvas");cv.width=Math.round(W*sc);cv.height=Math.round(H*sc);
- const c=cv.getContext("2d");c.scale(sc,sc);c.fillStyle="#fff";c.fillRect(0,0,W,H);body(c);
- return{cv,W,H,mon,nm:f==="all"?"everyone":(S.staff.find(x=>x.id===f)?.full_name||"staff")}}
+const FONT="Arial,Helvetica,sans-serif",longMon=()=>S.month.toLocaleString("default",{month:"long",year:"numeric"});
+function mkCanvas(W,H){const sc=Math.min(3,Math.sqrt(16e6/(W*H))),cv=document.createElement("canvas");cv.width=Math.round(W*sc);cv.height=Math.round(H*sc);
+ const c=cv.getContext("2d");c.scale(sc,sc);c.fillStyle="#fff";c.fillRect(0,0,W,H);return{cv,c}}
+function legendCanvas(c,x0,y,W,items){const per=Math.max(1,Math.floor((W-2*x0)/176));
+ items.forEach((s,i)=>{const x=x0+(i%per)*176,yy=y+Math.floor(i/per)*38,[b,fg]=shColor(s.code);
+  c.fillStyle=b;c.fillRect(x,yy,30,30);c.strokeStyle="#000";c.lineWidth=1;c.strokeRect(x,yy,30,30);c.strokeRect(x+30,yy,140,30);
+  c.textBaseline="middle";c.textAlign="center";c.fillStyle=fg;c.font=`800 14px ${FONT}`;c.fillText(s.code,x+15,yy+15.5);
+  c.textAlign="left";c.fillStyle="#000";c.font=`600 11px ${FONT}`;c.fillText(s.label,x+36,yy+10,128);
+  c.font=`10px ${FONT}`;c.fillText(s.code==="O"?"Day off":tm(s.start_time)+" – "+tm(s.end_time),x+36,yy+22,128)});
+ return Math.ceil(items.length/per)*38}
+function offGeo(){const n=dim(),sd=showDays(),tc=document.createElement("canvas").getContext("2d");tc.font=`600 13px ${FONT}`;
+ const M=24,snW=34,cw=30,rh=26,nameW=Math.max(150,Math.ceil(Math.max(0,...sortedAct().map(s=>tc.measureText(s.full_name).width))+20)),daysW=sd?50:0,
+  tableW=snW+nameW+n*cw+daysW,W=tableW+2*M,items=Object.values(S.shifts),per=Math.max(1,Math.floor((W-2*M)/176)),legH=Math.ceil(items.length/per)*38,
+  titleH=92,hdrH=46,y0=M+titleH,yr=y0+hdrH,footH=20+legH+16+150,Hp=Math.round(W/1.435);
+ return{n,sd,M,snW,cw,rh,nameW,daysW,tableW,W,items,legH,titleH,hdrH,y0,yr,footH,Hp}}
+function drawOff(c,g,o){const{n,sd,M,snW,cw,rh,nameW,daysW,tableW,W,y0,yr,hdrH}=g,rows=o.rows,Y=S.month.getFullYear(),Mo=S.month.getMonth(),
+  x0=M,xn=x0+snW,xd=xn+nameW,xe=xd+n*cw,xt=x0+tableW,yb=yr+rows.length*rh;
+ c.textBaseline="middle";c.textAlign="center";c.fillStyle="#000";
+ c.font=`800 22px ${FONT}`;c.fillText((S.dept?.name||"Duty Schedule").toUpperCase(),W/2,M+20,W-2*M);
+ c.font=`700 15px ${FONT}`;c.fillText("DUTY ROSTER",W/2,M+46);c.font=`500 14px ${FONT}`;c.fillText(longMon().toUpperCase(),W/2,M+68);
+ c.fillStyle="#E6E9EB";c.fillRect(x0,y0,tableW,hdrH);
+ for(let d=1;d<=n;d++){if(new Date(Y,Mo,d).getDay()%6===0){c.fillStyle="#D3D8DB";c.fillRect(xd+(d-1)*cw,y0,cw,hdrH)}}
+ rows.forEach((s,i)=>{const y=yr+i*rh;for(let d=1;d<=n;d++){c.fillStyle=shColor(code(s.id,dkey(d)))[0];c.fillRect(xd+(d-1)*cw,y,cw,rh)}});
+ c.fillStyle="#000";c.textAlign="center";c.font=`800 11px ${FONT}`;c.fillText("S/N",x0+snW/2,y0+hdrH/2);if(sd)c.fillText("DAYS",xe+daysW/2,y0+hdrH/2);
+ c.textAlign="left";c.fillText("NAME",xn+8,y0+hdrH/2);c.textAlign="center";
+ for(let d=1;d<=n;d++){const x=xd+(d-1)*cw+cw/2,w=new Date(Y,Mo,d).getDay();c.font=`700 9px ${FONT}`;c.fillText(DOW[w].toUpperCase(),x,y0+12);c.font=`800 12px ${FONT}`;c.fillText(String(d),x,y0+34)}
+ rows.forEach((s,i)=>{const y=yr+i*rh+rh/2;c.fillStyle="#000";c.textAlign="center";c.font=`700 12px ${FONT}`;c.fillText(String(o.start+i+1),x0+snW/2,y);
+  c.textAlign="left";c.font=`600 13px ${FONT}`;c.fillText(s.full_name,xn+8,y,nameW-14);c.textAlign="center";let w=0;
+  for(let d=1;d<=n;d++){const k=code(s.id,dkey(d));if(k!=="O")w++;c.fillStyle=shColor(k)[1];c.font=`800 14px ${FONT}`;c.fillText(k,xd+(d-1)*cw+cw/2,y+.5)}
+  if(sd){c.fillStyle="#000";c.font=`800 13px ${FONT}`;c.fillText(String(w),xe+daysW/2,y)}});
+ c.strokeStyle="#000";c.lineWidth=1;c.beginPath();
+ for(let i=0;i<=rows.length;i++){c.moveTo(x0,yr+i*rh);c.lineTo(xt,yr+i*rh)}
+ c.moveTo(x0,y0);c.lineTo(xt,y0);c.moveTo(xd,y0+hdrH/2);c.lineTo(xe,y0+hdrH/2);
+ const xs=[x0,xn,xd];for(let d=1;d<=n;d++)xs.push(xd+d*cw);if(sd)xs.push(xt);xs.forEach(x=>{c.moveTo(x,y0);c.lineTo(x,yb)});c.stroke();
+ c.lineWidth=2;c.strokeRect(x0,y0,tableW,yb-y0);
+ if(o.tag){c.fillStyle="#000";c.textAlign="right";c.font=`11px ${FONT}`;c.fillText(o.tag,W-M,o.H-M/2)}
+ if(o.foot){const yF=yb+20;legendCanvas(c,M,yF,W,g.items);const yS=yF+g.legH+16;
+  c.fillStyle="#000";c.textAlign="left";c.textBaseline="alphabetic";c.font=`500 13px ${FONT}`;c.fillText("Prepared by:",M,yS+60);
+  const pw=c.measureText("Prepared by: ").width;c.font=`800 14px ${FONT}`;c.fillText(prepBy()||"—",M+pw,yS+60,300);
+  c.font=`500 11px ${FONT}`;c.fillText("Date printed: "+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),M,yS+82);
+  const xL=W-M-420;c.font=`800 13px ${FONT}`;c.fillText("HR SIGNATURE:",xL,yS+70);c.fillText("DATE:",xL,yS+124);
+  c.lineWidth=1;c.beginPath();c.moveTo(xL+120,yS+72);c.lineTo(W-M,yS+72);c.moveTo(xL+120,yS+126);c.lineTo(W-M,yS+126);c.stroke()}}
+function buildOfficial(g,o){const H=o.H||(g.yr+o.rows.length*g.rh+g.footH+g.M),{cv,c}=mkCanvas(g.W,H);drawOff(c,g,{...o,H});return{cv,W:g.W,H,mon:longMon(),nm:"everyone"}}
+function buildPerson(f){const n=dim(),Y=S.month.getFullYear(),Mo=S.month.getMonth(),M=24,cw=58,ch=60,W=M*2+7*cw,who=S.staff.find(x=>x.id===f)?.full_name||"",
+  off=new Date(Y,Mo,1).getDay(),rows=Math.ceil((off+n)/7),mine=Array.from({length:n},(_,i)=>code(f,dkey(i+1))),work=mine.filter(k=>k!=="O").length,
+  items=Object.values(S.shifts),per=Math.max(1,Math.floor((W-2*M)/176)),legH=Math.ceil(items.length/per)*38,gy=M+128,gy2=gy+24,H=gy2+rows*ch+18+legH+56+M,{cv,c}=mkCanvas(W,H);
+ c.textBaseline="middle";c.textAlign="center";c.fillStyle="#000";c.font=`800 20px ${FONT}`;c.fillText((S.dept?.name||"Duty Schedule").toUpperCase(),W/2,M+14,W-2*M);
+ c.font=`700 14px ${FONT}`;c.fillText("DUTY SCHEDULE",W/2,M+38);c.font=`800 18px ${FONT}`;c.fillText(who,W/2,M+64,W-2*M);c.font=`500 13px ${FONT}`;c.fillText(longMon(),W/2,M+86);
+ c.font=`700 13px ${FONT}`;c.fillText(`Workdays: ${work}      Days off: ${n-work}`,W/2,M+108);
+ c.fillStyle="#E6E9EB";c.fillRect(M,gy,7*cw,24);c.fillStyle="#000";c.font=`800 10px ${FONT}`;DOW.forEach((d,i)=>c.fillText(d.toUpperCase(),M+i*cw+cw/2,gy+12));
+ mine.forEach((k,i)=>{const p=off+i,x=M+(p%7)*cw,y=gy2+Math.floor(p/7)*ch,[b,fg]=shColor(k);c.fillStyle=b;c.fillRect(x,y,cw,ch);
+  c.fillStyle=fg;c.textAlign="left";c.font=`600 10px ${FONT}`;c.fillText(String(i+1),x+5,y+9);c.textAlign="center";c.font=`800 20px ${FONT}`;c.fillText(k,x+cw/2,y+ch/2+4)});
+ c.strokeStyle="#000";c.lineWidth=1;c.beginPath();for(let r=0;r<=rows;r++){c.moveTo(M,gy2+r*ch);c.lineTo(M+7*cw,gy2+r*ch)}
+ for(let i=0;i<=7;i++){c.moveTo(M+i*cw,gy);c.lineTo(M+i*cw,gy2+rows*ch)}c.moveTo(M,gy);c.lineTo(M+7*cw,gy);c.stroke();c.lineWidth=2;c.strokeRect(M,gy,7*cw,24+rows*ch);
+ const ly=gy2+rows*ch+18;legendCanvas(c,M,ly,W,items);c.textAlign="left";c.textBaseline="middle";c.fillStyle="#000";c.font=`600 12px ${FONT}`;c.fillText("Prepared by: "+(prepBy()||"—"),M,ly+legH+24,W-2*M);
+ return{cv,W,H,mon:longMon(),nm:who||"staff"}}
 const fname=(mon,nm,ext)=>("duty-schedule-"+mon+"-"+nm).replace(/[^a-z0-9]+/gi,"-").toLowerCase()+"."+ext;
-async function exportImage(f){const{cv,mon,nm}=buildCanvas(f);const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
- if(!blob)return toast("Could not create the image");showImage(blob,fname(mon,nm,"png"))}
+async function exportImage(f){const o=f==="all"?buildOfficial(offGeo(),{rows:sortedAct(),start:0,foot:true,tag:""}):buildPerson(f);
+ const blob=await new Promise(r=>o.cv.toBlob(r,"image/png"));if(!blob)return toast("Could not create the image");showImage(blob,fname(o.mon,o.nm,"png"))}
 function makePdf(pages){
  const enc=new TextEncoder(),parts=[],offs=[];let len=0;
  const push=b=>{const u=typeof b==="string"?enc.encode(b):b;parts.push(u);len+=u.length};
@@ -375,12 +462,12 @@ function makePdf(pages){
 async function exportPdf(f){
  try{toast("Creating PDF…");
   const land=f==="all",PW=land?841.89:595.28,PH=land?595.28:841.89,M=14.17,aw=PW-2*M,ah=PH-2*M;let cvs=[];
-  if(land){const g=buildCanvas(f,{measure:true}),capPx=ah/(aw/g.W),rows=sortedAct();let chunks=[rows];
-   if(g.ry+rows.length*g.rh+18+g.legH+g.P>capPx){const per=Math.max(1,Math.floor((capPx-g.ry-18-g.legH-g.P-10)/g.rh));chunks=[];for(let i=0;i<rows.length;i+=per)chunks.push(rows.slice(i,i+per))}
-   chunks.forEach((r,i)=>cvs.push(buildCanvas(f,{rows:r,legend:i===chunks.length-1,tag:chunks.length>1?` · page ${i+1} of ${chunks.length}`:""})))}
-  else cvs.push(buildCanvas(f));
+  if(land){const g=offGeo(),cap1=Math.max(1,Math.floor((g.Hp-g.yr-g.M-18)/g.rh)),cap2=Math.max(1,Math.floor((g.Hp-g.yr-g.footH-g.M)/g.rh));let rem=sortedAct(),pg=[];
+   if(rem.length<=cap2)pg=[rem];else{while(rem.length>cap2){const t=Math.min(cap1,rem.length-1);pg.push(rem.slice(0,t));rem=rem.slice(t)}pg.push(rem)}
+   let st=0;pg.forEach((r,i)=>{cvs.push(buildOfficial(g,{rows:r,start:st,foot:i===pg.length-1,tag:pg.length>1?`Page ${i+1} of ${pg.length}`:"",H:g.Hp}));st+=r.length})}
+  else cvs.push(buildPerson(f));
   const pages=[];
-  for(const o of cvs){const blob=await new Promise(r=>o.cv.toBlob(r,"image/jpeg",.92));if(!blob)throw new Error("Could not create the PDF");
+  for(const o of cvs){const blob=await new Promise(r=>o.cv.toBlob(r,"image/jpeg",.95));if(!blob)throw new Error("Could not create the PDF");
    const sc=Math.min(aw/o.W,ah/o.H),dw=o.W*sc,dh=o.H*sc;
    pages.push({w:PW,h:PH,img:new Uint8Array(await blob.arrayBuffer()),iw:o.cv.width,ih:o.cv.height,dw,dh,x:(PW-dw)/2,y:PH-M-dh})}
   showPdf(makePdf(pages),fname(cvs[0].mon,cvs[0].nm,"pdf"),pages.length,land)
@@ -389,6 +476,27 @@ function showPdf(blob,name,n,land){S.imgFile=new File([blob],name,{type:"applica
  const can=isNat()||!!(navigator.canShare&&navigator.canShare({files:[S.imgFile]}));
  openM(`<b>PDF ready</b><div style="display:flex;gap:12px;align-items:center;margin:14px 0;padding:14px;border-radius:18px;background:var(--pale)"><div class="av" style="flex:none">PDF</div><div style="min-width:0"><div style="word-break:break-all;font-weight:600">${esc(name)}</div><small style="color:var(--mut)">A4 ${land?"landscape":"portrait"} · 5 mm margins · ${n} page${n>1?"s":""} · ${(blob.size/1024).toFixed(0)} KB</small></div></div><div class="tiles">${can?tile("shareImg()","share",isNat()?"Share, save or print":"Share","pri"):""}${isNat()?"":tile("saveImg()","save",can?"Save":"Save PDF",can?"":"pri")}${tile("closeM()","x","Close")}</div>`)}
 
+function legendDoc(){return `<div class="lg2">${Object.values(S.shifts).map(x=>{const[b,fg]=shColor(x.code);return `<span class="li"><b style="background:${b};color:${fg}">${esc(x.code)}</b><i>${esc(x.label)}${x.code==="O"?"":" ("+tm(x.start_time)+" – "+tm(x.end_time)+")"}</i></span>`}).join("")}</div>`}
+function officialHtml(f){
+ const n=dim(),sd=showDays(),mon=longMon().toUpperCase(),dept=esc((S.dept?.name||"Duty Schedule").toUpperCase()),by=esc(prepBy()||"—"),y=S.month.getFullYear(),m=S.month.getMonth(),
+  dt=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),wk=d=>new Date(y,m,d).getDay(),we=d=>wk(d)%6===0?"we":"";
+ const prep=`<div>Prepared by: <b>${by}</b><br><span style="font-size:9pt">Date printed: ${dt}</span></div>`;
+ if(f==="all"){const rows=sortedAct(),R=rows.length,rh=R<=14?7:R<=20?5.4:R<=26?4.4:5.6,fs=R<=14?9:R<=20?8.5:R<=26?7.5:8.5;
+  const head=`<tr><th rowspan="2" style="width:9mm">S/N</th><th rowspan="2" class="nm" style="width:46mm">NAME</th>${Array.from({length:n},(_,i)=>`<th class="${we(i+1)}">${DOW[wk(i+1)].toUpperCase()}</th>`).join("")}${sd?'<th rowspan="2" style="width:13mm">DAYS</th>':""}</tr><tr>${Array.from({length:n},(_,i)=>`<th class="${we(i+1)}">${i+1}</th>`).join("")}</tr>`;
+  const body=rows.map((s,i)=>{let w=0;const cells=Array.from({length:n},(_,d)=>{const k=code(s.id,dkey(d+1));if(k!=="O")w++;const[b,fg]=shColor(k);return `<td style="background:${b};color:${fg}">${esc(k)}</td>`}).join("");
+   return `<tr><td>${i+1}</td><td class="nm">${esc(s.full_name)}</td>${cells}${sd?`<td>${w}</td>`:""}</tr>`}).join("");
+  return `<div class="od"><div class="oh"><div class="o1">${dept}</div><div class="o2">DUTY ROSTER</div><div class="o3">${mon}</div></div><table class="ot" style="--rh:${rh}mm;--fs:${fs}pt"><thead>${head}</thead><tbody>${body}</tbody></table>${legendDoc()}<div class="of">${prep}<div><div class="sg">HR SIGNATURE: <i></i></div><div class="sg" style="margin-top:9mm">DATE: <i></i></div></div></div></div>`}
+ const who=esc(S.staff.find(x=>x.id===f)?.full_name||""),off=new Date(y,m,1).getDay(),mine=Array.from({length:n},(_,i)=>code(f,dkey(i+1))),work=mine.filter(k=>k!=="O").length,
+  cells=[...Array(off).fill(null),...mine];while(cells.length%7)cells.push(null);
+ const wks=[];for(let i=0;i<cells.length;i+=7)wks.push(cells.slice(i,i+7));
+ const body=wks.map((w,wi)=>`<tr>${w.map((k,ci)=>{if(k===null)return "<td></td>";const[b,fg]=shColor(k);return `<td style="background:${b};color:${fg}"><small>${wi*7+ci-off+1}</small><b>${esc(k)}</b></td>`}).join("")}</tr>`).join("");
+ return `<div class="od"><div class="oh"><div class="o1">${dept}</div><div class="o2">DUTY SCHEDULE</div><div class="o3">${who} · ${mon}</div></div><table class="ot pc"><thead><tr>${DOW.map(d=>`<th>${d.toUpperCase()}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table><p style="margin:3mm 0 0;font-size:10pt"><b>Workdays: ${work}</b> &nbsp;&nbsp; Days off: ${n-work}</p>${legendDoc()}<div class="of">${prep}</div></div>`}
+function printDoc(f){if(isNat())return exportPdf(f);
+ let el=$("#printdoc");if(!el){el=document.createElement("div");el.id="printdoc";document.body.appendChild(el)}
+ el.innerHTML=officialHtml(f);
+ let ps=$("#pgs");if(!ps){ps=document.createElement("style");ps.id="pgs";document.head.appendChild(ps)}
+ ps.textContent=`@page{size:A4 ${f==="all"?"landscape":"portrait"};margin:8mm}`;
+ setTimeout(()=>window.print(),60)}
 function ics(){
  const n=dim(),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//DutyRoster//EN"];
  for(let d=1;d<=n;d++){const c=code(S.prof.id,dkey(d));if(c==="O"||!S.shifts[c])continue;const s=S.shifts[c],ds=dkey(d).replace(/-/g,"");
@@ -397,19 +505,45 @@ function ics(){
 
 function rosterView(){
  const _sl=document.querySelector(".scroll")?.scrollLeft||0,_sy=window.scrollY;
- const n=dim(),act=S.staff.filter(s=>s.active&&s.role==="staff"||s.active&&s.role==="hod");
- const pub=S.roster?.published;
- let h=`<div class="card"><h2 class="po">${esc(S.dept?.name||"Duty Schedule")} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span> <button class="sm" onclick="saveR()">Save now</button>':""}</p>
- <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}.</p></div>
- <div class="card scroll"><table><tr><th></th>${Array.from({length:n},(_,i)=>{const w=new Date(S.month.getFullYear(),S.month.getMonth(),i+1).getDay();return `<th class="dh${w%6===0?" wk":""}"><small>${DOW[w]}</small>${i+1}</th>`}).join("")}<th>Days</th></tr>
+ const n=dim(),act=S.staff.filter(s=>s.active),pub=S.roster?.published,sd=showDays(),empty=!S.roster&&!Object.values(S.asg).some(o=>Object.keys(o).length);
+ let h=`<div class="card"><h2 class="po">${esc(S.dept?.name||"Duty Schedule")} · ${longMon()}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span> <button class="sm" onclick="saveR()">Save now</button>':""}</p>
+ <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}.</p>
+ ${empty?`<div class="cpb noprint"><span>No roster for this month yet.</span><button class="ghost sm" onclick="copyM()">Copy previous roster</button></div>`:""}</div>
+ <div class="card scroll"><table><tr><th></th>${dayHead()}${sd?"<th>Days</th>":""}</tr>
  ${act.map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><button class="${c}" onclick="cyc('${s.id}',${i+1})">${c}</button></td>`}).join("");
-  return `<tr><td class="n">${esc(s.full_name)}</td>${cells}<td><b>${w}</b></td></tr>`}).join("")}</table></div>
- <div class="card noprint"><div class="tiles" style="margin-top:0">${tile("saveR()","save","Save","pri")}${tile(`pubR(${!pub})`,pub?"unpublish":"publish",pub?"Unpublish":"Publish")}
- <label class="tile">${svg("csv")}<span>Import CSV</span><input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label>${tile("print()","print","Print")}${tile("exportImage('all')","image","Save image")}${tile("exportPdf('all')","pdf","Save PDF")}${tile("linkM()","share","Share link")}${S.roster?tile("delR()","trash","Delete roster","danger"):""}</div>
+  return `<tr><td class="n">${esc(s.full_name)}</td>${cells}${sd?`<td style="text-align:center"><b>${w}</b></td>`:""}</tr>`}).join("")}</table></div>
+ <div class="card noprint"><div class="tiles" style="margin-top:0">${tile("saveR()","save","Save","pri")}${tile(`pubR(${!pub})`,pub?"unpublish":"publish",pub?"Unpublish":"Publish")}${tile("copyM()","copy","Copy previous")}
+ <label class="tile">${svg("csv")}<span>Import CSV</span><input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label>${tile("printDoc('all')","print","Print")}${tile("exportImage('all')","image","Save image")}${tile("exportPdf('all')","pdf","Save PDF")}${tile("linkM()","share","Share link")}${tile("startPreview()","eye","View as staff")}${S.roster?tile("delR()","trash","Delete roster","danger"):""}</div>
  <p style="font-size:12px;color:var(--mut);margin:12px 0 0">CSV import: header <code>name,1,2,…</code> then one row per staff.</p></div>
+ <div class="card noprint"><b>Roster settings</b>
+  <div class="row" style="margin:14px 0"><div>Show Days Count: <b>${sd?"ON":"OFF"}</b><br><small style="color:var(--mut)">Total working days per person on screen, print and PDF</small></div><button class="swt ${sd?"on":""}" onclick="togDays()" aria-label="Show days count"><i></i></button></div>
+  <b style="display:block;margin:6px 0 4px">Indicator colours</b>
+  ${Object.values(S.shifts).map(x=>`<button type="button" class="clr" onclick="colM('${x.code}')"><span class="sqr ${x.code}">${esc(x.code)}</span><span style="flex:1">${esc(x.label)}</span><span class="hx">${colorOf(x.code).toUpperCase()}</span></button>`).join("")}</div>
  <div class="card noprint"><b>Department name</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Shown at the top of printed rosters, PDFs, images and the shared link.${/^your dep/i.test(S.dept?.name||"")?" <b style='color:#c0504d'>It still shows the placeholder name.</b>":""}</p><input id="dn" value="${esc(S.dept?.name||"")}" maxlength="60" placeholder="e.g. Pharmacy Department"><p class="err" id="dx"></p><button class="ghost" onclick="saveDept()">Save name</button></div>`;
  $("#app").innerHTML=shell(h);
  const _e=document.querySelector(".scroll");if(_e)_e.scrollLeft=_sl;window.scrollTo(0,_sy)}
+function cpMap(mode,d,sdim,sOff,tOff){let sd;
+ if(mode==="day"){sd=d;if(sd>sdim)sd-=7}
+ else{const w=Math.floor((d-1+tOff)/7),wd=(d-1+tOff)%7;sd=w*7+wd-sOff+1;while(sd<1)sd+=7;while(sd>sdim)sd-=7}
+ return sd}
+async function copyM(){const{data,error}=await sb.from("rosters").select("id,month,published").eq("department_id",S.prof.department_id).neq("month",ym(S.month)).order("month",{ascending:false});
+ if(error)return toast(error.message);if(!data||!data.length)return toast("There are no other rosters to copy yet.");
+ S.cp={list:data,sel:data[0].id,mode:"day"};cpHtml()}
+function cpHtml(){const p=S.cp,fm=m=>new Date(m+"T00:00").toLocaleString("default",{month:"long",year:"numeric"});
+ openM(`<b>Copy previous roster</b><p style="font-size:13px;color:var(--mut);margin:6px 0">Copy a roster into ${esc(longMon())}. Nothing is saved until you tap Save, so you can edit it first.</p>
+ <div style="max-height:32vh;overflow:auto">${p.list.map(r=>`<button type="button" class="opt ${p.sel===r.id?"on":""}" onclick="cpSel('${r.id}')"><span>${fm(r.month)} <small style="color:var(--mut)">${r.published?"Published":"Draft"}</small></span>${p.sel===r.id?svg("check"):""}</button>`).join("")}</div>
+ <b style="display:block;margin-top:14px">Match by</b><div class="seg" style="margin-top:6px"><button class="${p.mode==="day"?"on":""}" onclick="cpMode('day')">Same dates</button><button class="${p.mode==="wk"?"on":""}" onclick="cpMode('wk')">Same weekdays</button></div>
+ <p style="font-size:12px;color:var(--mut);margin:8px 0 0">${p.mode==="day"?"Day 1 copies day 1, day 2 copies day 2, and so on.":"Keeps the weekly pattern: each Monday copies a Monday, each Tuesday a Tuesday, and so on."}</p>
+ <div class="tiles">${tile("cpGo()","copy","Copy","pri")}${tile("closeM()","x","Cancel")}</div>`)}
+function cpSel(id){S.cp.sel=id;cpHtml()}function cpMode(m){S.cp.mode=m;cpHtml()}
+async function cpGo(){const p=S.cp,src=p.list.find(r=>r.id===p.sel);let a;try{a=await allAsg(p.sel)}catch(e){return toast(e.message)}
+ if(Object.values(S.asg).some(o=>Object.keys(o).length)&&!confirm("This month already has shifts. Replace them with the copied roster?"))return;
+ const sm=new Date(src.month+"T00:00"),sdim=new Date(sm.getFullYear(),sm.getMonth()+1,0).getDate(),sOff=sm.getDay(),tOff=S.month.getDay(),n=dim(),by={};
+ a.forEach(x=>{(by[x.user_id]??={})[+x.day.slice(8,10)]=x.shift_code});
+ const act=new Set(S.staff.filter(s=>s.active).map(s=>s.id)),asg={};let people=0;
+ for(const u of Object.keys(by)){if(!act.has(u))continue;people++;
+  for(let d=1;d<=n;d++){let c=by[u][cpMap(p.mode,d,sdim,sOff,tOff)];if(!c)continue;if(!S.shifts[c])c="O";(asg[u]??={})[dkey(d)]=c}}
+ S.asg=asg;S.dirty=true;closeM();toast(`Copied ${people} staff. Review, then tap Save.`);rosterView()}
 async function saveDept(){const n=$("#dn").value.trim();if(n.length<2)return $("#dx").textContent="Enter the department name (2 or more letters).";
  const{data,error}=await sb.from("departments").update({name:n}).eq("id",S.prof.department_id).select("name");
  if(error)return $("#dx").textContent=error.message;
@@ -417,9 +551,12 @@ async function saveDept(){const n=$("#dn").value.trim();if(n.length<2)return $("
  S.dept=S.dept||{};S.dept.name=n;toast("Department name saved");rosterView()}
 function cyc(u,d){const k=dkey(d),o=Object.keys(S.shifts),c=code(u,k);(S.asg[u]??={})[k]=o[(o.indexOf(c)+1)%o.length];S.dirty=true;rosterView()}
 async function ensure(){if(S.roster)return S.roster;
- const{data,error}=await sb.from("rosters").insert({department_id:S.prof.department_id,month:ym(S.month)}).select().single();
- if(error)throw error;return S.roster=data}
+ const base={department_id:S.prof.department_id,month:ym(S.month)};
+ let r=await sb.from("rosters").insert({...base,prepared_by:S.prof.full_name}).select().single();
+ if(r.error&&/prepared_by/i.test(r.error.message))r=await sb.from("rosters").insert(base).select().single();
+ if(r.error)throw r.error;return S.roster=r.data}
 async function saveR(){try{const r=await ensure(),rows=[];
+ if("prepared_by"in r&&!r.prepared_by){await sb.from("rosters").update({prepared_by:S.prof.full_name}).eq("id",r.id);r.prepared_by=S.prof.full_name}
  S.staff.filter(s=>s.active).forEach(s=>{for(let d=1;d<=dim();d++){const k=dkey(d),c=code(s.id,k);if(!S.shifts[c])throw new Error(`Invalid shift "${c}" for ${s.full_name} on day ${d}`);rows.push({roster_id:r.id,user_id:s.id,day:k,shift_code:c})}});
  const{error}=await sb.from("assignments").upsert(rows,{onConflict:"roster_id,user_id,day"});if(error)throw error;
  S.dirty=false;toast("Saved");rosterView()}catch(e){toast(e.message)}}
@@ -511,7 +648,7 @@ function navHtml(){const t=themePref(),ini=S.prof.full_name.split(" ").map(w=>w[
  np="Notification" in window?Notification.permission:"na";
  $("#side").innerHTML=`<div class="sh"><div class="av">${esc(ini)}</div><div><b>${esc(S.prof.full_name)}</b><br><small>${hod()?"Administrator":"Staff"}</small></div><button class="x" onclick="closeNav()" aria-label="Close">✕</button></div>
  <h4>Appearance</h4><div class="seg">${seg("auto","Auto")}${seg("light","Light")}${seg("dark","Dark")}</div>
- <h4>Notifications</h4>${np==="granted"?'<p class="sm2">On</p>':np==="denied"?'<p class="sm2">Blocked. Allow them in your browser or phone settings.</p>':np==="default"?'<button class="ghost" onclick="askNotif()">Turn on notifications</button>':'<p class="sm2">Not supported on this device.</p>'}
+ ${hod()?'<h4>Preview</h4><button class="ghost" onclick="startPreview()">View as Staff</button>':""}<h4>Notifications</h4>${np==="granted"?'<p class="sm2">On</p>':np==="denied"?'<p class="sm2">Blocked. Allow them in your browser or phone settings.</p>':np==="default"?'<button class="ghost" onclick="askNotif()">Turn on notifications</button>':'<p class="sm2">Not supported on this device.</p>'}
  <h4>Change password</h4><input id="np1" type="password" placeholder="New password (8+ chars)" autocomplete="new-password"><p class="err" id="npx"></p><button class="ghost" onclick="chgPw()">Update password</button>
  <div class="grow"></div><button class="out" onclick="sb.auth.signOut().then(()=>location.reload())">Sign out</button><p class="sm2" style="text-align:center;margin-top:12px">Duty Schedule</p>`}
 function openNav(){navHtml();$("#side").classList.add("open");$("#scrim").classList.add("open")}
