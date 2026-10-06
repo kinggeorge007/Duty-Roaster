@@ -207,7 +207,9 @@ nav{z-index:8}
 .po{display:none}
 @page{size:A4 landscape;margin:5mm}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}.scroll td,.scroll th{padding:1px!important}.scroll td.n{font-size:11px;min-width:0;padding-right:6px!important}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
+/* splash */#splash{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .4s ease}#splash.out{opacity:0;pointer-events:none}#splash img{width:min(34vw,140px);height:auto;opacity:0;transform:scale(.85);animation:spIn .9s cubic-bezier(.22,.61,.36,1) forwards}@keyframes spIn{to{opacity:1;transform:none}}@keyframes spFade{to{opacity:1}}@media(prefers-reduced-motion:reduce){#splash img{transform:none;animation:spFade .2s linear forwards}#splash{transition-duration:.15s}}
 </style></head><body>
+<div id="splash" aria-hidden="true"><img src="icon.svg" alt=""></div>
 <div id="toast"></div><div id="app"></div><div id="scrim" class="scrim" onclick="closeNav()"></div><aside id="side" class="side"></aside><div id="mdl" class="mdl" onclick="if(event.target===this)closeM()"><div class="mbox" id="mbx"></div></div>
 <script>
 /* ===== CONFIG: paste your Supabase values ===== */
@@ -269,7 +271,6 @@ const BASE="afighorovie",em=x=>(x.includes("@")?x:`${BASE}+${x}@gmail.com`).toLo
 async function allAsg(id){let out=[],from=0;for(;;){const{data,error}=await sb.from("assignments").select("user_id,day,shift_code").eq("roster_id",id).order("user_id").order("day").range(from,from+999);
  if(error)throw error;out=out.concat(data||[]);if(!data||data.length<1000)break;from+=1000}return out}
 async function load(){
- $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
  const dp=S.prof.department_id;
  const[{data:r},{data:st}]=await Promise.all([
   sb.from("rosters").select("*").eq("department_id",dp).eq("month",ym(S.month)),
@@ -347,7 +348,6 @@ function calView(){const f=fv(),me=S.prof.id;
 
 /* ---------- public read-only view (opened from the shared link) ---------- */
 async function vLoad(){
- $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
  const{data,error}=await sb.rpc("get_shared_roster",{t:SH,m:ym(S.month)});
  if(error||!data||data.error){$("#app").innerHTML='<div class="lg"><div class="lgc"><h1>Link not valid</h1><p class="lgs">Ask your head of department for the current link.</p></div></div>';return}
  S.dept={name:data.dept,settings:data.settings||{}};const a=data.shifts.slice().sort((x,y)=>(x.code==="O"?-1:y.code==="O"?1:x.start_time.localeCompare(y.start_time)));
@@ -659,5 +659,8 @@ async function chgPw(){const p=$("#np1").value;if(p.length<8)return $("#npx").te
 
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 if(isNat())window.print=()=>exportPdf(S.tab==="ros"&&hod()?"all":fv());
-SH?vLoad():init();
-</script></body></html>
+const _sp0=performance.now(),_rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function hideSplash(){const s=document.getElementById("splash");if(!s||s.dataset.h)return;s.dataset.h=1;setTimeout(()=>{s.classList.add("out");setTimeout(()=>s.remove(),450)},Math.max(0,(_rm?250:1300)-(performance.now()-_sp0)))}
+setTimeout(hideSplash,12000);
+Promise.resolve(SH?vLoad():init()).catch(()=>{}).finally(hideSplash);
+</script><script src="ai-assistant.js"></script></body></html>
