@@ -66,7 +66,7 @@ async function ask(text,action="ask"){
  bubble("u",esc(shown));busy=true;const t=bubble("a t","AI is checking the roster…");
  const slow=setTimeout(()=>t.textContent="Still working on it…",8000);
  try{
-  const{data,error}=await sb.functions.invoke("ai-roster-assistant",{body:{action,message:text||"",rosterId:S.roster.id,today:iso(new Date()),history:hist.slice(-6)}});
+  const{data,error}=await sb.functions.invoke("bright-responder",{body:{action,message:text||"",rosterId:S.roster.id,today:iso(new Date()),history:hist.slice(-6)}});
   if(error)throw error;if(data?.error)throw{context:{json:async()=>data}};
   t.remove();const m=bubble("a",rich(data?.reply||"I couldn't find that information in the current roster."));
   if(data?.proposal&&hod())proposal(data.proposal,m);
