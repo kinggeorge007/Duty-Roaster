@@ -204,12 +204,15 @@ nav{z-index:8}
 :root[data-theme="dark"] .lgc{background:rgba(26,29,32,.92);border:1px solid rgba(255,255,255,.08)}
 :root[data-theme="dark"] .lgc h1{color:#E8F5EE}:root[data-theme="dark"] .lgs{color:#8B9298}:root[data-theme="dark"] .lgc label{color:#B6BDC2}
 :root[data-theme="dark"] .lgc input{background:#1F2327;border-color:#3A4046;color:#ECEEEF}:root[data-theme="dark"] .lgc input::placeholder{color:#7C858C}
+.nx{color:var(--mut);margin-left:4px}
+.sm.danger,.ghost.sm.danger{background:rgba(217,83,79,.12);color:#c0504d}
+.bpal{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+.bchip{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:6px;border:2px solid transparent;font-weight:600;font-size:13px}
+.bchip b{font-weight:800}.bchip.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--pri)}
 .po{display:none}
 @page{size:A4 landscape;margin:5mm}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}.scroll td,.scroll th{padding:1px!important}.scroll td.n{font-size:11px;min-width:0;padding-right:6px!important}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
-/* splash */#splash{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .4s ease}#splash.out{opacity:0;pointer-events:none}#splash img{width:min(34vw,140px);height:auto;opacity:0;transform:scale(.85);animation:spIn .9s cubic-bezier(.22,.61,.36,1) forwards}@keyframes spIn{to{opacity:1;transform:none}}@keyframes spFade{to{opacity:1}}@media(prefers-reduced-motion:reduce){#splash img{transform:none;animation:spFade .2s linear forwards}#splash{transition-duration:.15s}}
 </style></head><body>
-<div id="splash" aria-hidden="true"><img src="icon.svg" alt=""></div>
 <div id="toast"></div><div id="app"></div><div id="scrim" class="scrim" onclick="closeNav()"></div><aside id="side" class="side"></aside><div id="mdl" class="mdl" onclick="if(event.target===this)closeM()"><div class="mbox" id="mbx"></div></div>
 <script>
 /* ===== CONFIG: paste your Supabase values ===== */
@@ -270,11 +273,15 @@ const BASE="afighorovie",em=x=>(x.includes("@")?x:`${BASE}+${x}@gmail.com`).toLo
  shown=e=>{const m=e?.match(/^afighorovie\+(.+)@gmail\.com$/i);return m?m[1]:e};
 async function allAsg(id){let out=[],from=0;for(;;){const{data,error}=await sb.from("assignments").select("user_id,day,shift_code").eq("roster_id",id).order("user_id").order("day").range(from,from+999);
  if(error)throw error;out=out.concat(data||[]);if(!data||data.length<1000)break;from+=1000}return out}
+async function loadStaff(dp){let r=await sb.from("profiles").select("id,full_name,email,role,active,sort_order").eq("department_id",dp).order("sort_order",{ascending:true}).order("full_name");
+ if(r.error&&/sort_order/i.test(r.error.message)){S.noSort=true;r=await sb.from("profiles").select("id,full_name,email,role,active").eq("department_id",dp).order("full_name")}
+ return r}
 async function load(){
+ $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
  const dp=S.prof.department_id;
  const[{data:r},{data:st}]=await Promise.all([
   sb.from("rosters").select("*").eq("department_id",dp).eq("month",ym(S.month)),
-  sb.from("profiles").select("id,full_name,email,role,active").eq("department_id",dp).order("full_name"),
+  loadStaff(dp),
   Object.keys(S.shifts).length?null:loadShifts(),
   S.dept?null:sb.from("departments").select("*").eq("id",dp).single().then(x=>{S.dept=x.data})]);
  S.roster=r?.[0]||null;S.asg={};S.staff=st||[];
@@ -304,19 +311,19 @@ function login(msg){
 function shell(inner){
  const tabs=hod()?[["cal","Calendar"],["ros","Roster"],["stf","Staff"]]:[["cal","Calendar"]];
  return `<div class="hero noprint"><div class="row"><div><h1>Hi, ${esc(S.prof.full_name.split(" ")[0])}</h1><p>${hod()?"Administrator":"Staff"} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><button class="ghost menu" onclick="openNav()" aria-label="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div>
- <main>${inner}</main><nav>${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" onclick="S.tab='${t[0]}';render()">${t[1]}</button>`).join("")}</nav>`}
+ <main>${inner}</main><nav>${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" onclick="S.tab='${t[0]}';S.edit=null;render()">${t[1]}</button>`).join("")}</nav>`}
 function monthBar(){return `<div class="row noprint"><button class="cir" onclick="mv(-1)" aria-label="Previous month">‹</button><b>${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</b><button class="cir" onclick="mv(1)" aria-label="Next month">›</button></div>`}
 function mv(n){if(SH){S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;return vLoad()}if(S.dirty&&!confirm("Discard unsaved changes?"))return;S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;load()}
-function render(){if(S.preview)return vRender();S.tab==="ros"&&hod()?rosterView():S.tab==="stf"&&hod()?staffView():calView()}
+function render(){if(S.preview)return vRender();S.tab==="ros"&&hod()?(S.edit?editorView():rosterView()):S.tab==="stf"&&hod()?staffView():calView()}
 
 const IC={save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/>',publish:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/>',unpublish:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/>',
 csv:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M12 18v-6M9 14l3-3 3 3"/>',print:'<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
 image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>',
 cal:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M12 13v5M9.5 15.5h5"/>',copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/>',
-reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',check:'<path d="M5 12l5 5 9-10"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
+reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',check:'<path d="M5 12l5 5 9-10"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',next:'<path d="M5 12h14M13 6l6 6-6 6"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
 const svg=i=>`<svg viewBox="0 0 24 24">${IC[i]}</svg>`,
  tile=(fn,i,l,c="")=>`<button type="button" class="tile ${c}" onclick="${fn}">${svg(i)}<span>${l}</span></button>`;
-const sortedAct=()=>S.staff.filter(s=>s.active).slice().sort((x,y)=>x.full_name.localeCompare(y.full_name));
+const sortedAct=()=>S.staff.filter(s=>s.active);
 function legendHtml(){return `<div class="lgd">${Object.values(S.shifts).map(x=>`<div class="lk"><span class="bd ${x.code}">${esc(x.code)}</span><div><b>${esc(x.label)}</b><small>${x.code==="O"?"Day off":tm(x.start_time)+" – "+tm(x.end_time)}</small></div></div>`).join("")}</div>`}
 function filterSel(){const f=fv(),cur=f==="all"?"Everyone – full roster":(S.staff.find(x=>x.id===f)?.full_name||"Everyone – full roster");
  return `<div class="fl noprint">Show<button type="button" class="tbtn" onclick="fltM()"><span>${esc(cur)}</span>${svg("chev")}</button></div>`}
@@ -348,6 +355,7 @@ function calView(){const f=fv(),me=S.prof.id;
 
 /* ---------- public read-only view (opened from the shared link) ---------- */
 async function vLoad(){
+ $("#app").innerHTML='<div class="hero"><h1>Loading…</h1></div>';
  const{data,error}=await sb.rpc("get_shared_roster",{t:SH,m:ym(S.month)});
  if(error||!data||data.error){$("#app").innerHTML='<div class="lg"><div class="lgc"><h1>Link not valid</h1><p class="lgs">Ask your head of department for the current link.</p></div></div>';return}
  S.dept={name:data.dept,settings:data.settings||{}};const a=data.shifts.slice().sort((x,y)=>(x.code==="O"?-1:y.code==="O"?1:x.start_time.localeCompare(y.start_time)));
@@ -507,11 +515,11 @@ function rosterView(){
  const _sl=document.querySelector(".scroll")?.scrollLeft||0,_sy=window.scrollY;
  const n=dim(),act=S.staff.filter(s=>s.active),pub=S.roster?.published,sd=showDays(),empty=!S.roster&&!Object.values(S.asg).some(o=>Object.keys(o).length);
  let h=`<div class="card"><h2 class="po">${esc(S.dept?.name||"Duty Schedule")} · ${longMon()}</h2>${monthBar()}<p class="noprint">Status: <span class="pill ${pub?"M":"O"}">${S.roster?(pub?"Published":"Draft"):"Not created"}</span> ${S.dirty?'<span class="err">Unsaved changes</span> <button class="sm" onclick="saveR()">Save now</button>':""}</p>
- <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}.</p>
+ <p class="noprint" style="font-size:12px;color:var(--mut)">Tap a cell to cycle ${Object.keys(S.shifts).join(" → ")}. Tap a name to schedule that person on their own calendar.</p>
  ${empty?`<div class="cpb noprint"><span>No roster for this month yet.</span><button class="ghost sm" onclick="copyM()">Copy previous roster</button></div>`:""}</div>
  <div class="card scroll"><table><tr><th></th>${dayHead()}${sd?"<th>Days</th>":""}</tr>
  ${act.map(s=>{let w=0;const cells=Array.from({length:n},(_,i)=>{const c=code(s.id,dkey(i+1));if(c!=="O")w++;return `<td><button class="${c}" onclick="cyc('${s.id}',${i+1})">${c}</button></td>`}).join("");
-  return `<tr><td class="n">${esc(s.full_name)}</td>${cells}${sd?`<td style="text-align:center"><b>${w}</b></td>`:""}</tr>`}).join("")}</table></div>
+  return `<tr><td class="n" style="cursor:pointer" onclick="openEd('${s.id}')">${esc(s.full_name)} <span class="nx">›</span></td>${cells}${sd?`<td style="text-align:center"><b>${w}</b></td>`:""}</tr>`}).join("")}</table></div>
  <div class="card noprint"><div class="tiles" style="margin-top:0">${tile("saveR()","save","Save","pri")}${tile(`pubR(${!pub})`,pub?"unpublish":"publish",pub?"Unpublish":"Publish")}${tile("copyM()","copy","Copy previous")}
  <label class="tile">${svg("csv")}<span>Import CSV</span><input type="file" accept=".csv" class="hide" onchange="imp(this.files[0])"></label>${tile("printDoc('all')","print","Print")}${tile("exportImage('all')","image","Save image")}${tile("exportPdf('all')","pdf","Save PDF")}${tile("linkM()","share","Share link")}${tile("startPreview()","eye","View as staff")}${S.roster?tile("delR()","trash","Delete roster","danger"):""}</div>
  <p style="font-size:12px;color:var(--mut);margin:12px 0 0">CSV import: header <code>name,1,2,…</code> then one row per staff.</p></div>
@@ -522,6 +530,25 @@ function rosterView(){
  <div class="card noprint"><b>Department name</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Shown at the top of printed rosters, PDFs, images and the shared link.${/^your dep/i.test(S.dept?.name||"")?" <b style='color:#c0504d'>It still shows the placeholder name.</b>":""}</p><input id="dn" value="${esc(S.dept?.name||"")}" maxlength="60" placeholder="e.g. Pharmacy Department"><p class="err" id="dx"></p><button class="ghost" onclick="saveDept()">Save name</button></div>`;
  $("#app").innerHTML=shell(h);
  const _e=document.querySelector(".scroll");if(_e)_e.scrollLeft=_sl;window.scrollTo(0,_sy)}
+function openEd(id){S.edit=id;if(!S.brush||!S.shifts[S.brush])S.brush=Object.keys(S.shifts).find(c=>c!=="O")||"O";window.scrollTo(0,0);render()}
+function closeEd(){S.edit=null;render()}
+function edNav(d){const a=S.staff.filter(s=>s.active),i=a.findIndex(s=>s.id===S.edit),j=i+d;if(j<0||j>=a.length)return toast(d>0?"That is the last staff member.":"That is the first staff member.");S.edit=a[j].id;window.scrollTo(0,0);render()}
+function edBrush(c){S.brush=c;render()}
+function edDay(d){const k=dkey(d),u=S.edit;(S.asg[u]??={})[k]=code(u,k)===S.brush?"O":S.brush;S.dirty=true;render()}
+function edClear(){if(!confirm("Clear all shifts for this person this month?"))return;S.asg[S.edit]={};S.dirty=true;render()}
+function editorView(){const _sy=window.scrollY,act=S.staff.filter(s=>s.active),i=act.findIndex(s=>s.id===S.edit);
+ if(i<0){S.edit=null;return rosterView()}
+ const p=act[i],u=p.id,n=dim(),off=S.month.getDay(),mine=Array.from({length:n},(_,k)=>code(u,dkey(k+1))),work=mine.filter(c=>c!=="O").length;
+ const chips=Object.values(S.shifts).map(x=>`<button type="button" class="bchip ${x.code} ${S.brush===x.code?"on":""}" onclick="edBrush('${x.code}')"><b>${esc(x.code)}</b><span>${esc(x.label)}</span></button>`).join("");
+ const h=`<div class="card"><div class="row noprint"><button class="ghost sm" onclick="closeEd()">‹ Full roster</button>${S.dirty?'<span class="err">Unsaved changes</span>':'<span style="color:var(--mut);font-size:13px">Saved</span>'}</div>
+ <div class="row noprint" style="margin-top:14px"><button class="cir" onclick="edNav(-1)" aria-label="Previous staff">‹</button><div style="text-align:center;min-width:0"><b style="font-size:18px">${esc(p.full_name)}</b><br><small style="color:var(--mut)">Staff ${i+1} of ${act.length}</small></div><button class="cir" onclick="edNav(1)" aria-label="Next staff">›</button></div></div>
+ <div class="card">${monthBar()}
+ <div class="stats"><div class="stat"><b>${work}</b><span>Workdays</span></div><div class="stat"><b>${n-work}</b><span>Days off</span></div></div>
+ <p style="font-size:12px;color:var(--mut);margin:14px 0 0">Pick a shift, then tap the days. Tap a day again to set it back to Off.</p>
+ <div class="bpal">${chips}</div>
+ <div class="grid">${DOW.map(d=>`<div class="dow">${d}</div>`).join("")}${Array(off).fill('<div class="day blank"></div>').join("")}${mine.map((c,k)=>`<div class="day ${c}" onclick="edDay(${k+1})">${k+1}<i>${c}</i></div>`).join("")}</div>
+ <div class="tiles">${tile("saveR()","save","Save","pri")}${i<act.length-1?tile("edNav(1)","next","Next staff"):tile("closeEd()","check","Done")}${tile("edClear()","trash","Clear month","danger")}</div></div>`;
+ $("#app").innerHTML=shell(h);window.scrollTo(0,_sy)}
 function cpMap(mode,d,sdim,sOff,tOff){let sd;
  if(mode==="day"){sd=d;if(sd>sdim)sd-=7}
  else{const w=Math.floor((d-1+tOff)/7),wd=(d-1+tOff)%7;sd=w*7+wd-sOff+1;while(sd<1)sd+=7;while(sd>sdim)sd-=7}
@@ -559,7 +586,7 @@ async function saveR(){try{const r=await ensure(),rows=[];
  if("prepared_by"in r&&!r.prepared_by){await sb.from("rosters").update({prepared_by:S.prof.full_name}).eq("id",r.id);r.prepared_by=S.prof.full_name}
  S.staff.filter(s=>s.active).forEach(s=>{for(let d=1;d<=dim();d++){const k=dkey(d),c=code(s.id,k);if(!S.shifts[c])throw new Error(`Invalid shift "${c}" for ${s.full_name} on day ${d}`);rows.push({roster_id:r.id,user_id:s.id,day:k,shift_code:c})}});
  const{error}=await sb.from("assignments").upsert(rows,{onConflict:"roster_id,user_id,day"});if(error)throw error;
- S.dirty=false;toast("Saved");rosterView()}catch(e){toast(e.message)}}
+ S.dirty=false;toast("Saved");render()}catch(e){toast(e.message)}}
 async function delR(){
  if(!S.roster)return toast("There is no roster for this month.");
  const mon=S.month.toLocaleString("default",{month:"long",year:"numeric"});
@@ -580,12 +607,12 @@ async function imp(f){if(!f)return;const lines=(await f.text()).split(/\r?\n/).f
  if(errs.length)return alert("Import failed:\n"+errs.slice(0,15).join("\n")+(errs.length>15?`\n…+${errs.length-15} more`:""));
  Object.assign(S.asg,tmp);S.dirty=true;toast("Imported – review, then Save");rosterView()}
 
-const sortStaff=()=>S.staff.sort((x,y)=>x.full_name.localeCompare(y.full_name));
+const sortStaff=()=>{if(!S.noSort)S.staff.sort((x,y)=>(x.sort_order??1e15)-(y.sort_order??1e15))};
 function staffView(){
  let h=`<div class="card"><b>Add staff</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Names only. Staff do not need an email or login. To add many, type one name per line.</p>
  <textarea id="sn" rows="3" placeholder="Full name&#10;Another name"></textarea><p class="err" id="sx"></p><button id="ab" onclick="addS()">Add</button></div>
  <div class="card"><b>Staff (${S.staff.filter(s=>s.active).length})</b>${S.staff.map(s=>`<div class="row" style="padding:8px 0"><div>${esc(s.full_name)}<br><small style="color:var(--mut)">${s.role==="hod"?"Admin · "+esc(shown(s.email)):"Staff"}${s.active?"":" · inactive"}</small></div>
- <div style="white-space:nowrap"><button class="ghost sm" onclick="renS('${s.id}')">Rename</button>${s.id===S.prof.id?"":` <button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button>`}</div></div>`).join("")}</div>
+ <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end"><button class="ghost sm" onclick="renS('${s.id}')">Rename</button>${s.id===S.prof.id?"":`<button class="ghost sm" onclick="tgl('${s.id}',${!s.active})">${s.active?"Deactivate":"Activate"}</button><button class="ghost sm danger" onclick="delStaff('${s.id}')">Delete</button>`}</div></div>`).join("")}</div>
  ${shiftCard()}
  <div class="card"><b>Add an admin (HOD)</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Only admins sign in. Give them a one-time login.</p>
  <input id="an" placeholder="Full name"><input id="ai" type="text" autocapitalize="none" placeholder="Email or ID for sign-in"><input id="ap" type="password" placeholder="Temporary password (8+ chars)">
@@ -624,7 +651,7 @@ async function addS(){const b=$("#ab");if(!b||b.disabled)return;
  if(!names.length)return $("#sx").textContent="Enter at least one name.";
  if(names.some(n=>n.length<2))return $("#sx").textContent="Each name needs at least 2 letters.";
  b.disabled=true;b.textContent="Adding…";$("#sx").textContent="";
- const{data,error}=await sb.from("profiles").insert(names.map(n=>({full_name:n,role:"staff",department_id:S.prof.department_id}))).select("id,full_name,email,role,active");
+ const{data,error}=await sb.from("profiles").insert(names.map(n=>({full_name:n,role:"staff",department_id:S.prof.department_id}))).select("*");
  if(error){b.disabled=false;b.textContent="Add";return $("#sx").textContent=error.message}
  S.staff.push(...data);sortStaff();toast(data.length+(data.length>1?" staff added":" staff added"));staffView()}
 async function addH(){const b=$("#ah");if(!b||b.disabled)return;b.disabled=true;b.textContent="Adding…";
@@ -635,9 +662,16 @@ async function addH0(){const n=$("#an").value.trim(),e=$("#ai").value.trim(),p=$
  const{data,error}=await t.auth.signUp({email:em(e),password:p});if(error||!data.user)return $("#ax").textContent=error?.message||"Could not create user";
  const{error:e2}=await sb.from("profiles").insert({id:data.user.id,full_name:n,email:em(e),role:"hod",department_id:S.prof.department_id});
  if(e2)return $("#ax").textContent=e2.message;
- S.staff.push({id:data.user.id,full_name:n,email:em(e),role:"hod",active:true});sortStaff();toast("Admin added");staffView()}
+ S.staff.push({id:data.user.id,full_name:n,email:em(e),role:"hod",active:true,sort_order:Math.max(0,...S.staff.map(x=>x.sort_order||0))+1});sortStaff();toast("Admin added");staffView()}
 async function renS(id){const s=S.staff.find(x=>x.id===id),n=prompt("Name",s.full_name);if(!n||n.trim().length<2)return;
  const{error}=await sb.from("profiles").update({full_name:n.trim()}).eq("id",id);if(error)return toast(error.message);s.full_name=n.trim();sortStaff();staffView()}
+async function delStaff(id){const s=S.staff.find(x=>x.id===id);if(!s||id===S.prof.id)return;
+ const{count}=await sb.from("assignments").select("roster_id",{count:"exact",head:true}).eq("user_id",id);
+ if(!confirm(`Delete ${s.full_name}?\n\n${count?`Their ${count} scheduled shifts in all rosters will be removed too. `:""}${s.role==="hod"?"This person is an admin, so their login will stop working. ":""}This cannot be undone.\n\n(Use Deactivate instead if you only want to hide them.)`))return;
+ let e=(await sb.from("assignments").delete().eq("user_id",id)).error;
+ if(!e)e=(await sb.from("profiles").delete().eq("id",id)).error;
+ if(e)return toast(e.message);
+ S.staff=S.staff.filter(x=>x.id!==id);delete S.asg[id];if(S.fv===id)S.fv=null;if(S.edit===id)S.edit=null;toast("Staff deleted");staffView()}
 async function tgl(id,a){const{error}=await sb.from("profiles").update({active:a}).eq("id",id);if(error)return toast(error.message);const s=S.staff.find(x=>x.id===id);if(s)s.active=a;staffView()}
 
 function themePref(){try{return localStorage.getItem("theme")||"auto"}catch(e){return"auto"}}
@@ -659,8 +693,5 @@ async function chgPw(){const p=$("#np1").value;if(p.length<8)return $("#npx").te
 
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
 if(isNat())window.print=()=>exportPdf(S.tab==="ros"&&hod()?"all":fv());
-const _sp0=performance.now(),_rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
-function hideSplash(){const s=document.getElementById("splash");if(!s||s.dataset.h)return;s.dataset.h=1;setTimeout(()=>{s.classList.add("out");setTimeout(()=>s.remove(),450)},Math.max(0,(_rm?250:1300)-(performance.now()-_sp0)))}
-setTimeout(hideSplash,12000);
-Promise.resolve(SH?vLoad():init()).catch(()=>{}).finally(hideSplash);
-</script><script src="ai-assistant.js"></script></body></html>
+SH?vLoad():init();
+</script></body></html>
