@@ -230,6 +230,21 @@ function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";se
 const hrs=c=>{const s=S.shifts[c];return s?`${s.label} · ${tm(s.start_time)}–${tm(s.end_time)}`:c};
 const code=(u,d)=>S.asg[u]?.[d]||"O";
 
+/* ---------- back button / swipe-back: go to the previous screen, then home ---------- */
+S.hs=[];S.ovl=null;S.skip=false;
+function pushNav(o){S.hs.push({t:S.tab,ed:S.edit,pv:!!S.preview,o:o?1:0});try{history.pushState({n:S.hs.length},"")}catch(e){}}
+function popOvl(){S.ovl=null;S.skip=true;try{history.back()}catch(e){S.skip=false}}
+window.addEventListener("popstate",e=>{const n=(e.state&&e.state.n)||0;
+ if(n>=S.hs.length){S.skip=false;return}
+ let r=null;while(S.hs.length>n)r=S.hs.pop();
+ if(S.skip){S.skip=false;return}
+ if(S.ovl){const k=S.ovl;S.ovl=null;k==="m"?closeM(true):closeNav(true)}
+ if(r&&!r.o){S.tab=r.t;S.edit=r.ed;S.preview=r.pv;rr()}});
+function goTab(t){
+ if(t==="cal"){if(S.hs.length){history.go(-S.hs.length);return}S.tab="cal";S.edit=null;render();return}
+ if(t===S.tab&&S.edit){if(S.hs.length){history.back();return}}
+ if(S.hs.length===0&&S.tab!==t)pushNav();
+ S.tab=t;S.edit=null;render()}
 async function init(){
  const{data:{session}}=await sb.auth.getSession();
  if(!session)return login();
@@ -311,7 +326,7 @@ function login(msg){
 function shell(inner){
  const tabs=hod()?[["cal","Calendar"],["ros","Roster"],["stf","Staff"]]:[["cal","Calendar"]];
  return `<div class="hero noprint"><div class="row"><div><h1>Hi, ${esc(S.prof.full_name.split(" ")[0])}</h1><p>${hod()?"Administrator":"Staff"} · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><button class="ghost menu" onclick="openNav()" aria-label="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div>
- <main>${inner}</main><nav>${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" onclick="S.tab='${t[0]}';S.edit=null;render()">${t[1]}</button>`).join("")}</nav>`}
+ <main>${inner}</main><nav>${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" onclick="goTab('${t[0]}')">${t[1]}</button>`).join("")}</nav>`}
 function monthBar(){return `<div class="row noprint"><button class="cir" onclick="mv(-1)" aria-label="Previous month">‹</button><b>${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</b><button class="cir" onclick="mv(1)" aria-label="Next month">›</button></div>`}
 function mv(n){if(SH){S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;return vLoad()}if(S.dirty&&!confirm("Discard unsaved changes?"))return;S.month=new Date(S.month.getFullYear(),S.month.getMonth()+n,1);S.sel=null;load()}
 function render(){if(S.preview)return vRender();S.tab==="ros"&&hod()?(S.edit?editorView():rosterView()):S.tab==="stf"&&hod()?staffView():calView()}
@@ -368,8 +383,9 @@ function vRender(){const pub=!!(S.roster&&S.roster.published);
  if(pub)h+=viewBody()+(fv()==="all"?"":dayCard(fv()));
  $("#app").innerHTML=(S.preview?`<div class="pvb noprint"><span><b>STAFF VIEW</b> · preview only, nothing can be changed</span><button onclick="endPreview()">Exit preview</button></div>`:"")+`<div class="hero noprint"><h1>${esc(S.dept.name)}</h1><p>Duty Schedule · ${S.month.toLocaleString("default",{month:"long",year:"numeric"})}</p></div><main>${h}</main>`}
 async function startPreview(){if(S.dirty){if(!confirm("You have unsaved changes. Save them first so the preview matches what staff will see?"))return;await saveR()}
- closeNav();S.preview=true;S.fv="all";S.sel=null;window.scrollTo(0,0);vRender()}
-function endPreview(){S.preview=false;S.fv=null;S.sel=null;render()}
+ if(S.ovl==="n"){closeNav(true);const t=S.hs[S.hs.length-1];if(t)t.o=0;try{history.replaceState({n:S.hs.length},"")}catch(e){}}else pushNav();
+ S.preview=true;S.fv="all";S.sel=null;window.scrollTo(0,0);vRender()}
+function endPreview(){S.fv=null;S.sel=null;if(S.hs.length)history.back();else{S.preview=false;render()}}
 
 /* ---------- Android app (wrapper) support ---------- */
 const isNat=()=>!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
@@ -378,8 +394,8 @@ async function natShare(file,name){try{const P=Capacitor.Plugins,w=await P.Files
  await P.Share.share({title:"Duty Schedule",files:[w.uri],dialogTitle:"Send or save"})}catch(e){const m=String(e&&e.message||e);if(!/cancel/i.test(m))toast("Could not share: "+m)}}
 
 /* ---------- modal, image export, share link ---------- */
-function openM(h){$("#mbx").innerHTML=h;$("#mdl").classList.add("open")}
-function closeM(){$("#mdl").classList.remove("open");if(S.imgUrl){URL.revokeObjectURL(S.imgUrl);S.imgUrl=null}}
+function openM(h){if(!S.ovl){pushNav(1);S.ovl="m"}$("#mbx").innerHTML=h;$("#mdl").classList.add("open")}
+function closeM(silent){$("#mdl").classList.remove("open");if(S.imgUrl){URL.revokeObjectURL(S.imgUrl);S.imgUrl=null}if(S.ovl==="m"){if(silent)S.ovl=null;else popOvl()}}
 function showImage(blob,name){S.imgFile=new File([blob],name,{type:"image/png"});if(S.imgUrl)URL.revokeObjectURL(S.imgUrl);S.imgUrl=URL.createObjectURL(blob);
  const can=isNat()||!!(navigator.canShare&&navigator.canShare({files:[S.imgFile]}));
  openM(`<b>Schedule image</b><img src="${S.imgUrl}" alt="" style="width:100%;border-radius:12px;margin:10px 0;border:1px solid rgba(0,135,81,.2)"><div class="tiles">${can?tile("shareImg()","share",isNat()?"Share or save":"Share","pri"):""}${isNat()?"":tile("saveImg()","save",can?"Save":"Save image",can?"":"pri")}${tile("closeM()","x","Close")}</div>`)}
@@ -530,8 +546,8 @@ function rosterView(){
  <div class="card noprint"><b>Department name</b><p style="font-size:12px;color:var(--mut);margin:4px 0">Shown at the top of printed rosters, PDFs, images and the shared link.${/^your dep/i.test(S.dept?.name||"")?" <b style='color:#c0504d'>It still shows the placeholder name.</b>":""}</p><input id="dn" value="${esc(S.dept?.name||"")}" maxlength="60" placeholder="e.g. Pharmacy Department"><p class="err" id="dx"></p><button class="ghost" onclick="saveDept()">Save name</button></div>`;
  $("#app").innerHTML=shell(h);
  const _e=document.querySelector(".scroll");if(_e)_e.scrollLeft=_sl;window.scrollTo(0,_sy)}
-function openEd(id){S.edit=id;if(!S.brush||!S.shifts[S.brush])S.brush=Object.keys(S.shifts).find(c=>c!=="O")||"O";window.scrollTo(0,0);render()}
-function closeEd(){S.edit=null;render()}
+function openEd(id){pushNav();S.edit=id;if(!S.brush||!S.shifts[S.brush])S.brush=Object.keys(S.shifts).find(c=>c!=="O")||"O";window.scrollTo(0,0);render()}
+function closeEd(){if(S.hs.length)history.back();else{S.edit=null;render()}}
 function edNav(d){const a=S.staff.filter(s=>s.active),i=a.findIndex(s=>s.id===S.edit),j=i+d;if(j<0||j>=a.length)return toast(d>0?"That is the last staff member.":"That is the first staff member.");S.edit=a[j].id;window.scrollTo(0,0);render()}
 function edBrush(c){S.brush=c;render()}
 function edDay(d){const k=dkey(d),u=S.edit;(S.asg[u]??={})[k]=code(u,k)===S.brush?"O":S.brush;S.dirty=true;render()}
@@ -685,13 +701,14 @@ function navHtml(){const t=themePref(),ini=S.prof.full_name.split(" ").map(w=>w[
  ${hod()?'<h4>Preview</h4><button class="ghost" onclick="startPreview()">View as Staff</button>':""}<h4>Notifications</h4>${np==="granted"?'<p class="sm2">On</p>':np==="denied"?'<p class="sm2">Blocked. Allow them in your browser or phone settings.</p>':np==="default"?'<button class="ghost" onclick="askNotif()">Turn on notifications</button>':'<p class="sm2">Not supported on this device.</p>'}
  <h4>Change password</h4><input id="np1" type="password" placeholder="New password (8+ chars)" autocomplete="new-password"><p class="err" id="npx"></p><button class="ghost" onclick="chgPw()">Update password</button>
  <div class="grow"></div><button class="out" onclick="sb.auth.signOut().then(()=>location.reload())">Sign out</button><p class="sm2" style="text-align:center;margin-top:12px">Duty Schedule</p>`}
-function openNav(){navHtml();$("#side").classList.add("open");$("#scrim").classList.add("open")}
-function closeNav(){$("#side").classList.remove("open");$("#scrim").classList.remove("open")}
+function openNav(){navHtml();if(!S.ovl){pushNav(1);S.ovl="n"}$("#side").classList.add("open");$("#scrim").classList.add("open")}
+function closeNav(silent){$("#side").classList.remove("open");$("#scrim").classList.remove("open");if(S.ovl==="n"){if(silent)S.ovl=null;else popOvl()}}
 function askNotif(){Notification.requestPermission().then(navHtml)}
 async function chgPw(){const p=$("#np1").value;if(p.length<8)return $("#npx").textContent="Use 8 or more characters.";
  const{error}=await sb.auth.updateUser({password:p});if(error)return $("#npx").textContent=error.message;$("#np1").value="";$("#npx").textContent="";toast("Password updated")}
 
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+try{history.replaceState({n:0},"")}catch(e){}
 if(isNat())window.print=()=>exportPdf(S.tab==="ros"&&hod()?"all":fv());
 SH?vLoad():init();
 </script></body></html>
