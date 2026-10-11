@@ -209,6 +209,14 @@ nav{z-index:8}
 .bpal{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
 .bchip{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:6px;border:2px solid transparent;font-weight:600;font-size:13px}
 .bchip b{font-weight:800}.bchip.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--pri)}
+.tourc{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--mint)}
+.tstep{text-align:center;margin-top:6px}.tdots{display:flex;justify-content:center;gap:6px;margin:6px 0 14px}.tdots i{width:7px;height:7px;border-radius:50%;background:var(--grid)}.tdots i.on{width:22px;border-radius:4px;background:var(--pri)}
+.tic{width:64px;height:64px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:var(--mint);color:var(--dk);border-radius:18px}
+.tic svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tstep h3{margin:0 0 6px;font-size:20px;font-weight:600;letter-spacing:-.01em}.tstep p{color:var(--mut);margin:0 0 12px;font-size:14px;line-height:1.5}
+.tl{counter-reset:s;list-style:none;margin:10px 0 12px;padding:0;text-align:left}
+.tl li{position:relative;padding:10px 12px 10px 42px;margin-bottom:6px;background:var(--pale);border-radius:12px;font-size:13.5px;line-height:1.45}
+.tl li:before{counter-increment:s;content:counter(s);position:absolute;left:11px;top:10px;width:21px;height:21px;border-radius:50%;background:var(--pri);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .po{display:none}
 @page{size:A4 landscape;margin:5mm}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,.hero,.noprint,.side,.scrim,.mdl{display:none!important}body{background:#fff;padding:0}.card{box-shadow:none;padding:6px}main{margin-top:0;max-width:none;padding:0}.scroll{overflow:visible}.rt,.scroll table{width:100%}.scroll td,.scroll th{padding:1px!important}.scroll td.n{font-size:11px;min-width:0;padding-right:6px!important}td button,.cl{border:1px solid #999;width:100%;min-width:18px;height:22px;font-size:10px}.lgd{grid-template-columns:repeat(6,1fr)}.card{padding:0!important}.po{display:block!important;margin:0 0 6px}}
@@ -335,7 +343,7 @@ const IC={save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/>'
 csv:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M12 18v-6M9 14l3-3 3 3"/>',print:'<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
 image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>',
 cal:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M12 13v5M9.5 15.5h5"/>',copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/>',
-reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',check:'<path d="M5 12l5 5 9-10"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',next:'<path d="M5 12h14M13 6l6 6-6 6"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
+reset:'<path d="M3 12a9 9 0 0115-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-15 6.7L3 16M3 21v-5h5"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',pdf:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',check:'<path d="M5 12l5 5 9-10"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',next:'<path d="M5 12h14M13 6l6 6-6 6"/>',users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.9.3 5 2.6 5 5.8"/>',user:'<circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',sliders:'<path d="M4 6h9M19 6h1M4 12h3M13 12h7M4 18h11M21 18h-1"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 .4c0 1.7-2.5 2-2.5 3.6M12 17h.01"/>',back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'};
 const svg=i=>`<svg viewBox="0 0 24 24">${IC[i]}</svg>`,
  tile=(fn,i,l,c="")=>`<button type="button" class="tile ${c}" onclick="${fn}">${svg(i)}<span>${l}</span></button>`;
 const sortedAct=()=>S.staff.filter(s=>s.active);
@@ -363,7 +371,8 @@ function dayCard(uid){if(!S.sel)return"";const k=dkey(S.sel),c=code(uid,k);
   h+=`<p style="margin:10px 0 2px;color:var(--mut);font-size:13px">${esc(S.shifts[sc]?.label||sc)} (${ppl.length})</p>${ppl.map(s=>`<span class="pill ${s.id===uid?sc:""}">${esc(s.full_name)}</span>`).join("")||"<span class='pill'>No one</span>"}`}
  return h+`</div>`}
 function calView(){const f=fv(),me=S.prof.id;
- let h=(!S.roster||(!S.roster.published&&!hod()))?`<div class="card">No published roster for this month yet.</div>`:"";
+ let h=(tourSeen()?"":`<div class="card tourc noprint"><div><b>New here?</b><br><small style="color:var(--mut)">Take a quick tour of the app.</small></div><div style="display:flex;gap:6px;flex:none"><button class="sm" onclick="startTour()">Start tour</button><button class="ghost sm" onclick="tourSkip()">Not now</button></div></div>`);
+ h+=(!S.roster||(!S.roster.published&&!hod()))?`<div class="card">No published roster for this month yet.</div>`:"";
  h+=`<div class="card">${monthBar()}${filterSel()}<div class="tiles noprint">${tile(`exportImage('${f}')`,"image","Save image")}${tile(`exportPdf('${f}')`,"pdf","Save PDF")}${tile(`printDoc('${f}')`,"print","Print")}${hod()?tile("linkM()","share","Share link")+tile("startPreview()","eye","View as staff"):""}${f===me?tile("ics()","cal","Phone calendar"):""}</div></div>`;
  if(S.roster&&(S.roster.published||hod())){h+=viewBody()+(f==="all"?"":dayCard(f))}
  $("#app").innerHTML=shell(h)}
@@ -387,6 +396,38 @@ async function startPreview(){if(S.dirty){if(!confirm("You have unsaved changes.
  S.preview=true;S.fv="all";S.sel=null;window.scrollTo(0,0);vRender()}
 function endPreview(){S.fv=null;S.sel=null;if(S.hs.length)history.back();else{S.preview=false;render()}}
 
+/* ---------- How to use (guided tour) ---------- */
+const TOURH=[
+ {i:"cal",t:"Welcome to Duty Schedule",p:"Build your team's monthly duty roster, publish it and share it with your staff. This quick tour takes about a minute.",l:["Add your staff and shifts once","Fill in the roster each month","Publish and share one link with your team"]},
+ {i:"users",t:"1. Add your staff",p:"Open the Staff tab at the bottom.",l:["Type names in the Add staff box, one per line, then tap Add","Staff do not need an email or a login","Staff stay in the order you add them","Use Rename, Deactivate or Delete on any name"],go:"stf",gl:"Open the Staff tab"},
+ {i:"clock",t:"2. Set your shifts",p:"Still on the Staff tab, scroll down to Shift types.",l:["Each shift has a code (like M), a name, and start and end times","Tap Edit to change a shift, or use the form to add a new one","O means Off and cannot be changed"],go:"stf",gl:"Open the Staff tab"},
+ {i:"edit",t:"3. Fill in the roster",p:"Open the Roster tab. Each row is a staff member and each column is a day.",l:["Tap a cell to change it: O, then M, then your other shifts","Tap Save when you finish","Staff cannot see it until you publish"],go:"ros",gl:"Open the Roster tab"},
+ {i:"user",t:"Schedule one person at a time",p:"On the Roster tab, tap a staff member's name to open their own calendar.",l:["Pick a shift at the top, then tap the days","Tap a day again to set it back to Off","Use the arrows or Next staff to move to the next person","Everything updates in the full table straight away"],go:"ros",gl:"Open the Roster tab"},
+ {i:"copy",t:"Copy a previous roster",p:"Start a new month in seconds.",l:["On the Roster tab, tap Copy previous","Choose a month, then Same dates or Same weekdays","Edit anything you need, then tap Save"],go:"ros",gl:"Open the Roster tab"},
+ {i:"publish",t:"4. Publish and share",p:"Publishing makes the roster visible to your team.",l:["Tap Publish (Unpublish hides it again)","Tap Share link and send it to your staff group","Staff open the link with no login. They can filter by name and save it as an image, but they cannot change anything"],go:"ros",gl:"Open the Roster tab"},
+ {i:"print",t:"Print, PDF and image",p:"Your roster prints like an official sheet.",l:["Print and Save PDF make an A4 landscape table with Prepared by and an HR signature space","Save image makes a sharp picture to send on WhatsApp","In the Android app, Print opens the PDF so you can print it from there"]},
+ {i:"sliders",t:"Roster settings",p:"You will find these at the bottom of the Roster tab.",l:["Show Days Count turns the totals column on or off, including in print","Tap a colour square to change that shift's colour","Set your Department name so it shows on prints"],go:"ros",gl:"Open the Roster tab"},
+ {i:"eye",t:"View as Staff",p:"See exactly what your staff will see.",l:["Tap View as staff on the Roster or Calendar tab, or in the ☰ menu","It is read-only, so nothing can be changed","Tap Exit preview to come back"]},
+ {i:"menu",t:"Menu and tips",p:"Tap the ☰ button at the top for settings.",l:["Choose Light, Dark or Auto appearance","Change your password","Use your phone's back button to go back one screen","Replay this tour any time from ☰, How to use the app"]}];
+const TOURS=[
+ {i:"cal",t:"Welcome to Duty Schedule",p:"See your duty days at a glance. This quick tour takes under a minute.",l:["Your shifts are colour-coded on a monthly calendar","Switch between your calendar and the full team roster","Save or print a copy any time"]},
+ {i:"user",t:"Your calendar",p:"The Calendar tab shows your month.",l:["Workdays, Days off and Next shift are shown at the top","The legend below explains each shift and its hours","Tap a day to see who else is working that shift"],go:"cal",gl:"Open the Calendar tab"},
+ {i:"users",t:"See the whole team",p:"Tap Show at the top of the Calendar tab.",l:["Choose Everyone to see the full roster","Choose a name to see that person's month","Tap a name in the roster table to jump to their calendar"]},
+ {i:"image",t:"Keep a copy",p:"Use the buttons under the month.",l:["Save image or Save PDF keeps a copy to send or print","Print makes a clean A4 sheet","Phone calendar adds your shifts to your phone's calendar"]},
+ {i:"menu",t:"Menu and tips",p:"Tap the ☰ button at the top for settings.",l:["Choose Light, Dark or Auto appearance","Change your password","Use your phone's back button to go back one screen"]}];
+const tourSteps=()=>hod()?TOURH:TOURS,tourKey=()=>"tour_"+(S.prof?S.prof.id:"x");
+const tourSeen=()=>{try{return localStorage.getItem(tourKey())==="1"}catch(e){return true}};
+const tourMark=()=>{try{localStorage.setItem(tourKey(),"1")}catch(e){}};
+function startTour(){S.tour=0;tourMark();if(S.ovl==="n"){$("#side").classList.remove("open");$("#scrim").classList.remove("open");S.ovl="m"}tourHtml()}
+function tourHtml(){const st=tourSteps(),i=S.tour,x=st[i],last=i===st.length-1;
+ openM(`<div class="row"><small style="color:var(--mut)">Step ${i+1} of ${st.length}</small><button class="ghost sm" onclick="closeM()">Close</button></div>
+ <div class="tstep"><div class="tdots">${st.map((_,k)=>`<i class="${k===i?"on":""}"></i>`).join("")}</div><div class="tic">${svg(x.i)}</div><h3>${esc(x.t)}</h3><p>${esc(x.p)}</p>
+ <ol class="tl">${x.l.map(t=>`<li>${esc(t)}</li>`).join("")}</ol>${x.go?`<button class="ghost" style="width:100%" onclick="tourGo('${x.go}')">${esc(x.gl)}</button>`:""}</div>
+ <div class="tiles">${i>0?tile("tourStep(-1)","back","Back"):""}${last?tile("closeM()","check","Finish","pri"):tile("tourStep(1)","next","Next","pri")}</div>`)}
+function tourStep(d){const n=tourSteps().length;S.tour=Math.max(0,Math.min(n-1,S.tour+d));tourHtml()}
+function tourGo(t){closeM(true);const top=S.hs[S.hs.length-1];if(top&&top.o){top.o=0;try{history.replaceState({n:S.hs.length},"")}catch(e){}}
+ S.preview=false;S.tab=t;S.edit=null;window.scrollTo(0,0);render()}
+function tourSkip(){tourMark();render()}
 /* ---------- Android app (wrapper) support ---------- */
 const isNat=()=>!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const toB64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(b)});
@@ -698,7 +739,7 @@ function navHtml(){const t=themePref(),ini=S.prof.full_name.split(" ").map(w=>w[
  np="Notification" in window?Notification.permission:"na";
  $("#side").innerHTML=`<div class="sh"><div class="av">${esc(ini)}</div><div><b>${esc(S.prof.full_name)}</b><br><small>${hod()?"Administrator":"Staff"}</small></div><button class="x" onclick="closeNav()" aria-label="Close">✕</button></div>
  <h4>Appearance</h4><div class="seg">${seg("auto","Auto")}${seg("light","Light")}${seg("dark","Dark")}</div>
- ${hod()?'<h4>Preview</h4><button class="ghost" onclick="startPreview()">View as Staff</button>':""}<h4>Notifications</h4>${np==="granted"?'<p class="sm2">On</p>':np==="denied"?'<p class="sm2">Blocked. Allow them in your browser or phone settings.</p>':np==="default"?'<button class="ghost" onclick="askNotif()">Turn on notifications</button>':'<p class="sm2">Not supported on this device.</p>'}
+ <h4>Help</h4><button class="ghost" onclick="startTour()">How to use the app</button>${hod()?'<h4>Preview</h4><button class="ghost" onclick="startPreview()">View as Staff</button>':""}<h4>Notifications</h4>${np==="granted"?'<p class="sm2">On</p>':np==="denied"?'<p class="sm2">Blocked. Allow them in your browser or phone settings.</p>':np==="default"?'<button class="ghost" onclick="askNotif()">Turn on notifications</button>':'<p class="sm2">Not supported on this device.</p>'}
  <h4>Change password</h4><input id="np1" type="password" placeholder="New password (8+ chars)" autocomplete="new-password"><p class="err" id="npx"></p><button class="ghost" onclick="chgPw()">Update password</button>
  <div class="grow"></div><button class="out" onclick="sb.auth.signOut().then(()=>location.reload())">Sign out</button><p class="sm2" style="text-align:center;margin-top:12px">Duty Schedule</p>`}
 function openNav(){navHtml();if(!S.ovl){pushNav(1);S.ovl="n"}$("#side").classList.add("open");$("#scrim").classList.add("open")}
